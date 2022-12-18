@@ -61,7 +61,7 @@ export default class ProductManager {
         if (indexToUpdate === -1) {
             throw new Error ("Product not found");
         } else {
-            this.#products[indexToUpdate] = {id: id, ...updatedProduct};
+            this.#products[indexToUpdate] = {...updatedProduct, id: id};
             this.saveProductsFile();
         }
     }

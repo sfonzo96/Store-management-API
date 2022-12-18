@@ -2,38 +2,55 @@ import { Router } from "express";
 import ProductManager from "../productManager.js";
 import Product from "../Product.js";
 
-const productsRouter = Router();
+export const productsRouter = Router();
 
 const productManager = new ProductManager();
 
 productsRouter.get('/', (req, res) => {
-    const { limit } = req.query;
-    if (!limit) {
-        const products = productManager.getProducts();
-        res.json(products);
-    } else {
-        const productsQuery = productManager.getProducts().slice(0, limit);
-        res.json(productsQuery);
+    try {
+        const { limit } = req.query;
+        if (!limit) {
+            const products = productManager.getProducts();
+            res.status(200).json(products);
+        } else {
+            const productsQuery = productManager.getProducts().slice(0, limit);
+            res.status(200).json(productsQuery);
+        }
+    } catch (error) {
+        res.status(404).json({ error: error.message });
     }
 })
 
-productsRouter.get('/:pid', (req, res) => {
-    const { pid } = req.params;
-    const product = productManager.getProductById(pid);
-    res.json(product);
-})
-
 productsRouter.post('/', (req, res) => {
-    const { title, description, price, thumbnail, stock, code, category, status } = req.body;
-    const product = new Product(title, description, price, thumbnail, stock, code, category, status);
-    productManager.addProduct(product);
-    res.json(product);
+    try {
+        const { title, description, price, thumbnail, stock, code, category, status } = req.body;
+        const product = new Product(title, description, price, thumbnail, stock, code, category, status);
+        productManager.addProduct(product);
+        res.status(201).json(product);
+    } catch (error) {
+        res.status(501).json({ error: error.message });
+    }
 });
 
+productsRouter.get('/:pid', (req, res) => {
+    try {
+        const { pid } = req.params;
+        const product = productManager.getProductById(pid);
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+
+})
+
 productsRouter.put('/:pid', (req, res) => {
-    const { pid } = req.params;
-    const { title, description, price, thumbnail, stock, code, category, status } = req.body;
-    const product = new Product(title, description, price, thumbnail, stock, code, category, status);
-    productManager.updateProductById(pid, product);
-    res.json(product);
+    try {
+        const { pid } = req.params;
+        const { title, description, price, thumbnail, stock, code, category, status } = req.body;
+        const product = new Product(title, description, price, thumbnail, stock, code, category, status);
+        productManager.updateProductById(Number(pid), product);
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(501).json({ error: error.message });
+    }
 });

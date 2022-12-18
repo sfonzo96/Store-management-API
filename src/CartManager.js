@@ -9,7 +9,7 @@ export class CartManager {
     static #defaultPath = './src/infoStorage/carts.json'; 
 
     constructor(path) {
-        this.path = path ?? Cart.CartManager.#defaultPath;
+        this.path = path ?? CartManager.#defaultPath;
         this.getCartsFile();
     }
 

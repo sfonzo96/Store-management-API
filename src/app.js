@@ -1,7 +1,7 @@
 import express from 'express';
 import ProductManager from './productManager.js';
 import { productsRouter } from './routers/products.router.js';
-import { cartsRouter } from './routers/users.router.js';
+import { cartsRouter } from './routers/carts.router.js';
 
 const app = express();
 

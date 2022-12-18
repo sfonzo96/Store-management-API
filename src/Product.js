@@ -3,14 +3,14 @@ export default class Product {
     id;
 
     constructor(title, description, price, thumbnail, stock, code, category, status = true) {
-        Product.validate(title, description, price, thumbnail, stock, code);
+        Product.validate(title, description, price, thumbnail, stock, code, category, status);
         this.title = title.trim();
         this.description = description.trim();
         this.price = price;
         this.thumbnail = thumbnail.trim();
         this.stock = stock;
         this.code = code.trim().toUpperCase();
-        this.category = category;
+        this.category = category.trim().toUpperCase();
         this.status = status;
     }
    
@@ -38,6 +38,7 @@ export default class Product {
             throw new Error('Code is not valid');
         }
         if (typeof category !== 'string' || category.trim().length === 0) {
+            console.log(typeof category)
             throw new Error('Category is not valid');
         }
         if (typeof status !== 'boolean') {
