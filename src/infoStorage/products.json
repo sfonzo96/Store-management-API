@@ -1,0 +1,128 @@
+[
+	{
+		"id": 1,
+		"title": "Producto prueba",
+		"description": "Este es un producto prueba",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA1"
+	},
+	{
+		"id": 2,
+		"title": "Producto prueba2",
+		"description": "Este es un producto prueba2",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA2"
+	},
+	{
+		"id": 3,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba3",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA3"
+	},	{
+		"id": 4,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba4",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA4"
+	},
+	{
+		"id": 5,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba5",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA5"
+	},
+	{
+		"id": 6,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba6",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA6"
+	},
+	{
+		"id": 7,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba7",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA7"
+	},
+	{
+		"id": 8,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba8",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA8"
+	},
+	{
+		"id": 4,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba4",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA4"
+	},
+	{
+		"id": 8,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba8",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA8"
+	},
+	{
+		"id": 9,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba9",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA9"
+	},
+	{
+		"id": 10,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba10",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA10"
+	},
+	{
+		"id": 11,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba11",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA11"
+	},
+	{
+		"id": 12,
+		"title": "Producto prueba3",
+		"description": "Este es un producto prueba12",
+		"price": 200,
+		"thumbnail": "Sin imagen",
+		"stock": 24,
+		"code": "PRUEBA12"
+	}
+]
+
