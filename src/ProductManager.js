@@ -83,7 +83,7 @@ export default class ProductManager {
     setProducts() {
         let products = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
         this.#products = [...products];
-        this.#lastId = this.#products.length;
+        this.#lastId = this.#products.length? this.#products.length : 1;
     }
 
     getProductsFile() {

@@ -53,7 +53,7 @@ export class CartManager {
     setCarts() {
         let carts = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
         this.#carts = [...carts];
-        this.#lastId = this.#carts.length + 1;
+        this.#lastId = this.#carts.length? this.#carts.length : 1;
     }
 
     getCartsFile() {
