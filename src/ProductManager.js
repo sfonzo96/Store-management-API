@@ -44,7 +44,7 @@ export default class ProductManager {
     
     addProduct(product) {
         if (!this.alreadyExists(product.code)) {
-            product.setId(this.#lastId++);
+            product.setId(++this.#lastId);
             this.#products.push(product);
             this.saveProductsFile();
         } else {
@@ -83,7 +83,7 @@ export default class ProductManager {
     setProducts() {
         let products = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
         this.#products = [...products];
-        this.#lastId = this.#products.length? this.#products.length : 1;
+        this.#lastId = this.#products.length;
     }
 
     getProductsFile() {
