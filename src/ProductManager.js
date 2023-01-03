@@ -7,7 +7,7 @@ export default class ProductManager {
 
     static #defaultPath = './src/infoStorage/products.json'; 
     // La ruta es relativa a la carpeta donde se corra node/nodemon. 
-    // Si se ejecuta desde src funciona con la ruta './products.json', si se ejecuta desde la carpeta base es necesario usar './src/products.json'
+    // Si se ejecuta desde src funciona con la ruta './infoStorage/products.json', si se ejecuta desde la carpeta base es necesario usar './src/infoStorage/products.json'
     // Se sugiere correr script 'npm run dev' para evitar problemas con la ruta
 
     constructor(path) {
