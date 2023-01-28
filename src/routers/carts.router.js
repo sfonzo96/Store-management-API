@@ -1,37 +1,14 @@
-import { Router } from "express";
-import { CartManager } from "../CartManager.js";
+import express from "express";
+import * as cartsController from '../controllers/carts.controller.js'
 
-export const cartsRouter = Router();
+const cartsRouter = express.Router();
 
-const cartManager = new CartManager();
+cartsRouter.post('/', cartsController.createCart)
+cartsRouter.get('/:cartID', cartsController.getCart)
+cartsRouter.put('/:cartID/', cartsController.updateCart)
+cartsRouter.put('/:cartID/product/:productID', cartsController.updateQuantity)
+cartsRouter.post('/:cartID/product/:productID/:quantity', cartsController.addProductToCart)
+cartsRouter.delete('/:cartID', cartsController.deleteCart)
+cartsRouter.delete('/:cartID/product/:productID', cartsController.deleteProductFromCart)
 
-cartsRouter.post('/', (req, res) => {
-    try {
-        cartManager.createCart();
-        res.status(201).json({ message: 'Cart created' })
-    } catch (error) {
-        res.status(501).json({ error: error.message })
-    }
-})
-
-cartsRouter.get('/:cid', (req, res) => {
-    try {
-        const { cid } = req.params;
-        const cart = cartManager.getCartById(Number(cid));
-        res.status(200).json(cart);
-    }
-    catch (error) {
-        res.status(404).json({ error: error.message });
-    }
-})
-
-cartsRouter.post('/:cid/product/:pid', (req, res) => {
-    try {
-        const { cid, pid } = req.params;
-        cartManager.addProductToCart(Number(cid), Number(pid));
-        res.status(201).json({ message: `Product ${pid }added to cart ${cid}`});
-    }
-    catch (error) {
-        res.status(501).json({ error: error.message });
-    }
-})
+export default cartsRouter;
