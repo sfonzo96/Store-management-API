@@ -11,16 +11,20 @@ export async function getHome(req, res) { // Shoulb be replaced by a real home v
 
 export async function getProducts(req, res) {
     try {
-        const {limit, sort, page} = req.query;
+        const {limit, sort, page, category} = req.query;
         const options = {
             limit: limit? Number(limit) : 10,
-            sort: sort? {price: sort} : {},
             page: page? Number(page) : 1,
+            ...(sort && { sort: {price: sort} }),
+            ...(category && { category }),
             lean: true
         }
-        let query = {}
-        if (req.query.category) query.category = req.query.category;
+
+        let query= {};
+        if (category) query = {category: category};
+
         const paginatedData = await productsServices.getProducts(query, options);
+
         if (paginatedData) {
             res.status(200).render('products', paginatedData)
         }

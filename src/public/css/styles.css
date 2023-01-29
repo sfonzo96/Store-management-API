@@ -2,6 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
 
 html {
@@ -25,6 +31,19 @@ section {
     gap: 1rem;
     width: 100%;
     align-items: center;
+}
+
+.categoryIndex {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+}
+
+.categoryIndex ul {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 /* CHAT CSS */
