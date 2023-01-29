@@ -22,6 +22,7 @@ const productSchema = new mongoose.Schema(
     thumbnail: {
         type: String,
         required: true,
+        default: "https://shoptheoldemercantile.com/image/cache/catalog/placeholderproduct-500x500.png",
     },
     stock: {
         type: Number,

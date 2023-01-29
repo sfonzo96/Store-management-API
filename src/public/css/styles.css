@@ -17,6 +17,17 @@ body {
     background-color: lightgrey;
 }
 
+/* PRODUCTS CSS */
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+}
+
+/* CHAT CSS */
 .messagesContainer {
     width: 100%;
     display: flex;
