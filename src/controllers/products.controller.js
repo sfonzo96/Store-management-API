@@ -19,6 +19,11 @@ export async function getProducts(req, res) {
                 success: true,
                 data: paginatedData.docs
             })
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'Products not found'
+            });
         }
     } catch (error) {
         res.status(500).json({ Error: error.message });

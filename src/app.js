@@ -4,9 +4,9 @@ import express from 'express';
 import './config/db.js'
 import router from './routers/index.router.js'
 import { create } from 'express-handlebars';
+import {paginationUrl} from './utils/helpers.js';
 import { Server } from 'socket.io';
 import webSocketService from './services/websocket.services.js';
-import {paginationUrl} from './utils/helpers.js';
 
 const hbs = create({
     helpers: {

@@ -7,6 +7,8 @@ viewsRouter.get('/chat', viewsController.getChat)
 
 viewsRouter.get("/", viewsController.getHome);
 
+viewsRouter.get('/cart/:cartID', viewsController.getCart)
+
 viewsRouter.get('/products', viewsController.getProducts);
 
 viewsRouter.get("/realtimeproducts", viewsController.getRealTimeProducts);

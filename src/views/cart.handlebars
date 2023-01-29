@@ -1,0 +1,17 @@
+<h1>Cart ID: {{_id}}</h1>
+<div id='listContainer' class='list-group flex-row flex-wrap gap-5 justify-content-center'>
+  {{#each products}}
+  <div class="card" style="width: 18rem;">
+    <img src="https://shoptheoldemercantile.com/image/cache/catalog/placeholderproduct-500x500.png" class="card-img-top" alt="...">
+    <div class="card-body justify-content-center d-flex flex-column">
+      <h5 class="card-title">{{product.title}}</h5>
+      <p class="card-text">{{product.description}}</p>
+      <p class="card-text">Price: {{product.price}}</p>
+      <p class="card-text">id: {{product._id}}</p>
+      <p class="card-text">Category: {{product.category}}</p>
+      <p class="card-text">code :{{product.code}}</p>
+      <p class="card-text">Stock:{{product.stock}}</p>
+    </div>
+  </div>
+  {{/each}}
+</div>

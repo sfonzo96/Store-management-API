@@ -1,6 +1,6 @@
 import CartModel from "../dao/models/carts.model.js";
 
-class CartManager {
+class CartServices {
     async createCart(cartData) {
         try {
             const fullData = cartData;
@@ -116,6 +116,6 @@ class CartManager {
     }
 }
 
-const cartManager = new CartManager();
-export default cartManager;
+const cartsServices = new CartServices();
+export default cartsServices;
 
