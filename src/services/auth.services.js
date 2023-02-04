@@ -7,7 +7,6 @@ class AuthServices {
       if (!user) {
         throw new Error('User not found')
       }
-      console.log(user.password, password)
       if (user.password !== password) {
         throw new Error('Wrong password')
       }
@@ -18,5 +17,5 @@ class AuthServices {
   }
 }
 
-const authServices = new AuthServices()
-export default authServices
+const authServices = new AuthServices();
+export default authServices;

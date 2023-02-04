@@ -15,4 +15,6 @@ viewsRouter.get("/realtimeproducts", viewsController.getRealTimeProducts);
 
 viewsRouter.get('/register', viewsController.registUser);
 
+viewsRouter.get('/usercenter', viewsController.getUserCenter);
+
 export default viewsRouter;
