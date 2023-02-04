@@ -5,12 +5,14 @@ const viewsRouter = express.Router();
 
 viewsRouter.get('/chat', viewsController.getChat)
 
-viewsRouter.get("/", viewsController.getHome);
+viewsRouter.get("/", viewsController.login);
 
 viewsRouter.get('/cart/:cartID', viewsController.getCart)
 
 viewsRouter.get('/products', viewsController.getProducts);
 
 viewsRouter.get("/realtimeproducts", viewsController.getRealTimeProducts);
+
+viewsRouter.get('/register', viewsController.registUser);
 
 export default viewsRouter;

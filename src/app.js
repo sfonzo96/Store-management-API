@@ -7,6 +7,9 @@ import { create } from 'express-handlebars';
 import {paginationUrl} from './utils/helpers.js';
 import { Server } from 'socket.io';
 import webSocketService from './services/websocket.services.js';
+import cookie from 'cookie-parser';
+import session from 'express-session';
+import mongoStore from "connect-mongo";
 
 const hbs = create({
     helpers: {
@@ -19,6 +22,22 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('src/public'));
+app.use(cookie());
+app.use(
+  session({
+    store: new mongoStore({
+      mongoUrl: process.env.MONGO_URI,
+      options: {
+        userNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 100000 },
+  }),
+);
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');

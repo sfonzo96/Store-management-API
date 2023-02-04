@@ -1,7 +1,6 @@
 const postProductForm = document.getElementById('postProductForm')
 const deleteProductForm = document.getElementById('deleteProductForm')
 const updateProductForm = document.getElementById('updateProductForm')
-/* const addToCartBtnList = document.querySelectorAll('.addToCartBtn') */
 
 postProductForm.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -90,14 +89,3 @@ updateProductForm.addEventListener('submit', (e) => {
       console.log(err)
     })
 })
-
-/* addToCartBtnList.forEach((button) => { // TODO: Get the cartID from the user session
-  button.addEventListener('click', function () {
-    const productID = this.id
-
-    axios({
-      method: 'post',
-      url: `/api/cart/${id}/product/${productID}`,
-    })
-  })
-}) */

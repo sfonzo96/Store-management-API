@@ -1,9 +1,17 @@
 import productsServices from "../services/products.db.services.js";
 import cartsServices from "../services/carts.db.services.js";
 
-export async function getHome(req, res) { // Shoulb be replaced by a real home view
+export async function login(req, res) { 
     try {
-        res.status(200).render('index', {});
+        res.status(200).render('login');
+    } catch (error) {
+        res.status(500).json({ Error: error.message });
+    }
+}
+
+export async function registUser(req, res) {
+    try {
+        res.status(200).render('register');
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -20,7 +28,7 @@ export async function getProducts(req, res) {
             lean: true
         }
 
-        let query= {};
+        let query = {};
         if (category) query = {category: category};
 
         const paginatedData = await productsServices.getProducts(query, options);
