@@ -7,6 +7,7 @@ const welcomeText = document.getElementById("welcomeText");
 const userName = document.getElementById("userName");
 
 let newMessages = [];
+let user = userName.innerText.substring(0, userName.innerText.indexOf(','));
 
 socket.on("welcome", async (data) => {
 	try {
@@ -30,7 +31,7 @@ socket.on("newUser", (newUser) => {
 	});
 });
 
-if (!userName.innerText.length > 0) {
+if (!user.length > 0) {
 	Swal.fire({
 		title: "Please set your name",
 		text: "User name:",
