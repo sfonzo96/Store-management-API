@@ -1,9 +1,12 @@
 import CartModel from "../dao/models/carts.model.js";
 
 class CartServices {
-    async createCart(cartData) {
+    async createCart() {
         try {
-            const fullData = cartData;
+            const newCart = await CartModel.create({new: true});
+
+            return newCart;
+            /* const fullData = cartData; // cartData is the request body
             if (fullData.products.length > 0) { // Sets total for each product and subtotal for the cart
                 fullData.products.forEach(products => {
                     products.total = Number(products.price * products.quantity).toFixed(2);
@@ -11,7 +14,7 @@ class CartServices {
                 fullData.subtotal = Number(fullData.products.map(product => product.price * product.quantity).reduce((acc, curr) => acc + curr)).toFixed(2);
             }
             const newCart = await CartModel.create(cartData);
-            return newCart;
+            return newCart; */
         } catch (error) {
             throw new Error(error.message);
         }
@@ -85,7 +88,7 @@ class CartServices {
                     { $pull: {products: {product: productID}} },
                     { new: true } 
                 )
-                console.log(updatedCart)
+
                 return updatedCart;
             } else throw new Error("Product not found in cart");     
         } catch (error) {

@@ -2,13 +2,15 @@ import cartsServices from "../services/carts.db.services.js";
 
 export async function createCart(req, res) {
     try {
-        const cartData = req.body;
-        const newCart = await cartsServices.createCart(cartData);
+/*         const cartData = req.body; */
+        const newCart = await cartsServices.createCart(/* cartData */);
         res.status(201).json({
             succees: true,
-            message: `${
+            message: 'New cart created.',
+            cart: newCart
+            /* `${
                 newCart.products.length > 0 ? `New cart created with ${newCart.products.length} products.` : `New empty cart successfully created.`
-            } New cart's ID is ${newCart._id}.`,
+            } New cart's ID is ${newCart._id}.` */,
         });
     } catch (error) {
         res.status(500).json({ Error: error.message });
@@ -44,7 +46,9 @@ export async function deleteCart(req, res) {
 
 export async function addProductToCart(req, res) {
     try {
-        const { cartID, productID, quantity } = req.params;
+        const { cartID, productID } = req.params;
+        const { quantity } = req.body;
+
         if (quantity <= 0) {
             res.status(400).json({
                 success: false,
@@ -52,6 +56,7 @@ export async function addProductToCart(req, res) {
             });
         }
         const cart = await cartsServices.addProductToCart(cartID, productID, Number(quantity));
+        
         if (cart) {
             res.status(200).json({
                 success: true,
@@ -129,6 +134,20 @@ export async function updateQuantity(req, res) {
                 message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`
             });
         }
+    } catch (error) {
+        res.status(500).json({ Error: error.message });
+    }
+}
+
+export async function getCartID(req, res) {
+    try {
+        const cartID = req.session.user.cart._id;
+
+        res.status(200).json({
+            success: true,
+            cartID
+        });
+
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }

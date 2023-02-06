@@ -1,5 +1,6 @@
 import productsServices from "../services/products.db.services.js";
 import cartsServices from "../services/carts.db.services.js";
+import userServices from "../services/users.db.services.js";
 
 export async function login(req, res) { 
     try {
@@ -71,13 +72,13 @@ export async function getRealTimeProducts(req, res) {
 
 export async function getCart(req, res) {
     try {
-        const {cartID} = req.params;
-        const cart = await cartsServices.getCart(cartID);
 
-        const user = req.session.user;
+        const userMail = req.session.user.email;
+        const user = await userServices.getUser(userMail);
+        delete user.password
 
-        if (cart) {
-            res.status(200).render('cart', {...cart, user})
+        if (user) {
+            res.status(200).render('cart', { user })
         }
         else {
             res.status(404).json({ Error: "Cart not found" })
