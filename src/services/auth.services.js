@@ -10,6 +10,7 @@ class AuthServices {
       if (user.password !== password) {
         throw new Error('Wrong password')
       }
+     
       return user
     } catch (error) {
       throw new Error(error.message)

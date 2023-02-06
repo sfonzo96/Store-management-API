@@ -4,7 +4,7 @@ import express from 'express';
 import './config/db.js'
 import router from './routers/index.router.js'
 import { create } from 'express-handlebars';
-import {paginationUrl} from './utils/helpers.js';
+import {paginationUrl, compare} from './utils/helpers.js';
 import { Server } from 'socket.io';
 import webSocketService from './services/websocket.services.js';
 import cookie from 'cookie-parser';
@@ -14,6 +14,7 @@ import mongoStore from "connect-mongo";
 const hbs = create({
     helpers: {
         paginationUrl,
+        compare
     }
 });
 
@@ -35,7 +36,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 100000 },
+    cookie: { maxAge: 10000000 },
   }),
 );
 

@@ -1,10 +1,10 @@
 const socket = io();
 
-const userName = document.getElementById("userName");
 const submitBtn = document.getElementById("submitBtn");
 const messageInput = document.getElementById("messageInput");
 const messagesContainer = document.getElementById("messagesContainer");
 const welcomeText = document.getElementById("welcomeText");
+const userName = document.getElementById("userName");
 
 let newMessages = [];
 
@@ -30,9 +30,7 @@ socket.on("newUser", (newUser) => {
 	});
 });
 
-let user = null;
-
-if (!user) {
+if (!userName.innerText.length > 0) {
 	Swal.fire({
 		title: "Please set your name",
 		text: "User name:",
@@ -44,7 +42,7 @@ if (!user) {
 	}).then((newUser) => {
 		user = newUser.value;
 		welcomeText.innerText = `Welcome ${user}!`;
-		userName.innerText = 'Write and send a message!';
+		userName.remove();
 		socket.emit("newUser", user);
 		document.addEventListener('keypress', (e) => {
 			if (e.key === "Enter") {
@@ -52,6 +50,12 @@ if (!user) {
 			}
 			});
 	})
+} else {
+	document.addEventListener('keypress', (e) => {
+		if (e.key === "Enter") {
+			sendMessage();
+		}
+	});
 };
 
 submitBtn.addEventListener("click", (e) => {

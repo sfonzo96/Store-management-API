@@ -13,8 +13,12 @@ viewsRouter.get('/products', viewsController.getProducts);
 
 viewsRouter.get("/realtimeproducts", viewsController.getRealTimeProducts);
 
-viewsRouter.get('/register', viewsController.registUser);
+viewsRouter.get('/register', viewsController.registerUser);
 
 viewsRouter.get('/usercenter', viewsController.getUserCenter);
+
+viewsRouter.get('/admin', viewsController.getAdminCenter)
+
+viewsRouter.get('/admin/update/', viewsController.getUpdateProduct)
 
 export default viewsRouter;

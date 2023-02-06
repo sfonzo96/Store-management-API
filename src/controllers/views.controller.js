@@ -15,7 +15,7 @@ export async function login(req, res) {
     }
 }
 
-export async function registUser(req, res) {
+export async function registerUser(req, res) {
     try {
         res.status(200).render('register');
     } catch (error) {
@@ -103,6 +103,42 @@ export async function getUserCenter(req, res) {
         const user = req.session.user;
 
         res.status(200).render('userCenter', { user })
+    } catch (error) {
+        res.status(500).json({ Error: error.message });
+    }
+}
+
+export async function getAdminCenter(req, res) {
+    try {
+        const user = req.session.user;
+
+        if (user.role !== "admin") {
+            return res.status(401).json({ Error: "Unauthorized" })
+        }
+        res.status(200).render('admin', { user })
+    } catch (error) {
+        res.status(500).json({ Error: error.message });
+    }
+}
+
+export async function getUpdateProduct(req, res) {
+    try {
+        const productID = req.query.productIDPut;
+
+        const product = await productsServices.getProduct(productID);
+
+        const user = req.session.user;
+
+        if (user.role !== "admin") {
+            return res.status(401).json({ Error: "Unauthorized" })
+        }
+
+        if (product) {
+            return res.status(200).render('updateProduct', {...product, productID, user})
+        }
+        
+        res.status(404).json({ Error: "Product not found" });
+
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
