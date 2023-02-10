@@ -1,11 +1,11 @@
 import productsServices from "../services/products.db.services.js";
-import cartsServices from "../services/carts.db.services.js";
+// import cartsServices from "../services/carts.db.services.js";
 import userServices from "../services/users.db.services.js";
 
 export async function login(req, res) { 
     try {
 
-        if (!req.session.logged) {
+        if (!req.isAuthenticated()) {
             return res.status(200).render('login');
         }
         
@@ -40,7 +40,7 @@ export async function getProducts(req, res) {
 
         const paginatedData = await productsServices.getProducts(query, options);
 
-        const user = req.session.user;
+        const user = req.user;
 
         if (paginatedData) {
             res.status(200).render('products', {...paginatedData, user})
@@ -57,7 +57,7 @@ export async function getRealTimeProducts(req, res) {
     try {
         const paginatedData = await productsServices.getProducts({},{lean: true});
 
-        const user = req.session.user;
+        const user = req.user;
 
         if (paginatedData) {
             res.status(200).render('realTimeProducts', {...paginatedData, user})
@@ -73,7 +73,7 @@ export async function getRealTimeProducts(req, res) {
 export async function getCart(req, res) {
     try {
 
-        const userMail = req.session.user.email;
+        const userMail = req.user.email;
         const user = await userServices.getUser(userMail);
         delete user.password
 
@@ -91,7 +91,7 @@ export async function getCart(req, res) {
 export async function getChat(req, res) {
     try {
 
-        const user = req.session.user;
+        const user = req.user;
 
         res.status(200).render('chat', {user})
     } catch (error) {
@@ -101,7 +101,7 @@ export async function getChat(req, res) {
 
 export async function getUserCenter(req, res) {
     try {
-        const user = req.session.user;
+        const user = req.user;
 
         res.status(200).render('userCenter', { user })
     } catch (error) {
@@ -111,11 +111,12 @@ export async function getUserCenter(req, res) {
 
 export async function getAdminCenter(req, res) {
     try {
-        const user = req.session.user;
+        const user = req.user;
 
         if (user.role !== "admin") {
             return res.status(401).json({ Error: "Unauthorized" })
         }
+        
         res.status(200).render('admin', { user })
     } catch (error) {
         res.status(500).json({ Error: error.message });
@@ -128,7 +129,7 @@ export async function getUpdateProduct(req, res) {
 
         const product = await productsServices.getProduct(productID);
 
-        const user = req.session.user;
+        const user = req.user;
 
         if (user.role !== "admin") {
             return res.status(401).json({ Error: "Unauthorized" })
@@ -145,3 +146,10 @@ export async function getUpdateProduct(req, res) {
     }
 }
 
+export async function getError(req, res) {
+    try {
+        res.status(200).render('error', {error: "Error"});
+    } catch (error) {
+        res.status(500).json({ Error: error.message });
+    }
+}

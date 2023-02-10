@@ -77,7 +77,7 @@ export async function addProductToCart(req, res) {
 export async function deleteProductFromCart(req, res) {
     try {
         const { cartID, productID } = req.params;
-        console.log(cartID, productID)
+
         const cart = await cartsServices.deleteProductFromCart(cartID, productID);
         if (cart) {
             res.status(200).json({
@@ -142,7 +142,7 @@ export async function updateQuantity(req, res) {
 
 export async function getCartID(req, res) {
     try {
-        const cartID = req.session.user.cart._id;
+        const cartID = req.user.cart._id;
 
         res.status(200).json({
             success: true,

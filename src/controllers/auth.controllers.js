@@ -1,4 +1,4 @@
-import authService from '../services/auth.services.js'
+/* import authService from '../services/auth.services.js'
 
 export async function login(req, res) {
   try {
@@ -34,5 +34,5 @@ export async function logout(req, res) {
   } catch (error) {
     res.status(500).json({ Error: error.message })
   }
-}
+} */
 

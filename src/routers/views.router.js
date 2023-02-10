@@ -21,4 +21,6 @@ viewsRouter.get('/admin', viewsController.getAdminCenter)
 
 viewsRouter.get('/admin/update/', viewsController.getUpdateProduct)
 
+viewsRouter.get('/failed', viewsController.getError)
+
 export default viewsRouter;

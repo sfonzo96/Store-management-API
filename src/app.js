@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import './config/db.js'
+import './config/db.config.js'
 import router from './routers/index.router.js'
 import { create } from 'express-handlebars';
 import {paginationUrl, compare} from './utils/helpers.js';
@@ -9,6 +9,8 @@ import { Server } from 'socket.io';
 import webSocketService from './services/websocket.services.js';
 import cookie from 'cookie-parser';
 import session from 'express-session';
+import configPassport from './config/passport.config.js';
+import passport from 'passport';
 import mongoStore from "connect-mongo";
 
 const hbs = create({
@@ -20,7 +22,7 @@ const hbs = create({
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('src/public'));
 app.use(cookie());
@@ -39,12 +41,15 @@ app.use(
     cookie: { maxAge: 10000000 },
   }),
 );
+configPassport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(router);
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
 
-app.use(router);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

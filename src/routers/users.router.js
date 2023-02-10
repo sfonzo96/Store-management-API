@@ -1,10 +1,11 @@
 import express from "express";
-import { auth } from "../middlewares/auth.middleware.js";
+import isAuthenticated from "../middlewares/auth.middleware.js";
 import * as userController from "../controllers/users.constroller.js";
 
 const usersRouter = express.Router();
 
 usersRouter.post("/", userController.createUser)
-usersRouter.get("/:email", auth, userController.getUser);
+usersRouter.get("/:email", isAuthenticated, userController.getUser);
+//TODO Update user endpoints
 
 export default usersRouter;
