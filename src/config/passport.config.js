@@ -53,12 +53,12 @@ function passportConfig(passport) {
   );
 
   passport.use(
-    'githubSignup',
+    'github',
     new passportGithub.Strategy(
       {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: 'http://localhost:8080/api/github/callback',
+        callbackURL: 'http://localhost:8080/api/github/callback', // This should be changed accordingly to the environment and stage of the proyect
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -80,6 +80,8 @@ function passportConfig(passport) {
             const newUser = await userService.createUser(userData);
             return done(null, newUser);
           }
+
+          delete user.password;
 
           done(null, user);
         } catch (error) {

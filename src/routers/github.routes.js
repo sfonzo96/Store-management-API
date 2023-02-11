@@ -8,9 +8,9 @@ githubRouter.get('/failed', (req, res) => {
   res.render('error', {error: 'something went wrong'})
 })
 
-githubRouter.get('/login', passport.authenticate("githubSignup",{scope:["user:email"]}), passport.authenticate('githubLogin',{failureRedirect:'/api/github/failed'}))
+githubRouter.get('/login', passport.authenticate("github",{scope:["user:email"]}))
 
-githubRouter.get('/callback', passport.authenticate('githubSignup',{failureRedirect:'/api/github/failed'}), (req, res) => {
+githubRouter.get('/callback', passport.authenticate('github',{failureRedirect:'/api/github/failed'}), (req, res) => {
   res.redirect('/');
 });
 
