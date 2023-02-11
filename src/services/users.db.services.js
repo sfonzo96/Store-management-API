@@ -10,6 +10,7 @@ class UserServices {
       if (userExists) {
         throw new Error('User already exists')
       }
+
       const newCart = await cartService.createCart();
 
       user.password = await bcrypt.hash(user.password, 10)
@@ -55,7 +56,6 @@ class UserServices {
       throw new Error(error.message)
     }
   }
-
 }
 
 const userService = new UserServices();

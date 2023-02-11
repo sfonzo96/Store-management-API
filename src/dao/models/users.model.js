@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
       enum: ["admin", "user"],
+    },
+    platform: {
+      type: String,
+      enum: ['github']
     }
   },
   {

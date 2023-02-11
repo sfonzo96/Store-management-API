@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import './config/db.config.js'
-import router from './routers/index.router.js'
+import router from './routers/index.routes.js'
 import { create } from 'express-handlebars';
 import {paginationUrl, compare} from './utils/helpers.js';
 import { Server } from 'socket.io';
