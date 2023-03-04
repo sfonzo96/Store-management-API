@@ -1,4 +1,4 @@
-import ProductModel from '../dao/models/products.model.js';
+import ProductModel from '../models/products.model.js.js.js';
 import webSocketService from './websocket.services.js';
 
 class ProductsServices {

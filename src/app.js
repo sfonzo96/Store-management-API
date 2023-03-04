@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import webSocketService from './services/websocket.services.js';
 import cookie from 'cookie-parser';
 import session from 'express-session';
+import flash from 'connect-flash';
 import configPassport from './config/passport.config.js';
 import passport from 'passport';
 import mongoStore from "connect-mongo";
@@ -44,6 +45,7 @@ app.use(
 configPassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(router);
 
 app.engine('handlebars', hbs.engine);

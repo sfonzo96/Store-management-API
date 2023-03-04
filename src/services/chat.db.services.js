@@ -1,4 +1,4 @@
-import MessageModel from "../dao/models/message.model.js";
+import MessageModel from "../models/message.model.js.js.js";
 
 class MessageManager {
 

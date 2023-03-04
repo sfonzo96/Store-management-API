@@ -1,4 +1,4 @@
-import UserModel from '../dao/models/users.model.js'
+import UserModel from '../models/users.model.js'
 import cartService from './carts.db.services.js'
 import bcrypt from 'bcrypt'
 
