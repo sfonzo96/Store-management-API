@@ -1,16 +1,14 @@
-import productsServices from "../services/products.db.services.js";
+import productsServices from '../services/products.db.services.js';
 // import cartsServices from "../services/carts.db.services.js";
-import userServices from "../services/users.db.services.js";
+import userServices from '../services/users.db.services.js';
 
-export async function login(req, res) { 
+export async function login(req, res) {
     try {
-
         if (!req.isAuthenticated()) {
             return res.status(200).render('login');
         }
-        
-        return res.status(200).redirect('/products');
 
+        return res.status(200).redirect('/products');
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -26,28 +24,30 @@ export async function registerUser(req, res) {
 
 export async function getProducts(req, res) {
     try {
-        const {limit, sort, page, category} = req.query;
+        const { limit, sort, page, category } = req.query;
         const options = {
-            limit: limit? Number(limit) : 10,
-            page: page? Number(page) : 1,
-            ...(sort && { sort: {price: sort} }),
+            limit: limit ? Number(limit) : 10,
+            page: page ? Number(page) : 1,
+            ...(sort && { sort: { price: sort } }),
             ...(category && { category }),
-            lean: true
-        }
+            lean: true,
+        };
 
         let query = {};
-        if (category) query = {category: category};
+        if (category) query = { category: category };
 
-        const paginatedData = await productsServices.getProducts(query, options);
+        const paginatedData = await productsServices.getProducts(
+            query,
+            options
+        );
 
         const user = req.user;
 
         if (paginatedData) {
-            res.status(200).render('products', {...paginatedData, user})
+            res.status(200).render('products', { ...paginatedData, user });
+        } else {
+            res.status(404).json({ Error: 'Products not found' });
         }
-        else {
-            res.status(404).json({ Error: "Products not found" })
-        };
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -55,16 +55,21 @@ export async function getProducts(req, res) {
 
 export async function getRealTimeProducts(req, res) {
     try {
-        const paginatedData = await productsServices.getProducts({},{lean: true});
+        const paginatedData = await productsServices.getProducts(
+            {},
+            { lean: true }
+        );
 
         const user = req.user;
 
         if (paginatedData) {
-            res.status(200).render('realTimeProducts', {...paginatedData, user})
+            res.status(200).render('realTimeProducts', {
+                ...paginatedData,
+                user,
+            });
+        } else {
+            res.status(404).json({ Error: 'Products not found' });
         }
-        else {
-            res.status(404).json({ Error: "Products not found" })
-        };
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -72,17 +77,15 @@ export async function getRealTimeProducts(req, res) {
 
 export async function getCart(req, res) {
     try {
-
         const userMail = req.user.email;
         const user = await userServices.getUser(userMail);
-        delete user.password
+        delete user.password;
 
         if (user) {
-            res.status(200).render('cart', { user })
+            res.status(200).render('cart', { user });
+        } else {
+            res.status(404).json({ Error: 'Cart not found' });
         }
-        else {
-            res.status(404).json({ Error: "Cart not found" })
-        };
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -90,10 +93,9 @@ export async function getCart(req, res) {
 
 export async function getChat(req, res) {
     try {
-
         const user = req.user;
 
-        res.status(200).render('chat', {user})
+        res.status(200).render('chat', { user });
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -103,7 +105,7 @@ export async function getUserCenter(req, res) {
     try {
         const user = req.user;
 
-        res.status(200).render('userCenter', { user })
+        res.status(200).render('userCenter', { user });
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -113,11 +115,11 @@ export async function getAdminCenter(req, res) {
     try {
         const user = req.user;
 
-        if (user.role !== "admin") {
-            return res.status(401).json({ Error: "Unauthorized" })
+        if (user.role !== 'admin') {
+            return res.status(401).json({ Error: 'Unauthorized' });
         }
-        
-        res.status(200).render('admin', { user })
+
+        res.status(200).render('admin', { user });
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -131,16 +133,17 @@ export async function getUpdateProduct(req, res) {
 
         const user = req.user;
 
-        if (user.role !== "admin") {
-            return res.status(401).json({ Error: "Unauthorized" })
+        if (user.role !== 'admin') {
+            return res.status(401).json({ Error: 'Unauthorized' });
         }
 
         if (product) {
-            return res.status(200).render('updateProduct', {...product, productID, user})
+            return res
+                .status(200)
+                .render('updateProduct', { ...product, productID, user });
         }
-        
-        res.status(404).json({ Error: "Product not found" });
 
+        res.status(404).json({ Error: 'Product not found' });
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }
@@ -148,7 +151,7 @@ export async function getUpdateProduct(req, res) {
 
 export async function getError(req, res) {
     try {
-        res.status(200).render('error', {error: "Error"});
+        res.status(200).render('error', { error: 'Error' });
     } catch (error) {
         res.status(500).json({ Error: error.message });
     }

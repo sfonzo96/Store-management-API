@@ -1,8 +1,7 @@
-import ProductModel from '../dao/models/products.model.js';
-import webSocketService from './websocket.services.js';
+import ProductModel from '../../dao/models/products.model.js';
+import webSocketService from '../websocket.services.js';
 
 class ProductsServices {
-    
     async createProduct(data) {
         try {
             const newProduct = await ProductModel.create(data);
@@ -12,14 +11,14 @@ class ProductsServices {
 
             return newProduct;
         } catch (error) {
-            throw new Error(error.message)
+            throw new Error(error.message);
         }
     }
 
     async getProducts(query, options) {
         try {
-            query = {...{deleted: false}, ...query}
-            
+            query = { ...{ deleted: false }, ...query };
+
             const paginatedList = await ProductModel.paginate(query, options);
 
             // ws emit to all clients to update real time view
@@ -27,38 +26,42 @@ class ProductsServices {
 
             const newData = {
                 ...paginatedList,
-                options
-            }
+                options,
+            };
 
             return newData;
         } catch (error) {
-            throw new Error(error.message)
+            throw new Error(error.message);
         }
     }
-    
+
     async getProduct(productID) {
         try {
             const product = await ProductModel.findById(productID).lean();
             return product;
         } catch (error) {
-            throw new Error(error.message)
+            throw new Error(error.message);
         }
     }
-    
+
     async updateProduct(productID, data) {
         try {
-            const updatedProduct = await ProductModel.findByIdAndUpdate(productID, data, {new: true}).lean();
-            
+            const updatedProduct = await ProductModel.findByIdAndUpdate(
+                productID,
+                data,
+                { new: true }
+            ).lean();
+
             // ws emit to all clients to update real time view
             const productsList = await this.getProducts();
             webSocketService.io.emit('reloadList', productsList);
 
             return updatedProduct;
         } catch (error) {
-            throw new Error(error.message)
+            throw new Error(error.message);
         }
     }
-    
+
     async deleteProduct(productID) {
         try {
             await ProductModel.deleteById(productID);
@@ -66,9 +69,8 @@ class ProductsServices {
             // ws emit to all clients to update real time view
             const productsList = await this.getProducts();
             webSocketService.io.emit('reloadList', productsList);
-
         } catch (error) {
-            throw new Error(error.message)
+            throw new Error(error.message);
         }
     }
 }

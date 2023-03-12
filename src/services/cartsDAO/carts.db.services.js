@@ -1,9 +1,9 @@
-import CartModel from "../dao/models/carts.model.js";
+import CartModel from '../../models/carts.model.js';
 
 class CartServices {
     async createCart() {
         try {
-            const newCart = await CartModel.create({new: true});
+            const newCart = await CartModel.create({ new: true });
 
             return newCart;
             /* const fullData = cartData; // cartData is the request body
@@ -19,21 +19,22 @@ class CartServices {
             throw new Error(error.message);
         }
     }
-    
+
     async getCart(cartID) {
         try {
-            const cart = await CartModel.findOne({_id: cartID}).lean();
+            const cart = await CartModel.findOne({ _id: cartID }).lean();
             return cart;
-        }
-        catch (error) {
+        } catch (error) {
             throw new Error(error.message);
         }
     }
 
     async deleteCart(cartID) {
         try {
-            await CartModel.findByIdAndUpdate(cartID, {$set: {products: []}});
-/*             await CartModel.findByIdAndDelete(cartID).lean(); */
+            await CartModel.findByIdAndUpdate(cartID, {
+                $set: { products: [] },
+            });
+            /*             await CartModel.findByIdAndDelete(cartID).lean(); */
         } catch (error) {
             throw new Error(error.message);
         }
@@ -42,31 +43,33 @@ class CartServices {
     async addProductToCart(cartID, productID, quantity) {
         try {
             const cart = await CartModel.findById(cartID); // get cart from db POPULATED WITH MIDDLEWARE (SO INFO IS AVAILABLE!!)
-          
+
             if (!cart) {
-                throw new Error("Cart not found");
+                throw new Error('Cart not found');
             }
-           
-            const productIsInCart = cart.products.some(prod => prod.product.equals(productID)); // check if product is already in cart
+
+            const productIsInCart = cart.products.some((prod) =>
+                prod.product.equals(productID)
+            ); // check if product is already in cart
             let updatedCart = {};
-            if (productIsInCart) { // product is in cart?
+            if (productIsInCart) {
+                // product is in cart?
                 const cart = await CartModel.findOneAndUpdate(
                     { _id: cartID, 'products.product': productID },
-                    { $inc: {'products.$.quantity': quantity} },
+                    { $inc: { 'products.$.quantity': quantity } },
                     { new: true }
-                ).lean()
-                updatedCart = {...cart};
+                ).lean();
+                updatedCart = { ...cart };
             } else {
                 const cart = await CartModel.findOneAndUpdate(
                     { _id: cartID },
-                    { $push: {products: {product: productID, quantity}} },
+                    { $push: { products: { product: productID, quantity } } },
                     { new: true }
-                ).lean()
-                updatedCart = {...cart};
+                ).lean();
+                updatedCart = { ...cart };
             }
 
             return updatedCart;
-
         } catch (error) {
             throw new Error(error.message);
         }
@@ -77,20 +80,22 @@ class CartServices {
             const cart = await CartModel.findById(cartID);
 
             if (!cart) {
-                throw new Error("Cart not found");
+                throw new Error('Cart not found');
             }
 
-            const productIsInCart = cart.products.some(prod => prod.product.equals(productID));
+            const productIsInCart = cart.products.some((prod) =>
+                prod.product.equals(productID)
+            );
 
             if (productIsInCart) {
                 const updatedCart = await CartModel.findOneAndUpdate(
-                    {_id: cartID, 'products.product': productID },
-                    { $pull: {products: {product: productID}} },
-                    { new: true } 
-                )
+                    { _id: cartID, 'products.product': productID },
+                    { $pull: { products: { product: productID } } },
+                    { new: true }
+                );
 
                 return updatedCart;
-            } else throw new Error("Product not found in cart");     
+            } else throw new Error('Product not found in cart');
         } catch (error) {
             throw new Error(error.message);
         }
@@ -98,7 +103,11 @@ class CartServices {
 
     async updateCart(cartID, cartData) {
         try {
-            const updatedCart = await CartModel.findByIdAndUpdate(cartID, { products: cartData }, { new: true });
+            const updatedCart = await CartModel.findByIdAndUpdate(
+                cartID,
+                { products: cartData },
+                { new: true }
+            );
             return updatedCart;
         } catch (error) {
             throw new Error(error.message);
@@ -109,10 +118,10 @@ class CartServices {
         try {
             const cart = await CartModel.findByIdAndUpdate(
                 cartID,
-                { $set: {'products.$[elem].quantity': quantity } },
+                { $set: { 'products.$[elem].quantity': quantity } },
                 { arrayFilters: [{ 'elem.product': productID }], new: true }
-            )
-            return cart                
+            );
+            return cart;
         } catch (error) {
             throw new Error(error.message);
         }
@@ -121,4 +130,3 @@ class CartServices {
 
 const cartsServices = new CartServices();
 export default cartsServices;
-

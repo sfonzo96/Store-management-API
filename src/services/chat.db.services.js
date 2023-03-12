@@ -1,7 +1,6 @@
-import MessageModel from "../dao/models/message.model.js";
+import MessageModel from '../dao/models/message.model.js';
 
 class MessageManager {
-
     async createMessage(data) {
         try {
             const newMessage = await MessageModel.create(data);

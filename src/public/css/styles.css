@@ -59,19 +59,19 @@ section {
 .messageBox {
     display: flex;
     flex-direction: column;
-    background-color: #DCF8C6;
+    background-color: #dcf8c6;
     border-radius: 1rem;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .messageUser {
-    padding: .5rem;
+    padding: 0.5rem;
     font-size: 1.6rem;
     font-weight: bold;
 }
 
 .messageText {
-    padding: .5rem;
+    padding: 0.5rem;
     font-size: 1.6rem;
 }
 
@@ -81,5 +81,5 @@ section {
 }
 
 .submitBtn {
-    padding: .5rem;
+    padding: 0.5rem;
 }

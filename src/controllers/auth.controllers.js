@@ -35,4 +35,3 @@ export async function logout(req, res) {
     res.status(500).json({ Error: error.message })
   }
 } */
-

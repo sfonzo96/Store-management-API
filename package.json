@@ -37,17 +37,9 @@
         "passport-local": "^1.0.0",
         "socket.io": "^4.5.4"
     },
-    "prettier": {
-        "trailingComma": "es5",
-        "tabWidth": 2,
-        "semi": true,
-        "singleQuote": true,
-        "bracketSpacing": true,
-        "singleAttributePerLine": false,
-        "bracketSameLine": true
-    },
     "devDependencies": {
-        "nodemon": "^2.0.20"
+        "nodemon": "^2.0.20",
+        "prettier": "2.8.4"
     },
     "engines": {
         "node": ">=16.14.2"
