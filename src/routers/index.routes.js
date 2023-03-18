@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
 
 export default class IndexRouter extends express.Router {
     constructor({
@@ -10,6 +12,12 @@ export default class IndexRouter extends express.Router {
         GithubRouter,
     }) {
         super();
+
+        // Set other mids
+        this.use(express.json());
+        this.use(express.urlencoded({ extended: true }));
+        this.use(cors());
+        // this.use(helmet()); needs to be configured to allow axios and other front end scripts
 
         // Set router for each path
         this.use('/api/products', ProductsRouter);

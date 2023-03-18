@@ -2,7 +2,7 @@ export default class ViewController {
     constructor({ ProductService, UserService }) {
         this.productService = ProductService;
         this.userService = UserService;
-        // TODO: integrate other controllers instead of services and avoid repeating the functions
+        // TODO: integrate other controllers instead of services and avoid repeating the functions??
     }
 
     login = (req, res) => {
@@ -19,7 +19,7 @@ export default class ViewController {
 
     async registerUser(req, res) {
         try {
-            res.status(200).render('register');
+            res.status(200).render('signUp');
         } catch (error) {
             res.status(500).json({ Error: error.message });
         }

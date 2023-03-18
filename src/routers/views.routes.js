@@ -13,7 +13,7 @@ export default class ViewsRouter extends express.Router {
 
         /* this.get("/realtimeproducts", ViewController.getRealTimeProducts); */
 
-        this.get('/register', [], ViewController.registerUser);
+        this.get('/signup', [], ViewController.registerUser);
 
         this.get('/usercenter', [], ViewController.getUserCenter);
 

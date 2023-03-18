@@ -14,14 +14,14 @@ export default class UserServices {
             });
 
             if (userExists) {
-                // throw new Error('User already exists');
+                throw new Error('User already exists');
             }
 
-            const newCart = this.cartDao.create();
+            const newCart = await this.cartDao.create();
 
             user.password = await bcrypt.hash(user.password, 10);
 
-            const createdUser = this.userDao.create({
+            const createdUser = await this.userDao.create({
                 ...user,
                 cart: newCart._id,
             });
@@ -42,7 +42,7 @@ export default class UserServices {
                 //TODO: error handling
             }
 
-            return user;
+            return user; // sends plain user in order to compare password in AuthService
         } catch (error) {
             throw new Error(error.message);
         }

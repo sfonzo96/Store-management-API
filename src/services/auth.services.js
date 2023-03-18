@@ -13,14 +13,11 @@ export default class AuthServices {
             if (!user) {
                 throw new Error('User not found');
             }
-            // console.log(user);
 
             const passwordIsValid = await bcrypt.compare(
                 password,
                 user.password
             );
-
-            // console.log(passwordIsValid);
 
             if (!passwordIsValid) {
                 throw new Error('Wrong password');

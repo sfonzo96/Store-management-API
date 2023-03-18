@@ -7,8 +7,6 @@ import session from 'express-session';
 import passportConfig from './config/passport.config.js';
 import passport from 'passport';
 import mongoStore from 'connect-mongo';
-import cors from 'cors';
-import helmet from 'helmet';
 
 export default class AppServer {
     constructor({ ServerConfig, Router, WebsocketService }) {
@@ -61,12 +59,6 @@ export default class AppServer {
         this.app.engine('handlebars', hbs.engine);
         this.app.set('view engine', 'handlebars');
         this.app.set('views', 'src/views');
-
-        // Set other mids
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(cors());
-        this.app.use(helmet());
     }
 
     start() {

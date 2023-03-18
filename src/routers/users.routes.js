@@ -6,6 +6,6 @@ export default class UsersRouter extends express.Router {
         super();
         this.post('/', [], UserController.createUser);
         this.get('/:email', [isAuthenticated], UserController.getUser);
-        //TODO Update user endpoints
+        //TODO Update user endpoints with password update and so
     }
 }
