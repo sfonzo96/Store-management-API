@@ -1,61 +1,82 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import express from 'express';
-import './config/db.config.js';
-import router from './routers/index.routes.js';
-import { create } from 'express-handlebars';
+import handlebars from 'express-handlebars';
 import { paginationUrl, compare } from './utils/helpers.js';
 import { Server } from 'socket.io';
-import webSocketService from './services/websocket.services.js';
 import cookie from 'cookie-parser';
 import session from 'express-session';
-import configPassport from './config/passport.config.js';
+import passportConfig from './config/passport.config.js';
 import passport from 'passport';
 import mongoStore from 'connect-mongo';
-// TODO : add helmet
-// FIXME: asd
-const hbs = create({
-    helpers: {
-        paginationUrl,
-        compare,
-    },
-});
+import cors from 'cors';
+import helmet from 'helmet';
 
-const app = express();
+export default class AppServer {
+    constructor({ ServerConfig, Router, WebsocketService }) {
+        this.app = express();
+        this.config = ServerConfig;
+        this.router = Router;
+        this.websocketService = WebsocketService;
+        this.setup();
+    }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('src/public'));
-app.use(cookie());
-app.use(
-    session({
-        store: new mongoStore({
-            mongoUrl: process.env.MONGO_URI,
-            options: {
-                userNewUrlParser: true,
-                useUnifiedTopology: true,
+    async setup() {
+        await passportConfig(passport);
+
+        const hbs = handlebars.create({
+            helpers: {
+                paginationUrl,
+                compare,
             },
-        }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: { maxAge: 10000000 },
-    })
-);
-configPassport(passport);
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(router);
+        });
 
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
-app.set('views', 'src/views');
+        // Set static route
+        this.app.use(express.static('src/public'));
 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
-    console.log(`🚀 Server started on http://localhost:${PORT}`);
-});
-server.on('error', (err) => console.log(err));
+        // Set cookie parser, session and passport
+        this.app.use(cookie());
+        this.app.use(
+            session({
+                store: new mongoStore({
+                    mongoUrl: this.config.MONGO_URI,
+                    options: {
+                        userNewUrlParser: true,
+                        useUnifiedTopology: true,
+                    },
+                }),
+                secret: this.config.SESSION_SECRET,
+                resave: false,
+                saveUninitialized: false,
+                cookie: { maxAge: 10000000 },
+            })
+        );
 
-const io = new Server(server);
-webSocketService.websocketInit(io);
+        // set passport
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
+
+        // Set main router
+        this.app.use(this.router);
+
+        // Set template engine
+        this.app.engine('handlebars', hbs.engine);
+        this.app.set('view engine', 'handlebars');
+        this.app.set('views', 'src/views');
+
+        // Set other mids
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(cors());
+        this.app.use(helmet());
+    }
+
+    start() {
+        const server = this.app.listen(this.config.PORT, () => {
+            console.log(`🚀 Server started on port: ${this.config.PORT}`);
+        });
+
+        server.on('error', (err) => console.log(err));
+
+        const io = new Server(server);
+        this.websocketService.websocketInit(io);
+    }
+}

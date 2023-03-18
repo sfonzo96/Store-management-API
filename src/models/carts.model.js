@@ -33,6 +33,8 @@ const cartSchema = new mongoose.Schema(
     }
 );
 
+// get cart from db POPULATED WITH MIDDLEWARE (SO INFO IS AVAILABLE!!)
+
 cartSchema.pre('findOne', function (next) {
     this.populate('products.product');
     next();

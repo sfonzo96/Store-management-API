@@ -1,26 +1,26 @@
 import express from 'express';
-import * as viewsController from '../controllers/views.controller.js';
 
-const viewsRouter = express.Router();
+export default class ViewsRouter extends express.Router {
+    constructor({ ViewController }) {
+        super();
+        this.get('/chat', [], ViewController.getChat);
 
-viewsRouter.get('/chat', viewsController.getChat);
+        this.get('/', [], ViewController.login);
 
-viewsRouter.get('/', viewsController.login);
+        this.get('/cart', [], ViewController.getCart);
 
-viewsRouter.get('/cart', viewsController.getCart);
+        this.get('/products', [], ViewController.getProducts);
 
-viewsRouter.get('/products', viewsController.getProducts);
+        /* this.get("/realtimeproducts", ViewController.getRealTimeProducts); */
 
-/* viewsRouter.get("/realtimeproducts", viewsController.getRealTimeProducts); */
+        this.get('/register', [], ViewController.registerUser);
 
-viewsRouter.get('/register', viewsController.registerUser);
+        this.get('/usercenter', [], ViewController.getUserCenter);
 
-viewsRouter.get('/usercenter', viewsController.getUserCenter);
+        this.get('/admin', [], ViewController.getAdminCenter);
 
-viewsRouter.get('/admin', viewsController.getAdminCenter);
+        this.get('/admin/update/', [], ViewController.getUpdateProduct);
 
-viewsRouter.get('/admin/update/', viewsController.getUpdateProduct);
-
-viewsRouter.get('/failed', viewsController.getError);
-
-export default viewsRouter;
+        this.get('/failed', [], ViewController.getError);
+    }
+}

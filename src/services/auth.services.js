@@ -1,30 +1,34 @@
-import userService from './users.db.services.js';
 import bcrypt from 'bcrypt';
+import UserDTO from '../dto/userDTO.js';
 
-class AuthServices {
-    async login(email, password) {
+export default class AuthServices {
+    constructor({ UserService }) {
+        this.userService = UserService;
+    }
+
+    login = async (email, password) => {
         try {
-            const user = await userService.getUser(email);
+            const user = await this.userService.getUser(email);
 
             if (!user) {
                 throw new Error('User not found');
             }
+            // console.log(user);
 
             const passwordIsValid = await bcrypt.compare(
                 password,
                 user.password
             );
 
+            // console.log(passwordIsValid);
+
             if (!passwordIsValid) {
                 throw new Error('Wrong password');
             }
 
-            return user;
+            return new UserDTO(user);
         } catch (error) {
             throw new Error(error.message);
         }
-    }
+    };
 }
-
-const authServices = new AuthServices();
-export default authServices;

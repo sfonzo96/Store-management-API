@@ -46,6 +46,16 @@ const userSchema = new mongoose.Schema(
     }
 );
 
+userSchema.pre('findOne', function (next) {
+    this.populate({
+        path: 'cart',
+        populate: {
+            path: 'products.product',
+        },
+    });
+    next();
+});
+
 const UserModel = mongoose.model('Users', userSchema);
 
 export default UserModel;
