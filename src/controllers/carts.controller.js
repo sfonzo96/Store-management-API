@@ -1,155 +1,193 @@
-import cartsServices from "../services/carts.db.services.js";
-
-export async function createCart(req, res) {
-    try {
-/*         const cartData = req.body; */
-        const newCart = await cartsServices.createCart(/* cartData */);
-        res.status(201).json({
-            succees: true,
-            message: 'New cart created.',
-            cart: newCart
-            /* `${
-                newCart.products.length > 0 ? `New cart created with ${newCart.products.length} products.` : `New empty cart successfully created.`
-            } New cart's ID is ${newCart._id}.` */,
-        });
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
+export default class CartsController {
+    constructor({ CartService, PurchaseService }) {
+        this.service = CartService;
+        this.purchaseService = PurchaseService;
     }
-};
 
-export async function getCart(req, res) {
-    try {
-        const { cartID } = req.params;
-        const cart = await cartsServices.getCart(cartID);
-        res.status(200).json({
-            success: true,
-            data: cart
-        });
-    }
-    catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-};
-
-export async function deleteCart(req, res) {
-    try {
-        const { cartID } = req.params;
-        await cartsServices.deleteCart(cartID); // Returns an empty cart
-        res.status(200).json({ 
-            success: true,
-            message: `Cart ${cartID} was emptied`
-        });
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-};
-
-export async function addProductToCart(req, res) {
-    try {
-        const { cartID, productID } = req.params;
-        const { quantity } = req.body;
-
-        if (quantity <= 0) {
-            res.status(400).json({
-                success: false,
-                message: `Invalid quantity. Must be a positive integer.`
+    createCart = async (req, res) => {
+        try {
+            /*         const cartData = req.body; */
+            const newCart = await this.service.createCart(/* cartData */);
+            res.status(201).json({
+                succees: true,
+                message: 'New cart created.',
+                cart: newCart,
             });
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
         }
-        const cart = await cartsServices.addProductToCart(cartID, productID, Number(quantity));
-        
-        if (cart) {
+    };
+
+    getCart = async (req, res) => {
+        try {
+            const { cartID } = req.params;
+            const cart = await this.service.getCart(cartID);
             res.status(200).json({
                 success: true,
-                message: `Product ${productID} added to cart ${cart._id}`,
-                data: cart
+                data: cart,
             });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: `Product ${productID} not found.`
-            });
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
         }
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-}
+    };
 
-export async function deleteProductFromCart(req, res) {
-    try {
-        const { cartID, productID } = req.params;
-
-        const cart = await cartsServices.deleteProductFromCart(cartID, productID);
-        if (cart) {
+    deleteCart = async (req, res) => {
+        try {
+            const { cartID } = req.params;
+            await this.service.deleteCart(cartID); // Returns an empty cart
             res.status(200).json({
                 success: true,
-                message: `Product ${productID} deleted from cart ${cartID}`,
-                data: cart
+                message: `Cart ${cartID} was emptied`,
             });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`
-            });
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
         }
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-}
+    };
 
-export async function updateCart(req, res) {
-    try {
-        const { products } = req.body;
-        const { cartID } = req.params;
-        const updatedCart = await cartsServices.updateCart(cartID, products);
-        if (updatedCart) {
+    addProductToCart = async (req, res) => {
+        try {
+            const { cartID, productID } = req.params;
+            const { quantity } = req.body;
+
+            if (quantity <= 0) {
+                res.status(400).json({
+                    success: false,
+                    message: `Invalid quantity. Must be a positive integer.`,
+                });
+            }
+
+            const cart = await this.service.addProductToCart(
+                cartID,
+                productID,
+                Number(quantity)
+            );
+
+            if (cart) {
+                res.status(200).json({
+                    success: true,
+                    message: `Product ${productID} added to cart ${cart._id}`,
+                    data: cart,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Product ${productID} not found.`,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    };
+
+    deleteProductFromCart = async (req, res) => {
+        try {
+            const { cartID, productID } = req.params;
+
+            const cart = await this.service.deleteProductFromCart(
+                cartID,
+                productID
+            );
+            if (cart) {
+                res.status(200).json({
+                    success: true,
+                    message: `Product ${productID} deleted from cart ${cartID}`,
+                    data: cart,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    };
+
+    updateCart = async (req, res) => {
+        try {
+            const { products } = req.body;
+            const { cartID } = req.params;
+            const updatedCart = await this.service.updateCart(cartID, products);
+            if (updatedCart) {
+                res.status(200).json({
+                    success: true,
+                    message: `Cart ${cartID} updated.`,
+                    data: updatedCart,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Cart ${cartID} not found.`,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    };
+
+    updateQuantity = async (req, res) => {
+        try {
+            const { cartID, productID } = req.params;
+            const { quantity } = req.body;
+            const updatedCart = await this.service.updateQuantity(
+                cartID,
+                productID,
+                Number(quantity)
+            );
+            if (updatedCart) {
+                res.status(200).json({
+                    success: true,
+                    message: `Product ${productID} quantity updated to ${quantity} in cart ${cartID}`,
+                    data: updatedCart,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    };
+
+    getCartID = async (req, res) => {
+        try {
+            const cartID = req.user.cart._id.toString();
+
             res.status(200).json({
                 success: true,
-                message: `Cart ${cartID} updated.`,
-                data: updatedCart
+                cartID,
             });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: `Cart ${cartID} not found.`
-            });
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
         }
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-}
+    };
 
-export async function updateQuantity(req, res) {
-    try {
-        const { cartID, productID} = req.params;
-        const { quantity } = req.body;
-        const updatedCart = await cartsServices.updateQuantity(cartID, productID, Number(quantity));
-        if (updatedCart) {
-            res.status(200).json({
-                success: true,
-                message: `Product ${productID} quantity updated to ${quantity} in cart ${cartID}`,
-                data: updatedCart
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`
-            });
+    makePurchase = async (req, res) => {
+        try {
+            const { cartID } = req.params;
+            const userMail = req.user.email;
+
+            const purchase = await this.purchaseService.makePurchase(
+                cartID,
+                userMail
+            );
+            if (purchase) {
+                res.status(200).json({
+                    success: true,
+                    message: `Purchase of cart ${cartID} successful`,
+                    data: purchase,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Stock might not fulfill the purchase. Try again later or contact us for updates.`,
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
         }
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
-}
-
-export async function getCartID(req, res) {
-    try {
-        const cartID = req.user.cart._id;
-
-        res.status(200).json({
-            success: true,
-            cartID
-        });
-
-    } catch (error) {
-        res.status(500).json({ Error: error.message });
-    }
+    };
 }

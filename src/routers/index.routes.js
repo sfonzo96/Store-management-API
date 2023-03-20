@@ -1,21 +1,32 @@
-import { Router } from 'express'
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
 
-import productsRouter from './products.routes.js'
-import cartsRouter from './carts.routes.js'
-import viewsRouter from './views.routes.js'
-import usersRouter from './users.routes.js'
-import passportLocalRouter from './passportLocal.routes.js'
-import githubRouter from './github.routes.js'
-/* import authRouter from './auth.router.js' */
+export default class IndexRouter extends express.Router {
+    constructor({
+        ProductsRouter,
+        CartsRouter,
+        UsersRouter,
+        ViewsRouter,
+        PassportRouter,
+        GithubRouter,
+        ChatRouter,
+    }) {
+        super();
 
-const router = Router();
+        // Set other mids
+        this.use(express.json());
+        this.use(express.urlencoded({ extended: true }));
+        this.use(cors());
+        // this.use(helmet()); needs to be configured to allow axios and other front end scripts
 
-router.use('/api/products', productsRouter);
-router.use('/api/carts', cartsRouter);
-router.use('/api/users', usersRouter);
-router.use('/', viewsRouter);
-router.use('/api/passport', passportLocalRouter);
-router.use('/api/github', githubRouter)
-/* router.use('/api/auth', authRouter) */
-
-export default router;
+        // Set router for each path
+        this.use('/api/products', ProductsRouter);
+        this.use('/api/carts', CartsRouter);
+        this.use('/api/users', UsersRouter);
+        this.use('/', ViewsRouter);
+        this.use('/api/passport', PassportRouter);
+        this.use('/api/github', GithubRouter);
+        this.use('/api/chat', ChatRouter);
+    }
+}

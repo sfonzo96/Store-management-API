@@ -1,15 +1,32 @@
-import express from "express";
-import * as cartsController from '../controllers/carts.controller.js'
+import express from 'express';
+import checkPermission from '../middlewares/authorizate.middleware.js';
 
-const cartsRouter = express.Router();
-
-cartsRouter.post('/', cartsController.createCart)
-/* cartsRouter.get('/:cartID', cartsController.getCart) */
-cartsRouter.put('/:cartID/', cartsController.updateCart)
-cartsRouter.put('/:cartID/product/:productID', cartsController.updateQuantity)
-cartsRouter.post('/:cartID/product/:productID', cartsController.addProductToCart)
-cartsRouter.delete('/:cartID', cartsController.deleteCart)
-cartsRouter.delete('/:cartID/product/:productID', cartsController.deleteProductFromCart)
-cartsRouter.get('/getCartID', cartsController.getCartID)
-
-export default cartsRouter;
+export default class CartsRouter extends express.Router {
+    constructor({ CartController }) {
+        super();
+        this.post('/', [], CartController.createCart);
+        this.put('/:cartID/', [], CartController.updateCart);
+        this.put(
+            '/:cartID/product/:productID',
+            [],
+            CartController.updateQuantity
+        );
+        this.post(
+            '/:cartID/product/:productID',
+            [checkPermission('addToCart')],
+            CartController.addProductToCart
+        );
+        this.delete('/:cartID', [], CartController.deleteCart);
+        this.delete(
+            '/:cartID/product/:productID',
+            [checkPermission('deleteFromCart')],
+            CartController.deleteProductFromCart
+        );
+        this.get('/getCartID', [], CartController.getCartID);
+        this.post(
+            '/:cartID/purchase',
+            [checkPermission('makePurchase')],
+            CartController.makePurchase
+        );
+    }
+}

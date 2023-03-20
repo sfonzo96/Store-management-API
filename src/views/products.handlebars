@@ -1,55 +1,59 @@
 <section>
-  <h1>Products</h1>
-  <div class="categoryIndex">
-    <h2>Categories</h2>
-    <ul>
-      <li>
-        <a href={{paginationUrl 1 options ""}}>Todos</a> {{!-- TODO: Optimizar este hardcodeo! --}}
-      </li>
-      <li>
-        <a href={{paginationUrl 1 options "tipo1"}}>tipo1</a>
-      </li>
-      <li>
-        <a href={{paginationUrl 1 options "tipo2"}}>tipo2</a>
-      </li>
-      <li>
-        <a href={{paginationUrl 1 options "tipo3"}}>tipo3</a
-      </li>
-      <li>
-        <a href={{paginationUrl 1 options "tipo4"}}>tipo4</a>
-      </li>
-      <li>
-        <a href={{paginationUrl 1 options "tipo5"}}>tipo5</a>
-      </li>
-    </ul>
-  </div>
-  <div id='listContainer' class='list-group flex-row flex-wrap gap-5 justify-content-center'>
-    {{#each docs}}
-    <div class="card" style="width: 18rem;">
-      <img src="https://shoptheoldemercantile.com/image/cache/catalog/placeholderproduct-500x500.png" class="card-img-top" alt="...">
-      <div class="card-body justify-content-center d-flex flex-column">
-        <h5 class="card-title">{{title}}</h5>
-        <p class="card-text">{{description}}</p>
-        <p class="card-text">Price: {{price}}</p>
-        <p class="card-text">id: {{_id}}</p>
-        <p class="card-text">Category: {{category}}</p>
-        <p class="card-text">code :{{code}}</p>
-        <p class="card-text">Stock:{{stock}}</p>
-        <button type="button" class="btn btn-primary addToCartBtn" id="{{_id}}">Add to cart</button>
-      </div>
+    <h1>Products</h1>
+    <div class='categoryIndex'>
+        <h2>Categories</h2>
+        <ul>
+            <li>
+                <a href={{paginationUrl 1 options '' }}>Todos</a>
+                {{! TODO: Optimizar este hardcodeo! }}
+            </li>
+            <li>
+                <a href={{paginationUrl 1 options 'tipo1' }}>tipo1</a>
+            </li>
+            <li>
+                <a href={{paginationUrl 1 options 'tipo2' }}>tipo2</a>
+            </li>
+            <li>
+                <a href={{paginationUrl 1 options 'tipo3' }}>tipo3</a>
+            </li>
+            <li>
+                <a href={{paginationUrl 1 options 'tipo4' }}>tipo4</a>
+            </li>
+            <li>
+                <a href={{paginationUrl 1 options 'tipo5' }}>tipo5</a>
+            </li>
+        </ul>
     </div>
-    {{/each}}
-  </div>
-  <div class='btn-group d-flex gap-3'  role='group' aria-label='Basic example'>
-    {{#if prevPage}}
-        <a href={{paginationUrl prevPage options options.category}}><button type='button' class='btn btn-primary'>Previous</button></a>
-    {{/if}}
-    <button  disabled="true" class='btn btn-primary'>{{page}}</button>
-    {{#if nextPage}}
-        <a href={{paginationUrl nextPage options options.category}}><button type='button'class='btn btn-primary'>Next</button></a>
-    {{/if}}
-  </div>
+    <div id='listContainer' class='list-group flex-row flex-wrap gap-5 justify-content-center'>
+        {{#each docs}}
+        <div class='card' style='width: 18rem;'>
+            <img src='https://shoptheoldemercantile.com/image/cache/catalog/placeholderproduct-500x500.png'
+                class='card-img-top' alt='...' />
+            <div class='card-body justify-content-center d-flex flex-column'>
+                <h5 class='card-title'>{{title}}</h5>
+                <p class='card-text'>{{description}}</p>
+                <p class='card-text'>Price: {{price}}</p>
+                <p class='card-text'>id: {{_id}}</p>
+                <p class='card-text'>Category: {{category}}</p>
+                <p class='card-text'>code :{{code}}</p>
+                <p class='card-text'>Stock:{{stock}}</p>
+                <button type='button' class='btn btn-primary addToCartBtn' id='{{_id}}'>Add to cart</button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class='btn-group d-flex gap-3' role='group' aria-label='Basic example'>
+        {{#if prevPage}}
+        <a href={{paginationUrl prevPage options options.category}}><button type='button'
+                class='btn btn-primary'>Previous</button></a>
+        {{/if}}
+        <button disabled='true' class='btn btn-primary'>{{page}}</button>
+        {{#if nextPage}}
+        <a href={{paginationUrl nextPage options options.category}}><button type='button'
+                class='btn btn-primary'>Next</button></a>
+        {{/if}}
+    </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/js/products.js" type="module"></script>
+<script src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'></script>
+<script src='/js/products.js' type='module'></script>

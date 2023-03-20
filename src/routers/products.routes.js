@@ -1,12 +1,25 @@
 import express from 'express';
-import * as productsController from '../controllers/products.controller.js'
+import checkPermission from '../middlewares/authorizate.middleware.js';
 
-const productsRouter = express.Router();
-
-productsRouter.get('/', productsController.getProducts)
-productsRouter.get('/:productID', productsController.getProduct)
-productsRouter.post('/',productsController.createProduct);
-productsRouter.put('/:productID', productsController.updateProduct);
-productsRouter.delete('/:productID', productsController.deleteProduct);
-
-export default productsRouter;
+export default class ProductsRouter extends express.Router {
+    constructor({ ProductController }) {
+        super();
+        this.get('/', [], ProductController.getProducts);
+        this.get('/:productID', [], ProductController.getProduct);
+        this.post(
+            '/',
+            [checkPermission('createProduct')],
+            ProductController.createProduct
+        );
+        this.put(
+            '/:productID',
+            [checkPermission('updateProduct')],
+            ProductController.updateProduct
+        );
+        this.delete(
+            '/:productID',
+            [checkPermission],
+            ProductController.deleteProduct
+        );
+    }
+}

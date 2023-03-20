@@ -1,27 +1,38 @@
-<h2 id="welcomeText">Welcome to the chat!</h2>
+<h2 id='welcomeText'>Welcome to the chat!</h2>
 
-
-<p id="userName">
-    {{#if user}} 
-        {{user.firstName}}, write and send your message!
-    {{/if}}
+{{#if user}}
+<p id='userName'>
+    {{user.firstName}}, write and send your message!
 </p>
 
-{{#unless user}} 
-    <div>
-        <p><a href="/register">Create an acount</a> or <a href="/">log in</a>.</p>
-    </div>
+<div>
+    <input id='messageInput' type='text' />
+    <button id='submitBtn' class='submitBtn'>Send</button>
+</div>
+
+{{!-- //MEMO: this div an auxiliar div to store the user id in the DOM and access it in order to store the message with
+the id in db --}}
+<div id="auxStorage" data-user={{user.firstName}}-{{user.id}}></div>
+
+{{/if}}
+
+
+{{#unless user}}
+<div>
+    <p>
+        Only users are allowed to chat.<a href='/signup'>Create an acount</a>
+        or
+        <a href='/'>log in</a>.
+    </p>
+</div>
 {{/unless}}
 
-<div>
-    <input id ="messageInput" type="text">
-    <button id="submitBtn" class="submitBtn">Send</button>
-</div>
 
-<div id="messagesContainer" class="messagesContainer">
+
+<div id='messagesContainer' class='messagesContainer'>
 
 </div>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/chat.js"></script>
+<script src='//cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/chat.js'></script>

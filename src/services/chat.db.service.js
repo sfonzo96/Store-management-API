@@ -1,25 +1,21 @@
-import MessageModel from "../models/message.model.js.js.js";
+import MessageModel from '../models/message.model.js';
 
-class MessageManager {
-
-    async createMessage(data) {
+export default class MessagesService {
+    createMessage = async (data) => {
         try {
             const newMessage = await MessageModel.create(data);
             return newMessage;
         } catch (error) {
             throw new Error(error.message);
         }
-    }
+    };
 
-    async getMessages() {
+    getMessages = async () => {
         try {
             const messages = await MessageModel.find().lean();
             return messages;
         } catch (error) {
             throw new Error(error.message);
         }
-    }
+    };
 }
-
-const messageManager = new MessageManager();
-export default messageManager;

@@ -1,12 +1,15 @@
 import passportLocal from 'passport-local';
-import userService from '../services/users.db.services.js';
-import authService from '../services/auth.services.js';
 import passportGithub from 'passport-github2';
-import dotenv from 'dotenv';
+import container from '../container.js';
+import UserDTO from '../dto/userDTO.js';
 
-dotenv.config();
+const passportConfig = async (passport) => {
+    //TODO: set this with awilix injection ({with this})
 
-function passportConfig(passport) {
+    const userService = container.resolve('UserService');
+    const authService = container.resolve('AuthService');
+    const config = container.resolve('ServerConfig');
+
     passport.use(
         'signup',
         new passportLocal.Strategy(
@@ -46,7 +49,6 @@ function passportConfig(passport) {
                     return done(null, user);
                 } catch (error) {
                     done(null, false, { message: error.message });
-                    //throw new Error(error.message);
                 }
             }
         )
@@ -56,8 +58,8 @@ function passportConfig(passport) {
         'github',
         new passportGithub.Strategy(
             {
-                clientID: process.env.CLIENT_ID,
-                clientSecret: process.env.CLIENT_SECRET,
+                clientID: config.CLIENT_ID,
+                clientSecret: config.CLIENT_SECRET,
                 callbackURL: 'http://localhost:8080/api/github/callback', // This should be changed accordingly to the environment and stage of the proyect
             },
             async (accessToken, refreshToken, profile, done) => {
@@ -78,9 +80,9 @@ function passportConfig(passport) {
                             platform: 'github',
                         };
                         const newUser = await userService.createUser(userData);
+                        delete newUser.password;
                         return done(null, newUser);
                     }
-
                     delete user.password;
 
                     done(null, user);
@@ -93,18 +95,21 @@ function passportConfig(passport) {
 
     passport.serializeUser((user, done) => {
         console.log('Serializing');
-        done(null, user._id);
+        if (!user.id) {
+            user = new UserDTO(user);
+        }
+        done(null, user.id);
     });
 
-    passport.deserializeUser(async (_id, done) => {
+    passport.deserializeUser(async (id, done) => {
         console.log('Deserializing');
-        const user = await userService.getUserById(_id);
+        const user = await userService.getUserById(id);
         if (!user) {
             return done(null, false);
         }
 
         done(null, user);
     });
-}
+};
 
 export default passportConfig;
