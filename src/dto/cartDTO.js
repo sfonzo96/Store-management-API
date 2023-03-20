@@ -3,7 +3,7 @@ export default class CartDTO {
         this.id = cart._id || cart.id;
         this.products = cart.products;
         this.subtotal;
-        setSubtotal();
+        this.setSubtotal();
     }
 
     setSubtotal = () => {

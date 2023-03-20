@@ -14,28 +14,32 @@ import ViewsRouter from './routers/views.routes.js';
 import UsersRouter from './routers/users.routes.js';
 import PassportLocalRouter from './routers/passportLocal.routes.js';
 import GithubRouter from './routers/github.routes.js';
+import ChatRouter from './routers/chat.routes.js';
 // models
 import User from './models/users.model.js';
 import Product from './models/products.model.js';
 import Cart from './models/carts.model.js';
 import Message from './models/message.model.js';
+import PurchaseTicket from './models/purchaseTicket.model.js';
 // repositories
 import UserRepository from './repositories/users.repository.js';
 import ProductRepository from './repositories/products.repository.js';
 import CartRepository from './repositories/carts.repository.js';
 // services
-import UserService from './services/users.db.services.js';
-import ProductService from './services/products.db.services.js';
-import CartService from './services/carts.db.services.js';
-import AuthService from './services/auth.services.js';
-import WebsocketService from './services/websocket.services.js';
-import chatService from './services/chat.db.services.js';
+import UserService from './services/users.db.service.js';
+import ProductService from './services/products.db.service.js';
+import CartService from './services/carts.db.service.js';
+import AuthService from './services/auth.service.js';
+import WebsocketService from './services/websocket.service.js';
+import ChatService from './services/chat.db.service.js';
+import PurchaseService from './services/purchase.db.service.js';
 // controllers
 import UserController from './controllers/users.controller.js';
 import ProductController from './controllers/products.controller.js';
 import CartController from './controllers/carts.controller.js';
 import ViewController from './controllers/views.controller.js';
 import PassportController from './controllers/passport.controller.js';
+import ChatController from './controllers/chat.controller.js';
 
 // create container
 const container = createContainer({
@@ -49,6 +53,7 @@ container.register({
     Product: asValue(Product),
     Cart: asValue(Cart),
     Message: asValue(Message),
+    PurchaseTicket: asValue(PurchaseTicket),
 
     // Repositories
     UserRepository: asClass(UserRepository).singleton(),
@@ -56,12 +61,13 @@ container.register({
     CartRepository: asClass(CartRepository).singleton(),
 
     // Services
-    ChatService: asClass(chatService).singleton(),
+    ChatService: asClass(ChatService).singleton(),
     WebsocketService: asClass(WebsocketService).singleton(),
     UserService: asClass(UserService).singleton(),
     ProductService: asClass(ProductService).singleton(),
     CartService: asClass(CartService).singleton(),
     AuthService: asClass(AuthService).singleton(),
+    PurchaseService: asClass(PurchaseService).singleton(),
 
     // Controllers
     UserController: asClass(UserController).singleton(),
@@ -69,6 +75,7 @@ container.register({
     CartController: asClass(CartController).singleton(),
     ViewController: asClass(ViewController).singleton(),
     PassportController: asClass(PassportController).singleton(),
+    ChatController: asClass(ChatController).singleton(),
 
     // Routers
     ProductsRouter: asClass(ProductsRouter).singleton(),
@@ -77,6 +84,7 @@ container.register({
     UsersRouter: asClass(UsersRouter).singleton(),
     PassportRouter: asClass(PassportLocalRouter).singleton(),
     GithubRouter: asClass(GithubRouter).singleton(),
+    ChatRouter: asClass(ChatRouter).singleton(),
     Router: asClass(Router).singleton(),
 
     // Config

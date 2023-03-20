@@ -1,6 +1,7 @@
 export default class CartsController {
-    constructor({ CartService }) {
+    constructor({ CartService, PurchaseService }) {
         this.service = CartService;
+        this.purchaseService = PurchaseService;
     }
 
     createCart = async (req, res) => {
@@ -54,6 +55,7 @@ export default class CartsController {
                     message: `Invalid quantity. Must be a positive integer.`,
                 });
             }
+
             const cart = await this.service.addProductToCart(
                 cartID,
                 productID,
@@ -152,12 +154,38 @@ export default class CartsController {
 
     getCartID = async (req, res) => {
         try {
-            const cartID = req.user.cart._id;
+            const cartID = req.user.cart._id.toString();
 
             res.status(200).json({
                 success: true,
                 cartID,
             });
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    };
+
+    makePurchase = async (req, res) => {
+        try {
+            const { cartID } = req.params;
+            const userMail = req.user.email;
+
+            const purchase = await this.purchaseService.makePurchase(
+                cartID,
+                userMail
+            );
+            if (purchase) {
+                res.status(200).json({
+                    success: true,
+                    message: `Purchase of cart ${cartID} successful`,
+                    data: purchase,
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: `Stock might not fulfill the purchase. Try again later or contact us for updates.`,
+                });
+            }
         } catch (error) {
             res.status(500).json({ Error: error.message });
         }

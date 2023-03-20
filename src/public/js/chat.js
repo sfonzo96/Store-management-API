@@ -2,25 +2,20 @@ const socket = io();
 
 const submitBtn = document.getElementById('submitBtn');
 const messageInput = document.getElementById('messageInput');
-const messagesContainer = document.getElementById('messagesContainer');
-const welcomeText = document.getElementById('welcomeText');
 const userName = document.getElementById('userName');
+const messagesContainer = document.getElementById('messagesContainer');
 
-let newMessages = [];
-let user = userName.innerText.substring(0, userName.innerText.indexOf(','));
+// let newMessages = [];
 
 socket.on('welcome', async (data) => {
     try {
-        const messages = await getMessages(data);
-        loadMessages(messages);
+        const response = await getMessages(data);
+        if (response.messages.length > 0) {
+            loadMessages(response.messages);
+        }
     } catch (error) {
         console.log(error);
     }
-});
-
-socket.on('message', async (data) => {
-    const message = await getMessages(data);
-    printMessage({ ...message });
 });
 
 socket.on('newUser', (newUser) => {
@@ -31,46 +26,13 @@ socket.on('newUser', (newUser) => {
     });
 });
 
-if (!user.length > 0) {
-    Swal.fire({
-        title: 'Please set your name',
-        text: 'User name:',
-        input: 'text',
-        allowOutsideClick: false,
-        inputValidator: (value) => {
-            return !value && 'You need to set your user name';
-        },
-    }).then((newUser) => {
-        user = newUser.value;
-        welcomeText.innerText = `Welcome ${user}!`;
-        userName.remove();
-        socket.emit('newUser', user);
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    });
-} else {
-    document.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-}
-
-submitBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    sendMessage();
-});
-
 function loadMessages(messages) {
     messagesContainer.innerHTML = '';
     messages.forEach((msg) => {
         const messageBox = document.createElement('div');
         messageBox.className = 'messageBox';
         messageBox.innerHTML = `
-								<p class="messageUser" id="messageUser">${msg.user}</p>
+								<p class="messageUser" id="messageUser">${msg.user.firstName} ${msg.user.lastName} </p>
 								<p class="messageText" id="messageText">${msg.message}</p>
 								<small class="messageDate" id="messageText">${msg.createdAt}</small>
 								`;
@@ -81,26 +43,64 @@ function loadMessages(messages) {
 function printMessage(message) {
     messagesContainer.innerHTML += `
 								<div class="messageBox">
-								<p class="messageUser" id="messageUser">${message.user}</p>
+								<p class="messageUser" id="messageUser">${message.user.firstName} ${message.user.lastName}</p>
 								<p class="messageText" id="messageText">${message.message}</p>
 								<small class="messageDate" id="messageText">${message.createdAt}</small>
 	`;
 }
 
-function sendMessage() {
+function getMessage() {
     const messageText = messageInput.value.trim();
     messageInput.value = '';
-    socket.emit('newMessage', { user, message: messageText });
+    return messageText;
+}
+
+function sendMessage(userID, message) {
+    axios({
+        method: 'POST',
+        url: '/api/chat/new',
+        data: {
+            user: userID,
+            message,
+        },
+    }).then((res) => {
+        console.log('getting a response');
+        console.log(res.data);
+        printMessage(res.data.message);
+    });
 }
 
 function getMessages(data) {
     return new Promise((res, rej) => {
-        if (data.messages) {
-            res([...data.messages]);
-        } else if (data) {
+        if (data) {
             res(data);
         } else {
             rej(new Error('Failed to get new messages'));
         }
     });
 }
+
+function setup() {
+    console.log('Connection successful');
+    if (submitBtn && messageInput && userName) {
+        const auxStorage = document.getElementById('auxStorage');
+        let userData = auxStorage.dataset.user;
+        let userName = userData.split('-')[0];
+        let userID = userData.split('-')[1];
+
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sendMessage(userID, getMessage());
+        });
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(userID, getMessage());
+            }
+        });
+
+        socket.emit('newUser', userName);
+    }
+}
+
+setup();

@@ -1,6 +1,6 @@
 import ProductDTO from '../dto/productDTO.js';
 
-export default class ProductsServices {
+export default class ProductsService {
     constructor({ ProductRepository, WebsocketService }) {
         this.dao = ProductRepository;
         this.websocket = WebsocketService;

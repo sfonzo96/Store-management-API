@@ -1,5 +1,5 @@
 import express from 'express';
-import isAuthenticated from '../middlewares/auth.middleware.js';
+import isAuthenticated from '../middlewares/authenticate.middleware.js';
 
 export default class UsersRouter extends express.Router {
     constructor({ UserController }) {

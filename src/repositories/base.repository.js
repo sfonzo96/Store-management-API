@@ -22,9 +22,11 @@ export default class BaseRepository {
     };
 
     update = async (filter, update) => {
-        return await findByIdAndUpdate(filter, update, {
-            new: true,
-        }).lean();
+        return await this.model
+            .findOneAndUpdate(filter, update, {
+                new: true,
+            })
+            .lean();
 
         // O conviene:
         // const response = await this.getOne(id).lean();

@@ -1,3 +1,4 @@
+import UserDTO from '../dto/userDTO.js';
 export default class ViewController {
     constructor({ ProductService, UserService }) {
         this.productService = ProductService;
@@ -17,13 +18,13 @@ export default class ViewController {
         }
     };
 
-    async registerUser(req, res) {
+    registerUser = async (req, res) => {
         try {
             res.status(200).render('signUp');
         } catch (error) {
             res.status(500).json({ Error: error.message });
         }
-    }
+    };
 
     getProducts = async (req, res) => {
         try {
@@ -56,36 +57,14 @@ export default class ViewController {
         }
     };
 
-    getRealTimeProducts = async (req, res) => {
-        try {
-            const paginatedData = await this.productService.getProducts(
-                {},
-                { lean: true }
-            );
-
-            const user = req.user;
-
-            if (paginatedData) {
-                res.status(200).render('realTimeProducts', {
-                    ...paginatedData,
-                    user,
-                });
-            } else {
-                res.status(404).json({ Error: 'Products not found' });
-            }
-        } catch (error) {
-            res.status(500).json({ Error: error.message });
-        }
-    };
-
     getCart = async (req, res) => {
         try {
             const userMail = req.user.email;
             const user = await this.userService.getUser(userMail);
-            delete user.password;
+            const userDTO = new UserDTO(user);
 
-            if (user) {
-                res.status(200).render('cart', { user });
+            if (userDTO) {
+                res.status(200).render('cart', { user: userDTO });
             } else {
                 res.status(404).json({ Error: 'Cart not found' });
             }
@@ -151,6 +130,28 @@ export default class ViewController {
             res.status(500).json({ Error: error.message });
         }
     };
+
+    /*     getRealTimeProducts = async (req, res) => {
+        try {
+            const paginatedData = await this.productService.getProducts(
+                {},
+                { lean: true }
+            );
+
+            const user = req.user;
+
+            if (paginatedData) {
+                res.status(200).render('realTimeProducts', {
+                    ...paginatedData,
+                    user,
+                });
+            } else {
+                res.status(404).json({ Error: 'Products not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ Error: error.message });
+        }
+    }; */
 
     getError = async (req, res) => {
         try {

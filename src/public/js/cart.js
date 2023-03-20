@@ -1,5 +1,6 @@
 const emtpyCartBtn = document.getElementById('emtpyCartBtn');
 const removeProductBtns = document.querySelectorAll('.removeFromCartBtn');
+const purchaseBtn = document.getElementById('purchaseBtn');
 
 document.addEventListener('DOMContentLoaded', () => {
     if (emtpyCartBtn) {
@@ -33,14 +34,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).then((res) => {
                     const cartID = res.data.cartID;
                     axios({
-                        method: 'delete',
+                        method: 'DELETE',
                         url: `/api/carts/${cartID}/product/${productID}`,
                     }).then((res) => {
                         alert(
-                            'Product removed from cart. TODO: botones + y - para modificar la cantidad.'
+                            'Product removed from cart.'
+                            // TODO: botones + y - para modificar la cantidad.
                         );
                         location.reload();
                     });
+                });
+            });
+        });
+    }
+
+    if (purchaseBtn) {
+        purchaseBtn.addEventListener('click', () => {
+            axios({
+                method: 'GET',
+                url: '/api/carts/getCartID',
+            }).then((res) => {
+                const cartID = res.data.cartID;
+                axios({
+                    method: 'POST',
+                    url: `/api/carts/${cartID}/purchase`,
+                }).then((res) => {
+                    if (res.success === true) {
+                        alert(res.message);
+                        location.reload();
+                    } else {
+                        alert(res.message);
+                    }
                 });
             });
         });

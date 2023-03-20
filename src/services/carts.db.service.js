@@ -1,8 +1,9 @@
 import CartDTO from '../dto/cartDTO.js';
 
-export default class CartServices {
-    constructor({ CartRepository }) {
+export default class CartService {
+    constructor({ CartRepository, PurchaseService }) {
         this.dao = CartRepository;
+        this.purchaseService = PurchaseService;
     }
 
     createCart = async () => {
@@ -68,34 +69,30 @@ export default class CartServices {
             }
 
             const productIsInCart = cart.products.some((prod) =>
-                prod.product.equals(productID)
+                prod.product._id.equals(productID)
             ); // check if product is already in cart
 
             let updatedCart;
 
             if (productIsInCart) {
                 // product is in cart?
-                updatedCart = await this.dao
-                    .update(
-                        { _id: cartID, 'products.product': productID },
-                        { $inc: { 'products.$.quantity': quantity } },
-                        { new: true }
-                    )
-                    .lean();
+                updatedCart = await this.dao.update(
+                    {
+                        _id: cartID,
+                        products: { $elemMatch: { product: productID } },
+                    },
+                    { $inc: { 'products.$.quantity': quantity } }
+                );
             } else {
-                updatedCart = await this.dao
-                    .update(
-                        { _id: cartID },
-                        {
-                            $push: {
-                                products: { product: productID, quantity },
-                            },
+                updatedCart = await this.dao.update(
+                    { _id: cartID },
+                    {
+                        $push: {
+                            products: { product: productID, quantity },
                         },
-                        { new: true }
-                    )
-                    .lean();
+                    }
+                );
             }
-
             return new CartDTO(updatedCart);
         } catch (error) {
             throw new Error(error.message);
@@ -111,12 +108,15 @@ export default class CartServices {
             }
 
             const productIsInCart = cart.products.some((prod) =>
-                prod.product.equals(productID)
+                prod.product._id.equals(productID)
             );
 
             if (productIsInCart) {
                 const updatedCart = await this.dao.update(
-                    { _id: cartID, 'products.product': productID },
+                    {
+                        _id: cartID,
+                        products: { $elemMatch: { product: productID } },
+                    },
                     { $pull: { products: { product: productID } } },
                     { new: true }
                 );

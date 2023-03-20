@@ -19,9 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             quantity: 1,
                         },
                     }).then((res) => {
+                        console.log(res);
                         alert(
-                            'Product added to cart',
-                            'Luego hago esto más decente, ya renegué demasiado para hacerlo funcionar ja'
+                            'Product added to cart'
+                            // TODO Luego hago esto más decente, ya renegué demasiado para hacerlo funcionar ja'
                         );
                     });
                 })

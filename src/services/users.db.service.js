@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import UserDTO from '../dto/userDTO.js';
 
-export default class UserServices {
+export default class UserService {
     constructor({ UserRepository, CartRepository }) {
         this.userDao = UserRepository;
         this.cartDao = CartRepository;

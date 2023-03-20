@@ -1,24 +1,33 @@
 <h2 id='welcomeText'>Welcome to the chat!</h2>
 
+{{#if user}}
 <p id='userName'>
-    {{#if user}}
     {{user.firstName}}, write and send your message!
-    {{/if}}
 </p>
+
+<div>
+    <input id='messageInput' type='text' />
+    <button id='submitBtn' class='submitBtn'>Send</button>
+</div>
+
+{{!-- //MEMO: this div an auxiliar div to store the user id in the DOM and access it in order to store the message with
+the id in db --}}
+<div id="auxStorage" data-user={{user.firstName}}-{{user.id}}></div>
+
+{{/if}}
+
 
 {{#unless user}}
 <div>
-    <p><a href='/signup'>Create an acount</a>
+    <p>
+        Only users are allowed to chat.<a href='/signup'>Create an acount</a>
         or
         <a href='/'>log in</a>.
     </p>
 </div>
 {{/unless}}
 
-<div>
-    <input id='messageInput' type='text' />
-    <button id='submitBtn' class='submitBtn'>Send</button>
-</div>
+
 
 <div id='messagesContainer' class='messagesContainer'>
 
