@@ -36,6 +36,6 @@ export default class BaseRepository {
 
     // Hard delete
     delete = async (id) => {
-        return await this.model.deleteOne(id).lean();
+        return await this.model.deleteOne({ _id: id }).lean();
     };
 }

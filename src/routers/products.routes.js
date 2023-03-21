@@ -18,7 +18,7 @@ export default class ProductsRouter extends express.Router {
         );
         this.delete(
             '/:productID',
-            [checkPermission],
+            [checkPermission('deleteProduct')],
             ProductController.deleteProduct
         );
     }
