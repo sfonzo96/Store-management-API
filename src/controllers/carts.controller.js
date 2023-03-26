@@ -1,24 +1,25 @@
+import CustomError from '../utils/CustomError.js';
+
 export default class CartsController {
     constructor({ CartService, PurchaseService }) {
         this.service = CartService;
         this.purchaseService = PurchaseService;
     }
 
-    createCart = async (req, res) => {
+    createCart = async (req, res, next) => {
         try {
-            /*         const cartData = req.body; */
-            const newCart = await this.service.createCart(/* cartData */);
+            const newCart = await this.service.createCart();
             res.status(201).json({
                 succees: true,
                 message: 'New cart created.',
                 cart: newCart,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getCart = async (req, res) => {
+    getCart = async (req, res, next) => {
         try {
             const { cartID } = req.params;
             const cart = await this.service.getCart(cartID);
@@ -27,11 +28,11 @@ export default class CartsController {
                 data: cart,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    deleteCart = async (req, res) => {
+    deleteCart = async (req, res, next) => {
         try {
             const { cartID } = req.params;
             await this.service.deleteCart(cartID); // Returns an empty cart
@@ -40,20 +41,20 @@ export default class CartsController {
                 message: `Cart ${cartID} was emptied`,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    addProductToCart = async (req, res) => {
+    addProductToCart = async (req, res, next) => {
         try {
             const { cartID, productID } = req.params;
             const { quantity } = req.body;
 
             if (quantity <= 0) {
-                res.status(400).json({
-                    success: false,
-                    message: `Invalid quantity. Must be a positive integer.`,
-                });
+                throw new CustomError(
+                    'VALIDATION_ERROR',
+                    'Invalid quantity. Must be a positive integer.'
+                );
             }
 
             const cart = await this.service.addProductToCart(
@@ -69,17 +70,14 @@ export default class CartsController {
                     data: cart,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: `Product ${productID} not found.`,
-                });
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    deleteProductFromCart = async (req, res) => {
+    deleteProductFromCart = async (req, res, next) => {
         try {
             const { cartID, productID } = req.params;
 
@@ -94,17 +92,14 @@ export default class CartsController {
                     data: cart,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`,
-                });
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    updateCart = async (req, res) => {
+    updateCart = async (req, res, next) => {
         try {
             const { products } = req.body;
             const { cartID } = req.params;
@@ -116,17 +111,14 @@ export default class CartsController {
                     data: updatedCart,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: `Cart ${cartID} not found.`,
-                });
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    updateQuantity = async (req, res) => {
+    updateQuantity = async (req, res, next) => {
         try {
             const { cartID, productID } = req.params;
             const { quantity } = req.body;
@@ -142,17 +134,14 @@ export default class CartsController {
                     data: updatedCart,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: `Product ${productID} not found in cart ${cartID}. Or cart ${cartID} not found.`,
-                });
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getCartID = async (req, res) => {
+    getCartID = async (req, res, next) => {
         try {
             const cartID = req.user.cart._id.toString();
 
@@ -161,11 +150,11 @@ export default class CartsController {
                 cartID,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    makePurchase = async (req, res) => {
+    makePurchase = async (req, res, next) => {
         try {
             const { cartID } = req.params;
             const userMail = req.user.email;
@@ -181,13 +170,13 @@ export default class CartsController {
                     data: purchase,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: `Stock might not fulfill the purchase. Try again later or contact us for updates.`,
-                });
+                throw new CustomError(
+                    'CONFLICT',
+                    'Out of stock. Try again later or contact us for updates.'
+                );
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 }

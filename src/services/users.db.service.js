@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import UserDTO from '../dto/userDTO.js';
+import CustomError from '../utils/CustomError.js';
 
 export default class UserService {
     constructor({ UserRepository, CartRepository }) {
@@ -14,7 +15,7 @@ export default class UserService {
             });
 
             if (userExists) {
-                throw new Error('User already exists');
+                throw new CustomError('CONFLICT', 'User already exists');
             }
 
             const newCart = await this.cartDao.create();
@@ -28,7 +29,7 @@ export default class UserService {
 
             return new UserDTO(createdUser);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -38,13 +39,12 @@ export default class UserService {
             const user = await this.userDao.getOne({ email });
 
             if (!user) {
-                console.log('User not found');
-                //TODO: error handling
+                throw new CustomError('NOT_FOUND', 'User not found');
             }
 
             return user; // sends plain user in order to compare password in AuthService
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -53,12 +53,12 @@ export default class UserService {
             const user = await this.userDao.getById(id);
 
             if (!user) {
-                throw new Error('User not found');
+                throw new CustomError('NOT_FOUND', 'User not found');
             }
 
             return new UserDTO(user);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 }

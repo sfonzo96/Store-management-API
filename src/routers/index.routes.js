@@ -11,6 +11,7 @@ export default class IndexRouter extends express.Router {
         PassportRouter,
         GithubRouter,
         ChatRouter,
+        MockingRouter,
     }) {
         super();
 
@@ -28,5 +29,6 @@ export default class IndexRouter extends express.Router {
         this.use('/api/passport', PassportRouter);
         this.use('/api/github', GithubRouter);
         this.use('/api/chat', ChatRouter);
+        this.use('/api/mocking', MockingRouter);
     }
 }

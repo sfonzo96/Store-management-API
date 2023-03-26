@@ -58,14 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 axios({
                     method: 'POST',
                     url: `/api/carts/${cartID}/purchase`,
-                }).then((res) => {
-                    if (res.success === true) {
-                        alert(res.message);
-                        location.reload();
-                    } else {
-                        alert(res.message);
-                    }
-                });
+                })
+                    .then((res) => {
+                        if (res.success === true) {
+                            alert('Purchase successful!');
+                            location.reload();
+                        } else {
+                            alert('Purchase failed!');
+                        }
+                    })
+                    .then((err) => {
+                        alert(err.message);
+                    });
             });
         });
     }

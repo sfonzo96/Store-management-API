@@ -1,9 +1,11 @@
+import CustomError from '../utils/CustomError.js';
+
 export default class ViewController {
     constructor({ ChatService }) {
         this.chatService = ChatService;
     }
 
-    getMessages = async (req, res) => {
+    getMessages = async (req, res, next) => {
         try {
             const messages = await this.chatService.getMessages();
             if (messages.length > 0) {
@@ -12,17 +14,17 @@ export default class ViewController {
                     data: messages,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: 'Products not found',
+                res.status(200).json({
+                    success: true,
+                    data: [],
                 });
             }
         } catch (error) {
-            throw new Error(error.message);
+            next(error);
         }
     };
 
-    createMessage = async (req, res) => {
+    createMessage = async (req, res, next) => {
         try {
             const messageData = req.body;
             const newMessage = await this.chatService.createMessage(
@@ -34,13 +36,10 @@ export default class ViewController {
                     message: newMessage,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: 'Products not found',
-                });
+                throw new CustomError('SERVER_ERROR', 'Error creating message');
             }
         } catch (error) {
-            throw new Error(error.message);
+            next(error);
         }
     };
 }

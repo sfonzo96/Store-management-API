@@ -1,4 +1,5 @@
 import CartDTO from '../dto/cartDTO.js';
+import CustomError from '../utils/CustomError.js';
 
 export default class CartService {
     constructor({ CartRepository, PurchaseService }) {
@@ -11,7 +12,7 @@ export default class CartService {
             const cart = await this.dao.create();
             return new CartDTO(cart);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -20,7 +21,7 @@ export default class CartService {
             const cart = await this.dao.getById(cartID);
             return new CartDTO(cart);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -28,7 +29,7 @@ export default class CartService {
         try {
             return await this.dao.delete();
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     }
 
@@ -43,7 +44,7 @@ export default class CartService {
             );
             return new CartDTO(updatedCart);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     }
 
@@ -56,7 +57,7 @@ export default class CartService {
             );
             return new CartDTO(updatedCart);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     }
 
@@ -65,7 +66,7 @@ export default class CartService {
             const cart = await this.dao.getById(cartID);
 
             if (!cart) {
-                throw new Error('Cart not found');
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
 
             const productIsInCart = cart.products.some((prod) =>
@@ -95,7 +96,7 @@ export default class CartService {
             }
             return new CartDTO(updatedCart);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -104,7 +105,7 @@ export default class CartService {
             const cart = await this.dao.getById(cartID);
 
             if (!cart) {
-                throw new Error('Cart not found');
+                throw new CustomError('NOT_FOUND', 'Cart not found');
             }
 
             const productIsInCart = cart.products.some((prod) =>
@@ -122,9 +123,10 @@ export default class CartService {
                 );
 
                 return new CartDTO(updatedCart);
-            } else throw new Error('Product not found in cart');
+            } else
+                throw new CustomError('NOT_FOUND', 'Product not found in cart');
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 }

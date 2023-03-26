@@ -1,4 +1,5 @@
 export default class PassportController {
+    // TODO: implement a notification on authentication (frontend)
     fail = async (req, res) => {
         console.log('Failed login');
         res.redirect('error', { error: 'Failed login' });
@@ -24,7 +25,7 @@ export default class PassportController {
                 );
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            throw error;
         }
     };
 }

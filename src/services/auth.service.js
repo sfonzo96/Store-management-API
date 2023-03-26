@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import UserDTO from '../dto/userDTO.js';
+import CustomError from '../utils/CustomError.js';
 
 export default class AuthService {
     constructor({ UserService }) {
@@ -11,7 +12,7 @@ export default class AuthService {
             const user = await this.userService.getUser(email);
 
             if (!user) {
-                throw new Error('User not found');
+                throw new CustomError('NOT_FOUND', 'User not found');
             }
 
             const passwordIsValid = await bcrypt.compare(
@@ -20,12 +21,12 @@ export default class AuthService {
             );
 
             if (!passwordIsValid) {
-                throw new Error('Wrong password');
+                throw new CustomError('INVALID_CREDENTIALS', 'Wrong password');
             }
 
             return new UserDTO(user);
         } catch (error) {
-            throw new Error(error.message);
+            next(error);
         }
     };
 }

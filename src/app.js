@@ -7,6 +7,7 @@ import session from 'express-session';
 import passportConfig from './config/passport.config.js';
 import passport from 'passport';
 import mongoStore from 'connect-mongo';
+import errorHandler from './middlewares/errorHandler.middleware.js';
 
 export default class AppServer {
     constructor({ ServerConfig, Router, WebsocketService }) {
@@ -54,6 +55,9 @@ export default class AppServer {
 
         // Set main router
         this.app.use(this.router);
+
+        // Set error handler
+        this.app.use(errorHandler);
 
         // Set template engine
         this.app.engine('handlebars', hbs.engine);

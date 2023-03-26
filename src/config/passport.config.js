@@ -28,7 +28,7 @@ const passportConfig = async (passport) => {
 
                     return done(null, user);
                 } catch (error) {
-                    throw new Error(error.message);
+                    done(error);
                 }
             }
         )
@@ -48,7 +48,7 @@ const passportConfig = async (passport) => {
 
                     return done(null, user);
                 } catch (error) {
-                    done(null, false, { message: error.message });
+                    done(error);
                 }
             }
         )
@@ -87,7 +87,7 @@ const passportConfig = async (passport) => {
 
                     done(null, user);
                 } catch (error) {
-                    throw new Error(error.message);
+                    done(error);
                 }
             }
         )

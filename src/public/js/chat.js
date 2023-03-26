@@ -1,3 +1,5 @@
+import CustomError from '../../utils/CustomError.js';
+
 const socket = io();
 
 const submitBtn = document.getElementById('submitBtn');
@@ -64,8 +66,6 @@ function sendMessage(userID, message) {
             message,
         },
     }).then((res) => {
-        console.log('getting a response');
-        console.log(res.data);
         printMessage(res.data.message);
     });
 }
@@ -75,7 +75,7 @@ function getMessages(data) {
         if (data) {
             res(data);
         } else {
-            rej(new Error('Failed to get new messages'));
+            rej(new CustomError('SERVER_ERROR', 'Error getting messages'));
         }
     });
 }

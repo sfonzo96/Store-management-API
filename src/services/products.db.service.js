@@ -16,7 +16,7 @@ export default class ProductsService {
 
             return new ProductDTO(newProduct);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -39,7 +39,7 @@ export default class ProductsService {
             // MEMO: Hacer DTO para lista de productos??
             return newData;
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -48,7 +48,7 @@ export default class ProductsService {
             const product = await this.dao.getById(productID);
             return new ProductDTO(product);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -68,7 +68,7 @@ export default class ProductsService {
 
             return new ProductDTO(updatedProduct);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -80,7 +80,7 @@ export default class ProductsService {
             const productsList = await this.getProducts();
             this.websocket.io.emit('reloadList', productsList);
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 }

@@ -1,9 +1,11 @@
+import CustomError from '../utils/CustomError.js';
+
 export default class ProductController {
     constructor({ ProductService }) {
         this.productService = ProductService;
     }
 
-    getProducts = async (req, res) => {
+    getProducts = async (req, res, next) => {
         try {
             const { limit, sort, page, category } = req.query;
             const options = {
@@ -28,17 +30,14 @@ export default class ProductController {
                     data: paginatedData.docs,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: 'Products not found',
-                });
+                throw new CustomError('NOT_FOUND', 'Products not found.');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getProduct = async (req, res) => {
+    getProduct = async (req, res, next) => {
         try {
             const { productID } = req.params;
             const product = await this.productService.getProduct(productID);
@@ -49,17 +48,14 @@ export default class ProductController {
                     data: product,
                 });
             } else {
-                res.status(404).json({
-                    success: false,
-                    message: 'Product not found. Check if ID is correct.',
-                });
+                throw new CustomError('NOT_FOUND', 'Product not found.');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    createProduct = async (req, res) => {
+    createProduct = async (req, res, next) => {
         try {
             const product = req.body;
             const newProduct = await this.productService.createProduct(product);
@@ -70,11 +66,11 @@ export default class ProductController {
                 data: newProduct,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    updateProduct = async (req, res) => {
+    updateProduct = async (req, res, next) => {
         try {
             const { productID } = req.params;
             const product = req.body;
@@ -88,11 +84,11 @@ export default class ProductController {
                 data: updatedProduct,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    deleteProduct = async (req, res) => {
+    deleteProduct = async (req, res, next) => {
         try {
             const { productID } = req.params;
             await this.productService.deleteProduct(productID);
@@ -101,7 +97,7 @@ export default class ProductController {
                 message: `Product (ID = ${productID}) deleted successfully.`,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 }

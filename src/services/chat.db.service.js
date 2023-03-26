@@ -6,7 +6,7 @@ export default class MessagesService {
             const newMessage = await MessageModel.create(data);
             return newMessage;
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -15,7 +15,7 @@ export default class MessagesService {
             const messages = await MessageModel.find().lean();
             return messages;
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 }

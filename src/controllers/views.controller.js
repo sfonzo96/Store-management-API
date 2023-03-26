@@ -1,4 +1,5 @@
 import UserDTO from '../dto/userDTO.js';
+import CustomError from '../utils/CustomError.js';
 export default class ViewController {
     constructor({ ProductService, UserService }) {
         this.productService = ProductService;
@@ -6,7 +7,7 @@ export default class ViewController {
         // TODO: integrate other controllers instead of services and avoid repeating the functions??
     }
 
-    login = (req, res) => {
+    login = (req, res, next) => {
         try {
             if (!req.isAuthenticated()) {
                 return res.status(200).render('login');
@@ -14,19 +15,19 @@ export default class ViewController {
 
             return res.status(200).redirect('/products');
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    registerUser = async (req, res) => {
+    registerUser = async (req, res, next) => {
         try {
             res.status(200).render('signUp');
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getProducts = async (req, res) => {
+    getProducts = async (req, res, next) => {
         try {
             const { limit, sort, page, category } = req.query;
             const options = {
@@ -50,14 +51,14 @@ export default class ViewController {
             if (paginatedData) {
                 res.status(200).render('products', { ...paginatedData, user });
             } else {
-                res.status(404).json({ Error: 'Products not found' });
+                throw new CustomError('NOT_FOUND', 'Products not found.');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getCart = async (req, res) => {
+    getCart = async (req, res, next) => {
         try {
             const userMail = req.user.email;
             const user = await this.userService.getUser(userMail);
@@ -66,48 +67,48 @@ export default class ViewController {
             if (userDTO) {
                 res.status(200).render('cart', { user: userDTO });
             } else {
-                res.status(404).json({ Error: 'Cart not found' });
+                throw new CustomError('NOT_FOUND', 'Cart not found.');
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getChat = async (req, res) => {
+    getChat = async (req, res, next) => {
         try {
             const user = req.user;
 
             res.status(200).render('chat', { user });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getUserCenter = async (req, res) => {
+    getUserCenter = async (req, res, next) => {
         try {
             const user = req.user;
 
             res.status(200).render('userCenter', { user });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getAdminCenter = async (req, res) => {
+    getAdminCenter = async (req, res, next) => {
         try {
             const user = req.user;
 
             if (user.role !== 'admin') {
-                return res.status(401).json({ Error: 'Unauthorized' });
+                throw new CustomError('FORBIDDEN', 'Access denied.');
             }
 
             res.status(200).render('admin', { user });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getUpdateProduct = async (req, res) => {
+    getUpdateProduct = async (req, res, next) => {
         try {
             const productID = req.query.productIDPut;
 
@@ -116,7 +117,7 @@ export default class ViewController {
             const user = req.user;
 
             if (user.role !== 'admin') {
-                return res.status(401).json({ Error: 'Unauthorized' });
+                throw new CustomError('FORBIDDEN', 'Access denied.');
             }
 
             if (product) {
@@ -127,11 +128,11 @@ export default class ViewController {
 
             res.status(404).json({ Error: 'Product not found' });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    /*     getRealTimeProducts = async (req, res) => {
+    /*     getRealTimeProducts = async (req, res, next) => {
         try {
             const paginatedData = await this.productService.getProducts(
                 {},
@@ -146,18 +147,18 @@ export default class ViewController {
                     user,
                 });
             } else {
-                res.status(404).json({ Error: 'Products not found' });
+                throw new CustomError('NOT_FOUND', 'Products not found.')
             }
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error)
         }
     }; */
 
-    getError = async (req, res) => {
+    getError = async (req, res, next) => {
         try {
             res.status(200).render('error', { error: 'Error' });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 }

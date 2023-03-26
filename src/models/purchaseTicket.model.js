@@ -39,10 +39,12 @@ const purchaseSchema = new mongoose.Schema(
     }
 );
 
-purchaseSchema.post('save', function (next) {
+//TODO: setSubtotal not working, set products as a reference
+
+/* purchaseSchema.post('save', function (next) {
     this.setSubtotal();
     next();
-});
+}); */
 
 const TicketModel = mongoose.model('Ticket', purchaseSchema);
 

@@ -1,29 +1,31 @@
+import CustomError from '../utils/CustomError.js';
+
 export default class UserController {
     constructor({ UserService }) {
         this.service = UserService;
     }
 
-    createUser = async (req, res) => {
+    createUser = async (req, res, next) => {
         try {
             const user = await this.service.createUser(req.body);
             if (!user) {
-                throw new Error('User not created');
+                throw new CustomError('SERVER_ERROR', 'Error creating user');
             }
             delete user.password;
             res.status(201).redirect('/');
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 
-    getUser = async (req, res) => {
+    getUser = async (req, res, next) => {
         try {
             const { email } = req.params;
 
             const user = await this.service.getUser(email);
 
             if (!user) {
-                throw new Error('User not found');
+                throw new CustomError('NOT_FOUND', 'User not found');
             }
 
             res.status(200).json({
@@ -31,7 +33,7 @@ export default class UserController {
                 user,
             });
         } catch (error) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     };
 }

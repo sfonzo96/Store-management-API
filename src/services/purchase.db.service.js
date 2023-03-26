@@ -1,4 +1,5 @@
 //TODO: implementar repositorio para purchase
+import { sendPurchaseMail, sendNotificateSell } from '../utils/sendMail.js';
 
 export default class PurchaseService {
     constructor({
@@ -37,7 +38,7 @@ export default class PurchaseService {
 
             return { availableProducts, unavailableProducts };
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -50,7 +51,7 @@ export default class PurchaseService {
                 { stock: product.stock }
             );
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 
@@ -62,7 +63,6 @@ export default class PurchaseService {
 
             // TODO: modify format of purchase to only have productID, title, quantity and price (see cart model: cartItemSchema)
             if (availableProducts.length === 0) {
-                // throw new Error('No products available for purchase');
                 return null;
             }
 
@@ -76,42 +76,12 @@ export default class PurchaseService {
                 { products: unavailableProducts }
             );
 
+            sendNotificateSell(purchase._id);
+            sendPurchaseMail(user, purchase);
             // TODO: check case parcial purchase (how to tell the user?)
             return purchase;
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     };
 }
-
-/* 
-+ Chequear stock:
-    - Si el producto tiene suficiente stock
-    para la cantidad indicada en el
-    producto del carrito, entonces
-    restarlo del stock del producto y
-    continuar.
-    // TODO OK pero hay que testear
-
-    - Si el producto no tiene suficiente
-    stock para la cantidad indicada en el
-    producto del carrito, entonces no
-    agregar el producto al proceso de
-    compr a
-        // TODO OK pero hay que testear
-    
-+ Al final, utilizar el servicio de Tickets
-para poder generar un ticket con los
-datos de la compra.
-
-+ En caso de existir una compra no
-completada, devolver el arreglo con los
-ids de los productos que no pudieron
-procesarse
-
-+ Una vez finalizada la compra, el carrito asociado
-al usuario que compró deberá contener sólo los
-productos que no pudieron comprarse. Es decir,
-se filtran los que sí se compraron y se quedan
-aquellos que no tenían disponibilidad. 
-*/
