@@ -1,3 +1,4 @@
+import CustomError from './CustomError.js';
 export function paginationUrl(currentPage, options, categoryValue) {
     let url = `/products?page=${currentPage}`;
 
@@ -11,7 +12,10 @@ export function paginationUrl(currentPage, options, categoryValue) {
 
 export function compare(lvalue, operator, rvalue) {
     if (arguments.length < 3) {
-        throw new Error("Handlerbars Helper 'compare' needs 3 parameters");
+        throw new CustomError(
+            'SERVER_ERROR',
+            "Handlerbars Helper 'compare' needs 3 parameters"
+        );
     }
 
     let operators = {
@@ -45,7 +49,8 @@ export function compare(lvalue, operator, rvalue) {
     };
 
     if (!operators[operator]) {
-        throw new Error(
+        throw new CustomError(
+            'SERVER_ERROR',
             "Handlerbars Helper 'compare' doesn't know the operator " + operator
         );
     }
