@@ -2,6 +2,7 @@ import passportLocal from 'passport-local';
 import passportGithub from 'passport-github2';
 import container from '../container.js';
 import UserDTO from '../dto/userDTO.js';
+import logger from '../logger/index.logger.js';
 
 const passportConfig = async (passport) => {
     //TODO: set this with awilix injection ({with this})
@@ -94,7 +95,7 @@ const passportConfig = async (passport) => {
     );
 
     passport.serializeUser((user, done) => {
-        console.log('Serializing');
+        logger.info('Serializing');
         if (!user.id) {
             user = new UserDTO(user);
         }
@@ -102,7 +103,7 @@ const passportConfig = async (passport) => {
     });
 
     passport.deserializeUser(async (id, done) => {
-        console.log('Deserializing');
+        logger.info('Deserializing');
         const user = await userService.getUserById(id);
         if (!user) {
             return done(null, false);

@@ -8,6 +8,8 @@ import passportConfig from './config/passport.config.js';
 import passport from 'passport';
 import mongoStore from 'connect-mongo';
 import errorHandler from './middlewares/errorHandler.middleware.js';
+import loggerMiddleware from './middlewares/logger.middleware.js';
+import logger from './logger/index.logger.js';
 
 export default class AppServer {
     constructor({ ServerConfig, Router, WebsocketService }) {
@@ -59,6 +61,9 @@ export default class AppServer {
         // Set error handler
         this.app.use(errorHandler);
 
+        // Set logger middleware
+        this.app.use(loggerMiddleware);
+
         // Set template engine
         this.app.engine('handlebars', hbs.engine);
         this.app.set('view engine', 'handlebars');
@@ -67,10 +72,10 @@ export default class AppServer {
 
     start() {
         const server = this.app.listen(this.config.PORT, () => {
-            console.log(`🚀 Server started on port: ${this.config.PORT}`);
+            logger.info(`🚀 Server started on port: ${this.config.PORT}`);
         });
 
-        server.on('error', (err) => console.log(err));
+        server.on('error', (err) => logger.error('Error:', err));
 
         const io = new Server(server);
         this.websocketService.websocketInit(io);

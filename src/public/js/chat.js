@@ -15,8 +15,8 @@ socket.on('welcome', async (data) => {
         if (response.messages.length > 0) {
             loadMessages(response.messages);
         }
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log(err);
     }
 });
 

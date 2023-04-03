@@ -38,7 +38,6 @@ deleteProductForm.addEventListener('submit', (e) => {
 
     const productID = document.getElementById('productIDDel').value;
 
-    console.log(productID);
     axios({
         method: 'delete',
         url: `/api/products/${productID}`,

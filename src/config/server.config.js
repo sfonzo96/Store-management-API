@@ -8,6 +8,7 @@ const serverConfig = {
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     APP_ID: process.env.APP_ID,
+    NODE_ENV: process.env.NODE_ENV || 'development',
 };
 
 export default serverConfig;

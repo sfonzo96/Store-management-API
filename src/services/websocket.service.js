@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import logger from '../logger/index.logger';
 dotenv.config();
 
 export default class WebSocketService {
@@ -10,7 +11,7 @@ export default class WebSocketService {
         this.io = io;
 
         this.io.on('connection', async (socket) => {
-            console.log(`Nueva conexion desde el id: ${socket.id}`);
+            logger.info(`Nueva conexion desde el id: ${socket.id}`);
 
             socket.emit('welcome', {
                 welcome: 'Bienvenido al servidor',
@@ -18,19 +19,8 @@ export default class WebSocketService {
             });
 
             socket.on('disconnect', (socket) => {
-                console.log(`Cierre de conexion`);
+                logger.info(`Cierre de conexion`);
             });
-
-            /*             socket.on('newMessage', async (data) => {
-                try {
-                    const newMessage = await this.chatService.createMessage(
-                        data
-                    );
-                    this.io.sockets.emit('message', newMessage);
-                } catch (error) {
-                    console.log(error);
-                }
-            }); */
 
             socket.on('newUser', (data) => {
                 socket.broadcast.emit('newUser', data);

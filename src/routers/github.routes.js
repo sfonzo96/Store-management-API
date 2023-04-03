@@ -5,7 +5,6 @@ export default class GithubRouter extends express.Router {
     constructor() {
         super();
         this.get('/failed', [], (req, res) => {
-            console.log('error');
             res.render('error', { error: 'something went wrong' });
         });
         this.get(

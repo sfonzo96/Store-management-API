@@ -1,7 +1,10 @@
+import logger from '../logger/index.logger';
+
 export default class PassportController {
     // TODO: implement a notification on authentication (frontend)
     fail = async (req, res) => {
-        console.log('Failed login');
+        // TODO: implement a notification on authentication (frontend)
+        logger.warn('Failed login');
         res.redirect('error', { error: 'Failed login' });
     };
 

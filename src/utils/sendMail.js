@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import logger from '../logger/index.logger';
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -24,7 +25,6 @@ export const sendNotificateSell = async (purchaseID) => {
             `,
         };
         const response = await transporter.sendMail(mailOptions);
-        console.log(response);
     } catch (error) {}
 };
 
@@ -66,8 +66,7 @@ export const sendPurchaseMail = async (user, purchase) => {
             `,
         };
         const response = await transporter.sendMail(mailOptions);
-        console.log(response);
     } catch (error) {
-        console.log(error);
+        logger.error('Error: ', error);
     }
 };
