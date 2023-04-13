@@ -1,5 +1,5 @@
 import express from 'express';
-import checkPermission from '../middlewares/authorizate.middleware.js';
+import isAuthorized from '../middlewares/isAuthorized.middleware.js';
 
 export default class ChatRouter extends express.Router {
     constructor({ ChatController }) {
@@ -11,7 +11,7 @@ export default class ChatRouter extends express.Router {
     setup = () => {
         this.post(
             '/new',
-            [checkPermission('sendMessage')],
+            [isAuthorized('sendMessage')],
             this.chatController.createMessage
         );
         this.get('/load', [], this.chatController.getMessages);

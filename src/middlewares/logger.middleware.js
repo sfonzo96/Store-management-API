@@ -1,8 +1,8 @@
-import logger from '../utils/logge.js';
+import logger from '../logger/index.logger.js';
 
 export default function loggerMiddleware(req, res, next) {
     logger.info(
-        `${new Date().toLocalString()} - Method: ${req.method} URL: ${req.url}`
+        `${new Date().toLocaleString()} - Method: ${req.method} URL: ${req.url}`
     );
     next();
 }

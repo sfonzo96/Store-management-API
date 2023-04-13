@@ -11,8 +11,6 @@ export default class ViewsRouter extends express.Router {
 
         this.get('/products', [], ViewController.getProducts);
 
-        /* this.get("/realtimeproducts", ViewController.getRealTimeProducts); */
-
         this.get('/signup', [], ViewController.registerUser);
 
         this.get('/usercenter', [], ViewController.getUserCenter);
@@ -22,5 +20,19 @@ export default class ViewsRouter extends express.Router {
         this.get('/admin/update/', [], ViewController.getUpdateProduct);
 
         this.get('/failed', [], ViewController.getError);
+
+        this.get('/password/reset', [], ViewController.getResetPassword);
+
+        this.get(
+            '/password/reset/success',
+            [],
+            ViewController.getResetPasswordSuccess
+        );
+
+        this.get(
+            '/password/reset/failed',
+            [],
+            ViewController.getResetPasswordFailed
+        );
     }
 }

@@ -39,7 +39,7 @@ export default class UserService {
             const user = await this.userDao.getOne({ email });
 
             if (!user) {
-                throw new CustomError('NOT_FOUND', 'User not found');
+                return false;
             }
 
             return user; // sends plain user in order to compare password in AuthService
@@ -60,5 +60,50 @@ export default class UserService {
         } catch (error) {
             throw error;
         }
+    };
+
+    resetPassword = async (email, newPassword) => {
+        try {
+            const user = await this.userDao.getOne({ email });
+
+            if (!user) {
+                throw new CustomError('NOT_FOUND', 'User not found');
+            }
+
+            const isSamePassword = await bcrypt.compare(
+                newPassword,
+                user.password
+            );
+
+            if (isSamePassword) {
+                throw new CustomError(
+                    'CONFLICT',
+                    'New password must be different from the old one.'
+                );
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+            const updatedUser = await this.userDao.update(
+                { _id: user._id },
+                {
+                    password: hashedPassword,
+                }
+            );
+
+            return new UserDTO(updatedUser);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    changeRole = async (id, toRole) => {
+        const user = await this.userDao.update({ _id: id }, { role: toRole });
+
+        if (!user) {
+            throw new CustomError('NOT_FOUND', 'User not found');
+        }
+
+        return new UserDTO(user);
     };
 }

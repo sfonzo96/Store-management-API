@@ -1,5 +1,5 @@
 //TODO: implementar repositorio para purchase
-import { sendPurchaseMail, sendNotificateSell } from '../utils/sendMail.js';
+import mailing from '../utils/mailing.js';
 
 export default class PurchaseService {
     constructor({
@@ -76,8 +76,8 @@ export default class PurchaseService {
                 { products: unavailableProducts }
             );
 
-            sendNotificateSell(purchase._id);
-            sendPurchaseMail(user, purchase);
+            mailing.sendNotificateSell(purchase._id);
+            mailing.sendPurchaseMail(user, purchase);
             // TODO: check case parcial purchase (how to tell the user?)
             return purchase;
         } catch (error) {

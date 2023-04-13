@@ -1,14 +1,15 @@
 import CustomError from '../utils/CustomError.js';
 
 export default class CartsController {
-    constructor({ CartService, PurchaseService }) {
-        this.service = CartService;
+    constructor({ CartService, PurchaseService, UserService }) {
+        this.cartService = CartService;
         this.purchaseService = PurchaseService;
+        this.userService = UserService;
     }
 
     createCart = async (req, res, next) => {
         try {
-            const newCart = await this.service.createCart();
+            const newCart = await this.cartService.createCart();
             res.status(201).json({
                 succees: true,
                 message: 'New cart created.',
@@ -22,7 +23,7 @@ export default class CartsController {
     getCart = async (req, res, next) => {
         try {
             const { cartID } = req.params;
-            const cart = await this.service.getCart(cartID);
+            const cart = await this.cartService.getCart(cartID);
             res.status(200).json({
                 success: true,
                 data: cart,
@@ -35,7 +36,7 @@ export default class CartsController {
     deleteCart = async (req, res, next) => {
         try {
             const { cartID } = req.params;
-            await this.service.deleteCart(cartID); // Returns an empty cart
+            await this.cartService.deleteCart(cartID); // Returns an empty cart
             res.status(200).json({
                 success: true,
                 message: `Cart ${cartID} was emptied`,
@@ -49,6 +50,15 @@ export default class CartsController {
         try {
             const { cartID, productID } = req.params;
             const { quantity } = req.body;
+            const user = await this.productService.getUser(req.user.id);
+            const product = await this.productService.getProduct(productID);
+
+            if (user.role === 'premium' && user._id === product.owner) {
+                throw new CustomError(
+                    'FORBIDDEN',
+                    'Premium users cannot add their own products to the cart.'
+                );
+            }
 
             if (quantity <= 0) {
                 throw new CustomError(
@@ -57,7 +67,7 @@ export default class CartsController {
                 );
             }
 
-            const cart = await this.service.addProductToCart(
+            const cart = await this.cartService.addProductToCart(
                 cartID,
                 productID,
                 Number(quantity)
@@ -81,7 +91,7 @@ export default class CartsController {
         try {
             const { cartID, productID } = req.params;
 
-            const cart = await this.service.deleteProductFromCart(
+            const cart = await this.cartService.deleteProductFromCart(
                 cartID,
                 productID
             );
@@ -103,7 +113,10 @@ export default class CartsController {
         try {
             const { products } = req.body;
             const { cartID } = req.params;
-            const updatedCart = await this.service.updateCart(cartID, products);
+            const updatedCart = await this.cartService.updateCart(
+                cartID,
+                products
+            );
             if (updatedCart) {
                 res.status(200).json({
                     success: true,
@@ -122,7 +135,7 @@ export default class CartsController {
         try {
             const { cartID, productID } = req.params;
             const { quantity } = req.body;
-            const updatedCart = await this.service.updateQuantity(
+            const updatedCart = await this.cartService.updateQuantity(
                 cartID,
                 productID,
                 Number(quantity)

@@ -1,5 +1,5 @@
 import express from 'express';
-import checkPermission from '../middlewares/authorizate.middleware.js';
+import isAuthorized from '../middlewares/isAuthorized.middleware.js';
 
 export default class CartsRouter extends express.Router {
     constructor({ CartController }) {
@@ -13,19 +13,19 @@ export default class CartsRouter extends express.Router {
         );
         this.post(
             '/:cartID/product/:productID',
-            [checkPermission('addToCart')],
+            [isAuthorized('addToCart')],
             CartController.addProductToCart
         );
         this.delete('/:cartID', [], CartController.deleteCart);
         this.delete(
             '/:cartID/product/:productID',
-            [checkPermission('deleteFromCart')],
+            [isAuthorized('deleteFromCart')],
             CartController.deleteProductFromCart
         );
         this.get('/getCartID', [], CartController.getCartID);
         this.post(
             '/:cartID/purchase',
-            [checkPermission('makePurchase')],
+            [isAuthorized('makePurchase')],
             CartController.makePurchase
         );
     }

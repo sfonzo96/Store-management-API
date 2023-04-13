@@ -1,5 +1,5 @@
 import express from 'express';
-import checkPermission from '../middlewares/authorizate.middleware.js';
+import isAuthorized from '../middlewares/isAuthorized.middleware.js';
 
 export default class ProductsRouter extends express.Router {
     constructor({ ProductController }) {
@@ -8,17 +8,17 @@ export default class ProductsRouter extends express.Router {
         this.get('/:productID', [], ProductController.getProduct);
         this.post(
             '/',
-            [checkPermission('createProduct')],
+            [isAuthorized('createProduct')],
             ProductController.createProduct
         );
         this.put(
             '/:productID',
-            [checkPermission('updateProduct')],
+            [isAuthorized('updateProduct')],
             ProductController.updateProduct
         );
         this.delete(
             '/:productID',
-            [checkPermission('deleteProduct')],
+            [isAuthorized('deleteProduct')],
             ProductController.deleteProduct
         );
     }

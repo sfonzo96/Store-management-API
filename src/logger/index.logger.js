@@ -1,6 +1,6 @@
-import serverConfig from '../config/server.config';
+import serverConfig from '../config/server.config.js';
 import devLogger from './devLogger.js';
-import productionLogger from './productionLogger.js';
+import productionLogger from './prodLogger.js';
 
 let logger = null;
 

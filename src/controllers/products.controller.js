@@ -58,6 +58,10 @@ export default class ProductController {
     createProduct = async (req, res, next) => {
         try {
             const product = req.body;
+            const owner = req.user.id;
+
+            Object.assign(product, { owner });
+
             const newProduct = await this.productService.createProduct(product);
 
             res.status(201).json({

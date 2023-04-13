@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
-import logger from '../logger/index.logger';
+import logger from '../logger/index.logger.js';
+import jwt from 'jsonwebtoken';
 dotenv.config();
+
+//TODO: maybe turn into a class/service
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -12,7 +15,31 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendNotificateSell = async (purchaseID) => {
+const sendPwResetEmail = async (user) => {
+    try {
+        const expiresIn = '1h';
+        const token = jwt.sign({ status: true }, process.env.JWT_SECRET, {
+            expiresIn,
+        });
+
+        const mailOptions = {
+            from: process.env.GMAIL_USER,
+            to: user.email,
+            subject: 'Password Reset',
+            html: `
+                <h2>Hi ${user.firstName}! You requested a password reset.</h2>
+                <h3>Click the link to reset your password.</h3>
+                <a href="http://localhost:3000/api/users/password/reset/${token}">Reset Password</a> 
+                <p>If you did not request a password reset, please ignore this email.</p>
+            `, // MEMO: href value should change according to the current domain
+        };
+        const response = await transporter.sendMail(mailOptions);
+    } catch (error) {
+        logger.error('Error: ', error);
+    }
+};
+
+const sendNotificateSell = async (purchaseID) => {
     try {
         const mailOptions = {
             from: process.env.GMAIL_USER,
@@ -28,7 +55,7 @@ export const sendNotificateSell = async (purchaseID) => {
     } catch (error) {}
 };
 
-export const sendPurchaseMail = async (user, purchase) => {
+const sendPurchaseMail = async (user, purchase) => {
     try {
         const mailOptions = {
             from: process.env.GMAIL_USER,
@@ -70,3 +97,5 @@ export const sendPurchaseMail = async (user, purchase) => {
         logger.error('Error: ', error);
     }
 };
+
+export default { sendPwResetEmail, sendNotificateSell, sendPurchaseMail };

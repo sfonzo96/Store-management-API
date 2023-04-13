@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import logger from '../logger/index.logger';
+import logger from '../logger/index.logger.js';
 dotenv.config();
 
 export default class WebSocketService {

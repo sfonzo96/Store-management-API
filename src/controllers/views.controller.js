@@ -132,31 +132,33 @@ export default class ViewController {
         }
     };
 
-    /*     getRealTimeProducts = async (req, res, next) => {
-        try {
-            const paginatedData = await this.productService.getProducts(
-                {},
-                { lean: true }
-            );
-
-            const user = req.user;
-
-            if (paginatedData) {
-                res.status(200).render('realTimeProducts', {
-                    ...paginatedData,
-                    user,
-                });
-            } else {
-                throw new CustomError('NOT_FOUND', 'Products not found.')
-            }
-        } catch (error) {
-            next(error)
-        }
-    }; */
-
     getError = async (req, res, next) => {
         try {
             res.status(200).render('error', { error: 'Error' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getResetPassword = async (req, res, next) => {
+        try {
+            res.status(200).render('resetPassword');
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getResetPasswordSuccess = async (req, res, next) => {
+        try {
+            res.status(200).render('resetPasswordSuccess');
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getResetPasswordFailed = async (req, res, next) => {
+        try {
+            res.status(200).render('resetPasswordFailed');
         } catch (error) {
             next(error);
         }

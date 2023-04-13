@@ -41,6 +41,11 @@ const productSchema = new mongoose.Schema(
             required: true,
             lowercase: true,
         },
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Users',
+            required: true,
+        },
         status: {
             type: Boolean,
             required: true,

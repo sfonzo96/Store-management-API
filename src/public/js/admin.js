@@ -1,5 +1,6 @@
 const postProductForm = document.getElementById('postProductForm');
 const deleteProductForm = document.getElementById('deleteProductForm');
+const changeRoleForm = document.getElementById('changeRoleForm');
 
 postProductForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -47,5 +48,19 @@ deleteProductForm.addEventListener('submit', (e) => {
         })
         .catch((err) => {
             console.log(err);
+        });
+});
+
+changeRoleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    axios({
+        method: 'put',
+        url: '/api/users/permission/change?userID=643872260be3940d2c3c6f74&toRole=premium',
+    })
+        .then((res) => {
+            alert('Role changed successfully');
+        })
+        .catch((err) => {
+            alert('Role change failed');
         });
 });
