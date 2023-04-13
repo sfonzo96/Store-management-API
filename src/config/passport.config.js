@@ -61,7 +61,8 @@ const passportConfig = async (passport) => {
             {
                 clientID: config.CLIENT_ID,
                 clientSecret: config.CLIENT_SECRET,
-                callbackURL: 'http://localhost:8080/api/github/callback', // This should be changed accordingly to the environment and stage of the proyect
+                callbackURL:
+                    'https://entregas-backend-coder.glitch.me//api/github/callback', // This should be changed accordingly to the environment and stage of the proyect
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {

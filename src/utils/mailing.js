@@ -29,7 +29,7 @@ const sendPwResetEmail = async (user) => {
             html: `
                 <h2>Hi ${user.firstName}! You requested a password reset.</h2>
                 <h3>Click the link to reset your password.</h3>
-                <a href="http://localhost:3000/api/users/password/reset/${token}">Reset Password</a> 
+                <a href="https://entregas-backend-coder.glitch.me//api/users/password/reset/${token}">Reset Password</a> 
                 <p>If you did not request a password reset, please ignore this email.</p>
             `, // MEMO: href value should change according to the current domain
         };
