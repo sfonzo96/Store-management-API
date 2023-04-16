@@ -7,69 +7,69 @@ dotenv.config();
 //TODO: maybe turn into a class/service
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 587,
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
-    },
+  service: 'gmail',
+  port: 587,
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
 });
 
 const sendPwResetEmail = async (user) => {
-    try {
-        const expiresIn = '1h';
-        const token = jwt.sign({ status: true }, process.env.JWT_SECRET, {
-            expiresIn,
-        });
+  try {
+    const expiresIn = '1h';
+    const token = jwt.sign({ status: true }, process.env.JWT_SECRET, {
+      expiresIn,
+    });
 
-        const mailOptions = {
-            from: process.env.GMAIL_USER,
-            to: user.email,
-            subject: 'Password Reset',
-            html: `
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: user.email,
+      subject: 'Password Reset',
+      html: `
                 <h2>Hi ${user.firstName}! You requested a password reset.</h2>
                 <h3>Click the link to reset your password.</h3>
                 <a href="https://entregas-backend-coder.glitch.me//api/users/password/reset/${token}">Reset Password</a> 
                 <p>If you did not request a password reset, please ignore this email.</p>
             `, // MEMO: href value should change according to the current domain
-        };
-        const response = await transporter.sendMail(mailOptions);
-    } catch (error) {
-        logger.error('Error: ', error);
-    }
+    };
+    const response = await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logger.error('Error: ', error);
+  }
 };
 
 const sendNotificateSell = async (purchaseID) => {
-    try {
-        const mailOptions = {
-            from: process.env.GMAIL_USER,
-            to: process.env.GMAIL_USER,
-            subject: 'New sale',
-            html: `
+  try {
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER,
+      subject: 'New sale',
+      html: `
                 <h1>Hey! There's been a new sale confirmed.</h1>
                 <h3>Order ID: ${purchaseID}</h3>
                 <p>Check recent sales in the site.</p>
             `,
-        };
-        const response = await transporter.sendMail(mailOptions);
-    } catch (error) {}
+    };
+    const response = await transporter.sendMail(mailOptions);
+  } catch (error) {}
 };
 
 const sendPurchaseMail = async (user, purchase) => {
-    try {
-        const mailOptions = {
-            from: process.env.GMAIL_USER,
-            to: user.email,
-            subject: 'Purchase Confirmation',
-            html: `
+  try {
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: user.email,
+      subject: 'Purchase Confirmation',
+      html: `
                 <h1>Hi ${
-                    user.firstName
+                  user.firstName
                 }! Your order is already in the making.</h1>
                 <h2>Order Summary</h2>
                 <ul>
                     <li>Order ID: ${purchase.code}</li>
                     <li>Order Items: ${purchase.products.map((item) => {
-                        return `
+                      return `
                             <ul style="{
                                 list-style-type: none;
                                 display: flex;
@@ -81,7 +81,7 @@ const sendPurchaseMail = async (user, purchase) => {
                                 <li>Quantity: ${item.quantity}</li>
                                 <li>Price: $${item.product.price}</li>
                                 <li>Total: $${
-                                    item.product.price * item.quantity
+                                  item.product.price * item.quantity
                                 }</li>
                             </ul>
                         `;
@@ -91,11 +91,11 @@ const sendPurchaseMail = async (user, purchase) => {
                 </ul>
                 <p>Thank you for trusting us!</p>
             `,
-        };
-        const response = await transporter.sendMail(mailOptions);
-    } catch (error) {
-        logger.error('Error: ', error);
-    }
+    };
+    const response = await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logger.error('Error: ', error);
+  }
 };
 
 export default { sendPwResetEmail, sendNotificateSell, sendPurchaseMail };

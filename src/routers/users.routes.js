@@ -3,30 +3,35 @@ import isAuthenticated from '../middlewares/isAuthenticated.middleware.js';
 import isAuthorized from '../middlewares/isAuthorized.middleware.js';
 
 export default class UsersRouter extends express.Router {
-    constructor({ UserController }) {
-        super();
-        this.post('/', [], UserController.createUser);
-        this.get('/:email', [isAuthenticated], UserController.getUser);
-        this.get(
-            '/getCurrentUser',
-            [isAuthenticated],
-            UserController.getCurrentUser
-        );
-        this.get('/sendPwResetEmail', [], UserController.sendPwResetEmail);
-        this.get(
-            'password/reset/:token',
-            [],
-            UserController.verifyPasswordResetToken
-        );
-        this.post(
-            '/password/reset',
-            [isAuthenticated],
-            UserController.resetPassword
-        );
-        this.put(
-            '/permission/change/',
-            [isAuthorized('changeRole')],
-            UserController.changeRole
-        );
-    }
+  constructor({ UserController }) {
+    super();
+    this.userController = UserController;
+    this.setup();
+  }
+
+  setup = () => {
+    this.post('/', [], this.userController.createUser);
+    this.get('/:email', [isAuthenticated], this.userController.getUser);
+    this.get(
+      '/getCurrentUser',
+      [isAuthenticated],
+      this.userController.getCurrentUser
+    );
+    this.get('/sendPwResetEmail', [], this.userController.sendPwResetEmail);
+    this.get(
+      'password/reset/:token',
+      [],
+      this.userController.verifyPasswordResetToken
+    );
+    this.post(
+      '/password/reset',
+      [isAuthenticated],
+      this.userController.resetPassword
+    );
+    this.put(
+      '/permission/change/',
+      [isAuthorized('changeRole')],
+      this.userController.changeRole
+    );
+  };
 }

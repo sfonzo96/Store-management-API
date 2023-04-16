@@ -45,57 +45,57 @@ import MockingController from './controllers/mocking.controller.js';
 
 // create container
 const container = createContainer({
-    injectionMode: InjectionMode.PROXY,
+  injectionMode: InjectionMode.PROXY,
 });
 
 // register all dependencies
 container.register({
-    // Models
-    User: asValue(User),
-    Product: asValue(Product),
-    Cart: asValue(Cart),
-    Message: asValue(Message),
-    PurchaseTicket: asValue(PurchaseTicket),
+  // Models
+  User: asValue(User),
+  Product: asValue(Product),
+  Cart: asValue(Cart),
+  Message: asValue(Message),
+  PurchaseTicket: asValue(PurchaseTicket),
 
-    // Repositories
-    UserRepository: asClass(UserRepository).singleton(),
-    ProductRepository: asClass(ProductRepository).singleton(),
-    CartRepository: asClass(CartRepository).singleton(),
+  // Repositories
+  UserRepository: asClass(UserRepository).singleton(),
+  ProductRepository: asClass(ProductRepository).singleton(),
+  CartRepository: asClass(CartRepository).singleton(),
 
-    // Services
-    ChatService: asClass(ChatService).singleton(),
-    WebsocketService: asClass(WebsocketService).singleton(),
-    UserService: asClass(UserService).singleton(),
-    ProductService: asClass(ProductService).singleton(),
-    CartService: asClass(CartService).singleton(),
-    AuthService: asClass(AuthService).singleton(),
-    PurchaseService: asClass(PurchaseService).singleton(),
+  // Services
+  ChatService: asClass(ChatService).singleton(),
+  WebsocketService: asClass(WebsocketService).singleton(),
+  UserService: asClass(UserService).singleton(),
+  ProductService: asClass(ProductService).singleton(),
+  CartService: asClass(CartService).singleton(),
+  AuthService: asClass(AuthService).singleton(),
+  PurchaseService: asClass(PurchaseService).singleton(),
 
-    // Controllers
-    UserController: asClass(UserController).singleton(),
-    ProductController: asClass(ProductController).singleton(),
-    CartController: asClass(CartController).singleton(),
-    ViewController: asClass(ViewController).singleton(),
-    PassportController: asClass(PassportController).singleton(),
-    ChatController: asClass(ChatController).singleton(),
-    MockingController: asClass(MockingController).singleton(),
+  // Controllers
+  UserController: asClass(UserController).singleton(),
+  ProductController: asClass(ProductController).singleton(),
+  CartController: asClass(CartController).singleton(),
+  ViewController: asClass(ViewController).singleton(),
+  PassportController: asClass(PassportController).singleton(),
+  ChatController: asClass(ChatController).singleton(),
+  MockingController: asClass(MockingController).singleton(),
 
-    // Routers
-    ProductsRouter: asClass(ProductsRouter).singleton(),
-    CartsRouter: asClass(CartsRouter).singleton(),
-    ViewsRouter: asClass(ViewsRouter).singleton(),
-    UsersRouter: asClass(UsersRouter).singleton(),
-    PassportRouter: asClass(PassportLocalRouter).singleton(),
-    GithubRouter: asClass(GithubRouter).singleton(),
-    ChatRouter: asClass(ChatRouter).singleton(),
-    MockingRouter: asClass(MockingRouter).singleton(),
-    Router: asClass(Router).singleton(),
+  // Routers
+  ProductsRouter: asClass(ProductsRouter).singleton(),
+  CartsRouter: asClass(CartsRouter).singleton(),
+  ViewsRouter: asClass(ViewsRouter).singleton(),
+  UsersRouter: asClass(UsersRouter).singleton(),
+  PassportRouter: asClass(PassportLocalRouter).singleton(),
+  GithubRouter: asClass(GithubRouter).singleton(),
+  ChatRouter: asClass(ChatRouter).singleton(),
+  MockingRouter: asClass(MockingRouter).singleton(),
+  Router: asClass(Router).singleton(),
 
-    // Config
-    ServerConfig: asValue(ServerConfig),
+  // Config
+  ServerConfig: asValue(ServerConfig),
 
-    // Server
-    App: asClass(App).singleton(),
+  // Server
+  App: asClass(App).singleton(),
 });
 
 export default container;

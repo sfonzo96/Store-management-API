@@ -1,38 +1,43 @@
 import express from 'express';
 
 export default class ViewsRouter extends express.Router {
-    constructor({ ViewController }) {
-        super();
-        this.get('/chat', [], ViewController.getChat);
+  constructor({ ViewController }) {
+    super();
+    this.viewController = ViewController;
+    this.setup();
+  }
 
-        this.get('/', [], ViewController.login);
+  setup = () => {
+    this.get('/chat', [], this.viewController.getChat);
 
-        this.get('/cart', [], ViewController.getCart);
+    this.get('/', [], this.viewController.login);
 
-        this.get('/products', [], ViewController.getProducts);
+    this.get('/cart', [], this.viewController.getCart);
 
-        this.get('/signup', [], ViewController.registerUser);
+    this.get('/products', [], this.viewController.getProducts);
 
-        this.get('/usercenter', [], ViewController.getUserCenter);
+    this.get('/signup', [], this.viewController.registerUser);
 
-        this.get('/admin', [], ViewController.getAdminCenter);
+    this.get('/usercenter', [], this.viewController.getUserCenter);
 
-        this.get('/admin/update/', [], ViewController.getUpdateProduct);
+    this.get('/admin', [], this.viewController.getAdminCenter);
 
-        this.get('/failed', [], ViewController.getError);
+    this.get('/admin/update/', [], this.viewController.getUpdateProduct);
 
-        this.get('/password/reset', [], ViewController.getResetPassword);
+    this.get('/failed', [], this.viewController.getError);
 
-        this.get(
-            '/password/reset/success',
-            [],
-            ViewController.getResetPasswordSuccess
-        );
+    this.get('/password/reset', [], this.viewController.getResetPassword);
 
-        this.get(
-            '/password/reset/failed',
-            [],
-            ViewController.getResetPasswordFailed
-        );
-    }
+    this.get(
+      '/password/reset/success',
+      [],
+      this.viewController.getResetPasswordSuccess
+    );
+
+    this.get(
+      '/password/reset/failed',
+      [],
+      this.viewController.getResetPasswordFailed
+    );
+  };
 }

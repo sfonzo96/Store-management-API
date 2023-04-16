@@ -1,0 +1,79 @@
+paths:
+  /api/users:
+    post:
+      summary: Creates a new user
+      description: Use this endpoint in order to create a new user
+      operationID: createUser
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUser'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        '500':
+          description: Internal server error when attempting to create a new user
+  /api/users/:email:
+    get:
+      tags:
+        - Users
+  /api/users/sendPwResetEmail:
+    get:
+      tags:
+        - Users
+  /api/users/password/reset/:token:
+    get:
+      tags:
+        - Users
+  /api/users/password/reset:
+    post:
+      tags:
+        - Users
+  /api/users/permission/change:
+    put:
+      tags:
+        - Users
+components:
+  schemas:
+    RequestUser:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - password
+        - email
+        - age
+      properties:
+        firstName:
+          type: string
+          example: Santiago
+        lastName:
+          type: string
+          example: Fonzo
+        password:
+          type: string
+          format: password
+          example: santi1234
+        email:
+          type: string
+          format: email
+          example: santiagofonzo@example.com
+        age:
+          type: integer
+          example: 26
+    ResponseUser:
+      allOf:
+        - $ref: '#/components/schemas/RequestUser'
+        - type: object
+          properties:
+            id:
+              type: ObjectId
+              example: '641751e08490514c94ff1b05'

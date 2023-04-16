@@ -1,0 +1,216 @@
+paths:
+  /api/products:
+    get:
+      summary: Get all products from db
+      description: This endpoint will get the products from the database
+      operationId: getProducts
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: sets the number of products per page when pagination happens
+          schema:
+            type: number
+        - name: sort
+          in: query
+          required: false
+          descrption: sets the order (by price) in which the products will be ordered (ascendant or descendant)
+          schema:
+            type: string
+            enum: ['asc', 'desc']
+        - name: page
+          in: query
+          required: false
+          description: sets the page that will be shown when there's more than one
+          schema:
+            type: number
+        - name: category
+          in: query
+          required: false
+          description: filters products by category
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the products list according to the queries filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getProductsResponse'
+        '404':
+          description: Products were not found
+        '500':
+          description: Internal server error
+
+    post:
+      summary: Creates a product
+      description: This endpoint will create a product with the specified properties
+      operationId: createProduct
+      tags:
+        - Products
+      requestBody:
+        description: JSON object with the object properties
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/product'
+                - not:
+                  properties:
+                    id:
+                      type: string
+                      description: This is theproduct's ID in the db
+      responses:
+        '201':
+          description: Creation of the product was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createProductResponse'
+        '400':
+          description: Product couldn't be created
+        '500':
+          description: Internal server error
+
+  /api/products/{productID}:
+    get:
+      summary: Get a specific product from db
+      description: This endpoint will return a product that matches an ID
+      operationId: getProduct
+      tags:
+        - Products
+      parameters:
+        name: productID
+        in: path
+        required: true
+        description: Is the product ID in the database
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the product of the specified ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '404':
+          description: There's no product with the specified ID
+        '500':
+          description: Internal server error
+    put:
+      summary: Updates a specific product
+      description: This endpoint will update the specified properties values of the product that matches an ID
+      operationId: updateProduct
+      tags:
+        - Products
+      requestBody:
+        description: JSON object with the object properties to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '200':
+          description: Returns the updated product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates a successful update
+                  data:
+                    type: object
+                    description: Returns the updated product
+                    schema:
+                      $ref: '#/components/schemas/product'
+        '400':
+          description: The product couldn't be updated
+        '500': Internal server error
+
+components:
+  schemas:
+    createProductResponse:
+      type: object
+      properties:
+        successful:
+          type: boolean
+          description: Confirms success of the request
+        data:
+          type: object
+          description: Contains the created product properties
+          schema:
+            $ref: '#/components/schemas/product'
+    getProductsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/product'
+    product:
+      type: object
+      requires:
+        - title
+        - description
+        - price
+        - code
+        - category
+        - owner
+      properties:
+        id:
+          type: string
+          description: This is the id of the products in the db
+        title:
+          type: string
+          description: The product name or title
+        description:
+          type: string
+          description: The product's description
+        code:
+          type: string
+          description: A code that identifies the product (an SKU)
+        price:
+          type: number
+          description: The product's price
+        stock:
+          type: integer
+          description: The product's current stock
+        category:
+          type: string
+          description: The product's category
+        thumbnail:
+          type: string
+          description: An url of the product's image
+        owner:
+          type: string
+          description: The product's creator's ID
+        deleted:
+          type: boolean
+          description: An indicator of the state of the product in the db (deleted if true)
+        createdAt:
+          type: string
+          description: The product's creation date
+        deletedAt:
+          type: string
+          description: The product's deletion date
+      example:
+        id: '63c9c4c8de34ps136566faf8'
+        title: 'Test product'
+        description: 'Product created for testing'
+        code: 'AAA100'
+        price: 50
+        status: true
+        stock: 2
+        category: 'category4'
+        thumbnail: './img/testing-img.webp'
+        deleted: false
+        createdAt: '2023-01-19T22:31:36.162+00:00'
+        updatedAt: '2023-03-21T00:50:47.003+00:00'

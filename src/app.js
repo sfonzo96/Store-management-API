@@ -10,74 +10,76 @@ import mongoStore from 'connect-mongo';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import loggerMiddleware from './middlewares/logger.middleware.js';
 import logger from './logger/index.logger.js';
+import setSwaggerDocs from './utils/swagger.js';
 
 export default class AppServer {
-    constructor({ ServerConfig, Router, WebsocketService }) {
-        this.app = express();
-        this.config = ServerConfig;
-        this.router = Router;
-        this.websocketService = WebsocketService;
-        this.setup();
-    }
+  constructor({ ServerConfig, Router, WebsocketService }) {
+    this.app = express();
+    this.config = ServerConfig;
+    this.router = Router;
+    this.websocketService = WebsocketService;
+    this.setup();
+  }
 
-    async setup() {
-        await passportConfig(passport);
+  async setup() {
+    // Set swagger
+    setSwaggerDocs(this.app, this.config.PORT);
 
-        const hbs = handlebars.create({
-            helpers: {
-                paginationUrl,
-                compare,
-            },
-        });
+    // Set static route
+    this.app.use(express.static('src/public'));
 
-        // Set static route
-        this.app.use(express.static('src/public'));
+    // Set cookie parser, session and passport
+    await passportConfig(passport);
+    this.app.use(cookie());
+    this.app.use(
+      session({
+        store: new mongoStore({
+          mongoUrl: this.config.MONGO_URI,
+          options: {
+            userNewUrlParser: true,
+            useUnifiedTopology: true,
+          },
+        }),
+        secret: this.config.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { maxAge: 10000000 },
+      })
+    );
 
-        // Set cookie parser, session and passport
-        this.app.use(cookie());
-        this.app.use(
-            session({
-                store: new mongoStore({
-                    mongoUrl: this.config.MONGO_URI,
-                    options: {
-                        userNewUrlParser: true,
-                        useUnifiedTopology: true,
-                    },
-                }),
-                secret: this.config.SESSION_SECRET,
-                resave: false,
-                saveUninitialized: false,
-                cookie: { maxAge: 10000000 },
-            })
-        );
+    // set passport
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
 
-        // set passport
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+    // Set main router
+    this.app.use(this.router);
 
-        // Set main router
-        this.app.use(this.router);
+    // Set error handler
+    this.app.use(errorHandler);
 
-        // Set error handler
-        this.app.use(errorHandler);
+    // Set logger middleware
+    this.app.use(loggerMiddleware);
 
-        // Set logger middleware
-        this.app.use(loggerMiddleware);
+    // Set template engine
+    const hbs = handlebars.create({
+      helpers: {
+        paginationUrl,
+        compare,
+      },
+    });
+    this.app.engine('handlebars', hbs.engine);
+    this.app.set('view engine', 'handlebars');
+    this.app.set('views', 'src/views');
+  }
 
-        // Set template engine
-        this.app.engine('handlebars', hbs.engine);
-        this.app.set('view engine', 'handlebars');
-        this.app.set('views', 'src/views');
-    }
+  start() {
+    const server = this.app.listen(this.config.PORT, () => {
+      logger.info(`🚀 Server started on port: ${this.config.PORT}`);
+    });
 
-    start() {
-        const server = this.app.listen(this.config.PORT, () => {
-            logger.info(`🚀 Server started on port: ${this.config.PORT}`);
-        });
+    server.on('error', (err) => logger.error('Error:', err));
 
-        server.on('error', (err) => logger.error('Error:', err));
-
-        const io = new Server(server);
-        this.websocketService.websocketInit(io);
-    }
+    const io = new Server(server);
+    this.websocketService.websocketInit(io);
+  }
 }

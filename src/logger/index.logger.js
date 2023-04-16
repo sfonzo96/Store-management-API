@@ -5,11 +5,11 @@ import productionLogger from './prodLogger.js';
 let logger = null;
 
 if (serverConfig.NODE_ENV === 'development') {
-    logger = devLogger();
+  logger = devLogger();
 }
 
 if (serverConfig.NODE_ENV === 'production') {
-    logger = productionLogger();
+  logger = productionLogger();
 }
 
 export default logger;
