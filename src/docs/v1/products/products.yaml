@@ -1,7 +1,7 @@
 paths:
   /api/products:
     get:
-      summary: Get all products from db
+      summary: Get all products
       description: This endpoint will get the products from the database
       operationId: getProducts
       tags:
@@ -39,10 +39,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getProductsResponse'
-        '404':
-          description: Products were not found
-        '500':
-          description: Internal server error
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
     post:
       summary: Creates a product
@@ -62,7 +68,6 @@ paths:
                   properties:
                     id:
                       type: string
-                      description: This is theproduct's ID in the db
       responses:
         '201':
           description: Creation of the product was successful
@@ -70,25 +75,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/createProductResponse'
-        '400':
-          description: Product couldn't be created
-        '500':
-          description: Internal server error
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
   /api/products/{productID}:
     get:
-      summary: Get a specific product from db
+      summary: Get a specific product
       description: This endpoint will return a product that matches an ID
       operationId: getProduct
       tags:
         - Products
       parameters:
-        name: productID
-        in: path
-        required: true
-        description: Is the product ID in the database
-        schema:
-          type: string
+        - name: productID
+          in: path
+          required: true
+          description: Is the product's ID
+          schema:
+            type: string
       responses:
         '200':
           description: Returns the product of the specified ID
@@ -96,23 +107,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/product'
-        '404':
-          description: There's no product with the specified ID
-        '500':
-          description: Internal server error
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
     put:
-      summary: Updates a specific product
+      summary: Updates the specified product
       description: This endpoint will update the specified properties values of the product that matches an ID
       operationId: updateProduct
       tags:
         - Products
+      parameters:
+        - name: productID
+          in: path
+          required: true
+          description: Is the product's ID
+          schema:
+            type: string
       requestBody:
         description: JSON object with the object properties to be updated
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/product'
+              $ref: '#/components/schemas/productUpdate'
       responses:
         '200':
           description: Returns the updated product
@@ -129,9 +154,51 @@ paths:
                     description: Returns the updated product
                     schema:
                       $ref: '#/components/schemas/product'
-        '400':
-          description: The product couldn't be updated
-        '500': Internal server error
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    delete:
+      summary: Deletes the specified product
+      description: This endpoint will delete the product that matches the ID provided
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - name: productID
+          in: path
+          required: true
+          description: Is the product's ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Confirms the deletion of the desired product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates a successful deletion
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
 components:
   schemas:
@@ -146,6 +213,7 @@ components:
           description: Contains the created product properties
           schema:
             $ref: '#/components/schemas/product'
+
     getProductsResponse:
       type: object
       properties:
@@ -155,6 +223,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/product'
+
     product:
       type: object
       requires:
@@ -214,3 +283,42 @@ components:
         deleted: false
         createdAt: '2023-01-19T22:31:36.162+00:00'
         updatedAt: '2023-03-21T00:50:47.003+00:00'
+
+    productUpdate:
+      type: object
+      required:
+        - id-
+      properties:
+        id:
+          $ref: '#/components/schemas/product/properties/id'
+        title:
+          $ref: '#/components/schemas/product/properties/title'
+        description:
+          $ref: '#/components/schemas/product/properties/description'
+        code:
+          $ref: '#/components/schemas/product/properties/code'
+        price:
+          $ref: '#/components/schemas/product/properties/price'
+        stock:
+          $ref: '#/components/schemas/product/properties/stock'
+        category:
+          $ref: '#/components/schemas/product/properties/category'
+        thumbnail:
+          $ref: '#/components/schemas/product/properties/thumbnail'
+        owner:
+          $ref: '#/components/schemas/product/properties/owner'
+      minProperties: 2
+      additionalProperties: false
+
+    error:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: The http response status code
+        error:
+          type: string
+          description: A generic error message that indicates the kind of error
+      example:
+        statusCode: 404
+        error: Resource not found

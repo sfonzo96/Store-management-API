@@ -63,6 +63,7 @@ export default class UserController {
     }
   };
 
+  //TODO: verify token should be generic
   verifyPasswordResetToken = async (req, res, next) => {
     try {
       const { token } = req.params;

@@ -1,0 +1,323 @@
+paths:
+  /api/carts:
+    post:
+      summary: Creates a new cart
+      description: This endpoint will create a new empty cart
+      operationId: createCart
+      tags:
+        - Carts
+      responses:
+        '201':
+          description: Returns a confirmation that the cart was created
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /api/carts/{cartID}:
+    put:
+      summary: Updates the cart whose ID is specified
+      description: This endpoint will update the whole cart by replacing it with other data
+      operationId: updateCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart to be modified
+          schema:
+            type: string
+      requestBody:
+        content:
+          aplication/json:
+            schema: '#/components/schemas/cart/properties/products'
+      responses:
+        '200':
+          description: Returns a confirmation that the cart was updated successfully
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    delete:
+      summary: Empties the cart whose ID is specified
+      description: This endpoint will make a soft delete of the cart, meaning that it will erase it's products data
+      operationId: deleteCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart to be emptied
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a confirmation that the cart was emptied successfully
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /api/carts/{cartID}/purchase:
+    post:
+      summary: Creates a purchase ticket
+      description: This endpoint will get the current user's cart and create a purchase ticket with it's data and will include the user's ID as well.
+      operationId: makePurchase
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart to be emptied
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a confirmation that the purchase was successful
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /api/carts/{cartID}/product/{productID}:
+    put:
+      summary: Updates a product's quantity in the cart
+      description: This endpoint will modify the quantity of a specified product in a specified cart.
+      operationId: updateQuantity
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart whose product's quantity is to be updated
+          schema:
+            type: string
+        - name: productID
+          in: path
+          required: true
+          description: Is the ID of the product whose quantity is to be updated
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a confirmation that the update was successful
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    post:
+      summary: Adds a product to the cart
+      description: This endpoint will add a specified product to a specified cart
+      operationId: addProductToCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart to what the product is going to be added
+          schema:
+            type: string
+        - name: productID
+          in: path
+          required: true
+          description: Is the ID of the product that's going to be added to the cart
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a confirmation that the addition was successful
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    delete:
+      summary: Deletes a product from the cart
+      description: This endpoint will delete a specified product of a specified cart
+      operationId: deleteProductFromCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          description: Is the ID of the cart from what the product is going to be deleted
+          schema:
+            type: string
+        - name: productID
+          in: path
+          required: true
+          description: Is the ID of the product that's going to be deleted from the cart
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a confirmation that the deletion was successful
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /api/carts/getCartID:
+    get:
+      summary: Gets the current user's cart ID
+      description: This endpoint will return the current user's cart ID
+      operatioId: getCartID
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Returns a confirmation that the request was successful and the requested ID
+          content:
+            aplication/json:
+              type: object
+              properties:
+                success:
+                  type: booleaan
+                  desciption: Indicates that the requested operation was successful
+                cartID:
+                  type: string
+                  description: Current user's cart ID
+        '4XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            aplicacion/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    cartItem:
+      type: object
+      properties:
+        product:
+          type: object
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: integer
+          description: The number of units of the product in the cart
+
+    cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The cart's ID
+        products:
+          type: array
+          items: '#/components/schemas/cartItem'
+
+    error:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: The http response status code
+        error:
+          type: string
+          description: A generic error message that indicates the kind of error
+      example:
+        statusCode: 404
+        error: Resource not found

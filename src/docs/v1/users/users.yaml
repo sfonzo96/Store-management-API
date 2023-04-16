@@ -2,7 +2,7 @@ paths:
   /api/users:
     post:
       summary: Creates a new user
-      description: Use this endpoint in order to create a new user
+      description: This endpoint will create a new user
       operationID: createUser
       tags:
         - Users
@@ -11,39 +11,56 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestUser'
+              $ref: '#/components/schemas/requestUser'
       responses:
         '201':
           description: User created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseUser'
-        '500':
-          description: Internal server error when attempting to create a new user
+                $ref: '#/components/schemas/responseUser'
+        '4XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '5XX':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
   /api/users/:email:
     get:
       tags:
         - Users
+  /api/users/getCurrentUser:
+    get:
+      operationId: getCurrentUser
+      tags:
+        - Users
   /api/users/sendPwResetEmail:
     get:
+      operationId: sendPwResetEmail
       tags:
         - Users
   /api/users/password/reset/:token:
     get:
+      operationId: verifyPasswordResetToken
       tags:
         - Users
   /api/users/password/reset:
     post:
+      operationId: resetPassword
       tags:
         - Users
   /api/users/permission/change:
     put:
+      operationId: changeRole
       tags:
         - Users
 components:
   schemas:
-    RequestUser:
+    requestUser:
       type: object
       required:
         - firstName
@@ -69,11 +86,37 @@ components:
         age:
           type: integer
           example: 26
-    ResponseUser:
+      example:
+        firstName: Santiago
+        lastName: Fonzo
+        password: santi123
+        email: santiagofonzo@live.com
+        age: 26
+    responseUser:
       allOf:
-        - $ref: '#/components/schemas/RequestUser'
-        - type: object
-          properties:
-            id:
-              type: ObjectId
-              example: '641751e08490514c94ff1b05'
+        - $ref: '#/components/schemas/requestUser'
+          not:
+            properties:
+              password:
+                type: string
+        - id:
+            type: string
+      example:
+        firstName: Santiago
+        lastName: Fonzo
+        password: santi123
+        email: santiagofonzo@live.com
+        age: 26
+        id: 641751e08490514c94ff1b05
+    error:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: The http response status code
+        error:
+          type: string
+          description: A generic error message that indicates the kind of error
+      example:
+        statusCode: 404
+        error: Resource not found

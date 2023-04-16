@@ -11,6 +11,7 @@ export default class CartsRouter extends express.Router {
   setup = () => {
     this.post('/', [], this.cartController.createCart);
     this.put('/:cartID/', [], this.cartController.updateCart);
+    this.delete('/:cartID', [], this.cartController.deleteCart);
     this.put(
       '/:cartID/product/:productID',
       [],
@@ -21,7 +22,6 @@ export default class CartsRouter extends express.Router {
       [isAuthorized('addToCart')],
       this.cartController.addProductToCart
     );
-    this.delete('/:cartID', [], this.cartController.deleteCart);
     this.delete(
       '/:cartID/product/:productID',
       [isAuthorized('deleteFromCart')],

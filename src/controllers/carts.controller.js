@@ -12,8 +12,6 @@ export default class CartsController {
       const newCart = await this.cartService.createCart();
       res.status(201).json({
         succees: true,
-        message: 'New cart created.',
-        cart: newCart,
       });
     } catch (error) {
       next(error);
@@ -39,7 +37,6 @@ export default class CartsController {
       await this.cartService.deleteCart(cartID); // Returns an empty cart
       res.status(200).json({
         success: true,
-        message: `Cart ${cartID} was emptied`,
       });
     } catch (error) {
       next(error);
@@ -67,7 +64,7 @@ export default class CartsController {
         );
       }
 
-      const cart = await this.cartService.addProductToCart(
+      await this.cartService.addProductToCart(
         cartID,
         productID,
         Number(quantity)
@@ -76,8 +73,6 @@ export default class CartsController {
       if (cart) {
         res.status(200).json({
           success: true,
-          message: `Product ${productID} added to cart ${cart._id}`,
-          data: cart,
         });
       } else {
         throw new CustomError('NOT_FOUND', 'Cart not found');
@@ -91,15 +86,10 @@ export default class CartsController {
     try {
       const { cartID, productID } = req.params;
 
-      const cart = await this.cartService.deleteProductFromCart(
-        cartID,
-        productID
-      );
+      await this.cartService.deleteProductFromCart(cartID, productID);
       if (cart) {
         res.status(200).json({
           success: true,
-          message: `Product ${productID} deleted from cart ${cartID}`,
-          data: cart,
         });
       } else {
         throw new CustomError('NOT_FOUND', 'Cart not found');
@@ -117,8 +107,6 @@ export default class CartsController {
       if (updatedCart) {
         res.status(200).json({
           success: true,
-          message: `Cart ${cartID} updated.`,
-          data: updatedCart,
         });
       } else {
         throw new CustomError('NOT_FOUND', 'Cart not found');
@@ -132,7 +120,7 @@ export default class CartsController {
     try {
       const { cartID, productID } = req.params;
       const { quantity } = req.body;
-      const updatedCart = await this.cartService.updateQuantity(
+      await this.cartService.updateQuantity(
         cartID,
         productID,
         Number(quantity)
@@ -140,8 +128,6 @@ export default class CartsController {
       if (updatedCart) {
         res.status(200).json({
           success: true,
-          message: `Product ${productID} quantity updated to ${quantity} in cart ${cartID}`,
-          data: updatedCart,
         });
       } else {
         throw new CustomError('NOT_FOUND', 'Cart not found');
@@ -149,6 +135,7 @@ export default class CartsController {
     } catch (error) {
       next(error);
     }
+    a;
   };
 
   getCartID = async (req, res, next) => {
@@ -176,8 +163,6 @@ export default class CartsController {
       if (purchase) {
         res.status(200).json({
           success: true,
-          message: `Purchase of cart ${cartID} successful`,
-          data: purchase,
         });
       } else {
         throw new CustomError(

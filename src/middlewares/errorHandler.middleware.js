@@ -1,5 +1,6 @@
 import errorMap from '../utils/errorMap.js';
 import CustomError from '../utils/CustomError.js';
+import logger from '../logger/index.logger.js';
 
 export default function errorHandler(err, req, res, next) {
   // Check if the error is thrown as an operational error
@@ -9,15 +10,23 @@ export default function errorHandler(err, req, res, next) {
       statusCode: 500,
       message: 'Internal server error',
     };
-    // Sends response
-    res.status(statusCode).json({
+
+    const errorObject = {
+      statusCode,
       error: message,
       cause: err.cause,
       stack: err.stack,
+    };
+
+    // Logs the error
+    logger.error(errorObject);
+
+    // Sends response
+    res.status(statusCode).json({
+      statusCode,
+      error: message,
     });
   } else {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-// TODO: implement logs for errors
