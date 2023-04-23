@@ -5,8 +5,6 @@ import UserDTO from '../dto/userDTO.js';
 import logger from '../logger/index.logger.js';
 
 const passportConfig = async (passport) => {
-  //TODO: set this with awilix injection ({with this})
-
   const userService = container.resolve('UserService');
   const authService = container.resolve('AuthService');
   const config = container.resolve('ServerConfig');
@@ -62,7 +60,7 @@ const passportConfig = async (passport) => {
         clientID: config.CLIENT_ID,
         clientSecret: config.CLIENT_SECRET,
         callbackURL:
-          'http://entregas-backend-coder.glitch.me/api/github/callback', // This should be changed accordingly to the environment and stage of the proyect
+          'https://entregas-backend-coder.glitch.me/api/github/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -81,13 +79,13 @@ const passportConfig = async (passport) => {
               password: '',
               platform: 'github',
             };
+
             const newUser = await userService.createUser(userData);
-            delete newUser.password;
+            new UserDTO(newUser);
             return done(null, newUser);
           }
-          delete user.password;
 
-          done(null, user);
+          done(null, new UserDTO(user));
         } catch (error) {
           done(error);
         }
