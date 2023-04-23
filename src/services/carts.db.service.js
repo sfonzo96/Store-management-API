@@ -1,5 +1,6 @@
 import CartDTO from '../dto/cartDTO.js';
 import CustomError from '../utils/CustomError.js';
+import mongoose from 'mongoose';
 
 export default class CartService {
   constructor({ CartRepository, PurchaseService }) {
@@ -53,10 +54,16 @@ export default class CartService {
       const updatedCart = await this.cartDao.update(
         { _id: cartID },
         { $set: { 'products.$[elem].quantity': quantity } },
-        { arrayFilters: [{ 'elem.product': productID }], new: true }
+        {
+          arrayFilters: [
+            { 'elem.product': mongoose.Types.ObjectId(productID) },
+          ],
+          new: true,
+        }
       );
       return new CartDTO(updatedCart);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

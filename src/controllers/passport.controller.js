@@ -13,8 +13,6 @@ export default class PassportController {
   };
 
   login = async (req, res) => {
-    /*     req.session.logged = true; 
-    req.session.user = req.user; */
     res.status(200).redirect('/products');
   };
 

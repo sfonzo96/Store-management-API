@@ -3,7 +3,9 @@ import CustomError from '../utils/CustomError.js';
 
 const isAuthorized = (permission) => async (req, res, next) => {
   try {
-    const user = req.user;
+    const user = JSON.parse(req.headers.user) || req.user;
+
+    req.user = user; //MEMO: testing, should now affect app functionality
 
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized' });

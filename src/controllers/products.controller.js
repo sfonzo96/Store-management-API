@@ -73,6 +73,7 @@ export default class ProductController {
         data: newProduct,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

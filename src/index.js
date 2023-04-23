@@ -15,5 +15,3 @@ mongoose.connect(serverConfig.MONGO_URI, (err) => {
     return app.start();
   }
 });
-
-// TODO: ADD MEANINGFUL COMMENTS ALL ON EVERY FILE WHERE NEEDED

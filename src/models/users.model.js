@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
     },
     platform: {
       type: String,
-      enum: ['github'],
+      enum: ['github', null],
       default: null,
     },
   },

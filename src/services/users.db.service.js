@@ -24,11 +24,12 @@ export default class UserService {
 
       const createdUser = await this.usersDao.create({
         ...user,
-        cart: newCart._id,
+        cart: newCart.id,
       });
 
       return new UserDTO(createdUser);
     } catch (error) {
+      console.log('error', error);
       throw error;
     }
   };

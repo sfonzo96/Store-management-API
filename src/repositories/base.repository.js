@@ -21,11 +21,15 @@ export default class BaseRepository {
     return await this.model.find(criteria).lean();
   };
 
-  update = async (filter, update) => {
+  update = async (
+    filter,
+    update,
+    arrayFilters = {
+      new: true,
+    }
+  ) => {
     return await this.model
-      .findOneAndUpdate(filter, update, {
-        new: true,
-      })
+      .findOneAndUpdate(filter, update, arrayFilters)
       .lean();
 
     // O conviene:
