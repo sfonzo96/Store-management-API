@@ -58,9 +58,12 @@ export default class ProductController {
   createProduct = async (req, res, next) => {
     try {
       const product = req.body;
-      const owner = req.user.id;
 
-      Object.assign(product, { owner });
+      if (req.user.id) {
+        // This wil validate that the req.user obj has an id (testing's user won't have it) and define an owner if it has (admin or premium user will have it)
+        const owner = req.user.id;
+        Object.assign(product, { owner });
+      }
 
       const newProduct = await this.productService.createProduct(product);
 

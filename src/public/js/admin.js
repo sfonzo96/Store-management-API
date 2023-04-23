@@ -53,9 +53,14 @@ deleteProductForm.addEventListener('submit', (e) => {
 
 changeRoleForm.addEventListener('submit', (e) => {
   e.preventDefault();
+
+  const formData = new FormData(changeRoleForm);
+  const userID = formData.get('userID').trim();
+  const toRole = formData.get('toRole').trim();
+
   axios({
     method: 'put',
-    url: '/api/users/permission/change?userID=643872260be3940d2c3c6f74&toRole=premium',
+    url: `/api/users/permission/change?userID=${userID}&toRole=${toRole}`,
   })
     .then((res) => {
       alert('Role changed successfully');

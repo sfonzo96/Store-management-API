@@ -3,12 +3,15 @@ import CustomError from '../utils/CustomError.js';
 
 const isAuthorized = (permission) => async (req, res, next) => {
   try {
-    const user = JSON.parse(req.headers.user) || req.user;
+    let user;
+    if (req.headers.user) {
+      req.user = JSON.parse(req.headers.user);
+    }
 
-    req.user = user; //MEMO: testing, should now affect app functionality
+    user = req.user;
 
     if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      throw new CustomError('UNAUTHORIZED', 'Unauthorized');
     }
 
     if (user.role === 'admin') {
