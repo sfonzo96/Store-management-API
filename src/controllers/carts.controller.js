@@ -1,10 +1,11 @@
 import CustomError from '../utils/CustomError.js';
 
 export default class CartsController {
-  constructor({ CartService, PurchaseService, UserService }) {
+  constructor({ CartService, PurchaseService, UserService, ProductService }) {
     this.cartService = CartService;
     this.purchaseService = PurchaseService;
     this.userService = UserService;
+    this.productService = ProductService;
   }
 
   createCart = async (req, res, next) => {
@@ -35,7 +36,9 @@ export default class CartsController {
   deleteCart = async (req, res, next) => {
     try {
       const { cartID } = req.params;
+
       const cart = await this.cartService.deleteCart(cartID); // Returns an empty cart
+
       res.status(200).json({
         success: true,
         data: cart,
@@ -49,20 +52,20 @@ export default class CartsController {
     try {
       const { cartID, productID } = req.params;
       const { quantity } = req.body;
-      const user = await this.productService.getUser(req.user.id);
+
+      if (quantity <= 0) {
+        throw new CustomError(
+          'VALIDATION_ERROR',
+          'Invalid quantity. Must be a positive integer.'
+        );
+      }
+      const user = await this.userService.getUser(req.user.id);
       const product = await this.productService.getProduct(productID);
 
       if (user.role === 'premium' && user._id === product.owner) {
         throw new CustomError(
           'FORBIDDEN',
           'Premium users cannot add their own products to the cart.'
-        );
-      }
-
-      if (quantity <= 0) {
-        throw new CustomError(
-          'VALIDATION_ERROR',
-          'Invalid quantity. Must be a positive integer.'
         );
       }
 
@@ -81,6 +84,7 @@ export default class CartsController {
         throw new CustomError('NOT_FOUND', 'Cart not found');
       }
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

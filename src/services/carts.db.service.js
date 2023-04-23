@@ -26,17 +26,17 @@ export default class CartService {
     }
   };
 
-  async deleteCart(cartID) {
+  deleteCart = async (cartID) => {
     try {
-      return await this.cartDao.delete();
+      return await this.cartDao.delete(cartID);
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   // MEMO: probar --> unificar updateCart y updateQuantity
 
-  async updateCart(cartID, cartData) {
+  updateCart = async (cartID, cartData) => {
     try {
       const updatedCart = await this.cartDao.update(
         { _id: cartID },
@@ -47,9 +47,9 @@ export default class CartService {
     } catch (error) {
       throw error;
     }
-  }
+  };
 
-  async updateQuantity(cartID, productID, quantity) {
+  updateQuantity = async (cartID, productID, quantity) => {
     try {
       const updatedCart = await this.cartDao.update(
         { _id: cartID },
@@ -66,7 +66,7 @@ export default class CartService {
       console.log(error);
       throw error;
     }
-  }
+  };
 
   addProductToCart = async (cartID, productID, quantity) => {
     try {
