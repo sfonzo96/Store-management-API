@@ -6,11 +6,11 @@ export default class WebSocketService {
   constructor({ ChatService }) {
     this.chatService = ChatService;
   }
+
   websocketInit = (io) => {
-    // TODO implement middleware to check for user permission to send messages
     this.io = io;
 
-    this.io.on('connection', async (socket) => {
+    this.io.on('connect', async (socket) => {
       logger.info(`Nueva conexion desde el id: ${socket.id}`);
 
       socket.emit('welcome', {
@@ -18,8 +18,17 @@ export default class WebSocketService {
         messages: await this.chatService.getMessages(),
       });
 
-      socket.on('disconnect', (socket) => {
+      socket.on('disconnect', () => {
         logger.info(`Cierre de conexion`);
+      });
+
+      socket.on('newMessage', async (data) => {
+        try {
+          const newMessage = await this.chatService.createMessage(data);
+          this.io.emit('newMessage', newMessage);
+        } catch (error) {
+          throw error;
+        }
       });
 
       socket.on('newUser', (data) => {

@@ -1,5 +1,3 @@
-import CustomError from '../../utils/CustomError.js';
-
 const socket = io();
 
 const submitBtn = document.getElementById('submitBtn');
@@ -8,25 +6,6 @@ const userName = document.getElementById('userName');
 const messagesContainer = document.getElementById('messagesContainer');
 
 // let newMessages = [];
-
-socket.on('welcome', async (data) => {
-  try {
-    const response = await getMessages(data);
-    if (response.messages.length > 0) {
-      loadMessages(response.messages);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-socket.on('newUser', (newUser) => {
-  Swal.fire({
-    text: `${newUser} has joined the chat!`,
-    toast: true,
-    position: 'top-right',
-  });
-});
 
 function loadMessages(messages) {
   messagesContainer.innerHTML = '';
@@ -51,14 +30,12 @@ function printMessage(message) {
 	`;
 }
 
-function getMessage() {
-  const messageText = messageInput.value.trim();
-  messageInput.value = '';
-  return messageText;
-}
-
 function sendMessage(userID, message) {
-  axios({
+  socket.emit('newMessage', {
+    user: userID,
+    message,
+  });
+  /* axios({
     method: 'POST',
     url: '/api/chat/new',
     data: {
@@ -67,7 +44,13 @@ function sendMessage(userID, message) {
     },
   }).then((res) => {
     printMessage(res.data.message);
-  });
+  }); */
+}
+
+function getMessage() {
+  const messageText = messageInput.value.trim();
+  messageInput.value = '';
+  return messageText;
 }
 
 function getMessages(data) {
@@ -75,12 +58,12 @@ function getMessages(data) {
     if (data) {
       res(data);
     } else {
-      rej(new CustomError('SERVER_ERROR', 'Error getting messages'));
+      rej(new Error('Error getting messages'));
     }
   });
 }
 
-function setup() {
+socket.on('connect', () => {
   console.log('Connection successful');
   if (submitBtn && messageInput && userName) {
     const auxStorage = document.getElementById('auxStorage');
@@ -99,8 +82,28 @@ function setup() {
       }
     });
 
-    socket.emit('newUser', userName);
-  }
-}
+    socket.on('welcome', async (data) => {
+      try {
+        const response = await getMessages(data);
+        if (response.messages.length > 0) {
+          loadMessages(response.messages);
+        }
+        socket.emit('newUser', userName);
+      } catch (err) {
+        console.log(err);
+      }
+    });
 
-setup();
+    socket.on('newUser', (newUser) => {
+      Swal.fire({
+        text: `${newUser} has joined the chat!`,
+        toast: true,
+        position: 'top-right',
+      });
+    });
+
+    socket.on('newMessage', (message) => {
+      printMessage(message);
+    });
+  }
+});

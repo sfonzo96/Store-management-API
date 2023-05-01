@@ -9,11 +9,11 @@ export default class ChatRouter extends express.Router {
   }
 
   setup = () => {
-    this.post(
+    /*     this.post(
       '/new',
       [isAuthorized('sendMessage')],
       this.chatController.createMessage
-    );
+    ); */
     this.get('/load', [], this.chatController.getMessages);
   };
 }

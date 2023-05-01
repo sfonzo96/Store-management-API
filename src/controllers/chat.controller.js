@@ -24,10 +24,11 @@ export default class ViewController {
     }
   };
 
-  createMessage = async (req, res, next) => {
+  /*   createMessage = async (req, res, next) => {
     try {
       const messageData = req.body;
       const newMessage = await this.chatService.createMessage(messageData);
+
       if (newMessage) {
         res.status(200).json({
           success: true,
@@ -39,5 +40,5 @@ export default class ViewController {
     } catch (error) {
       next(error);
     }
-  };
+  }; */
 }
