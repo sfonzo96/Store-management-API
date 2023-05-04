@@ -1,10 +1,9 @@
 import express from 'express';
-import isAuthorized from '../middlewares/isAuthorized.middleware.js';
-
 export default class ProductsRouter extends express.Router {
-  constructor({ ProductController }) {
+  constructor({ ProductController, Authorizator }) {
     super();
     this.productController = ProductController;
+    this.authorizator = Authorizator;
     this.setup();
   }
 
@@ -12,18 +11,27 @@ export default class ProductsRouter extends express.Router {
     this.get('/', [], this.productController.getProducts);
     this.post(
       '/',
-      [isAuthorized('createProduct')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizatePremium('createProduct')(req, res, next),
+      ],
       this.productController.createProduct
     );
     this.get('/:productID', [], this.productController.getProduct);
     this.put(
       '/:productID',
-      [isAuthorized('updateProduct')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizatePremium('updateProduct')(req, res, next),
+      ],
       this.productController.updateProduct
     );
     this.delete(
       '/:productID',
-      [isAuthorized('deleteProduct')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizatePremium('deleteProduct')(req, res, next),
+      ],
       this.productController.deleteProduct
     );
   };

@@ -59,3 +59,8 @@ export function compare(lvalue, operator, rvalue) {
 
   return result;
 }
+
+export function docsIncludes(array, value) {
+  if (!array.length > 1) return false;
+  return array.some((doc) => doc.name === value);
+}

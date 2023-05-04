@@ -1,6 +1,6 @@
-const sendResetPasswordBtn = document.getElementById('sendResetPasswordBtn');
+const sendPasswordResetBtn = document.getElementById('sendPasswordResetBtn');
 
-sendResetPasswordBtn.addEventListener('click', (e) => {
+sendPasswordResetBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
   axios({

@@ -51,7 +51,7 @@ describe('Testing Routers', () => {
 
   //Carts Router tests
 
-  describe('Testing cartsRouter', () => {
+  describe('Testing CartsRouter', () => {
     it('Creates a cart', async () => {
       const response = await requester.post('/api/carts');
       expect(response.statusCode).to.equal(201);
@@ -93,7 +93,7 @@ describe('Testing Routers', () => {
 
   //Products Router tests
 
-  describe('Testing productsRouter', () => {
+  describe('Testing ProductsRouter', () => {
     it('Creates a product', async () => {
       const response = await requester
         .post('/api/products')
@@ -124,7 +124,7 @@ describe('Testing Routers', () => {
   });
 
   // Passport Local (Sessions) Router tests
-  describe('Testing passportLocalRouter', () => {
+  describe('Testing PassportRouter', () => {
     it('Logs in a user', async () => {
       delete userMock.id;
       delete userMock.role;

@@ -1,6 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import { paginationUrl, compare } from './utils/helpers.js';
+import { paginationUrl, compare, docsIncludes } from './utils/helpers.js';
 import { Server } from 'socket.io';
 import cookie from 'cookie-parser';
 import session from 'express-session';
@@ -65,6 +65,7 @@ export default class AppServer {
       helpers: {
         paginationUrl,
         compare,
+        docsIncludes,
       },
     });
     this.app.engine('handlebars', hbs.engine);

@@ -1,10 +1,10 @@
 import express from 'express';
-import isAuthorized from '../middlewares/isAuthorized.middleware.js';
 
 export default class CartsRouter extends express.Router {
-  constructor({ CartController }) {
+  constructor({ CartController, Authorizator }) {
     super();
     this.cartController = CartController;
+    this.authorizator = Authorizator;
     this.setup();
   }
 
@@ -19,18 +19,27 @@ export default class CartsRouter extends express.Router {
     );
     this.post(
       '/:cartID/product/:productID',
-      [isAuthorized('addToCart')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizateRegularUser()(req, res, next),
+      ],
       this.cartController.addProductToCart
     );
     this.delete(
       '/:cartID/product/:productID',
-      [isAuthorized('deleteFromCart')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizateRegularUser()(req, res, next),
+      ],
       this.cartController.deleteProductFromCart
     );
     this.get('/getCartID', [], this.cartController.getCartID);
     this.post(
       '/:cartID/purchase',
-      [isAuthorized('makePurchase')],
+      [
+        (req, res, next) =>
+          this.authorizator.authorizateRegularUser()(req, res, next),
+      ],
       this.cartController.makePurchase
     );
   };

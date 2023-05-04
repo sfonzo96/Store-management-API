@@ -1,11 +1,12 @@
 import express from 'express';
 import isAuthenticated from '../middlewares/isAuthenticated.middleware.js';
-import isAuthorized from '../middlewares/isAuthorized.middleware.js';
+import upload from '../middlewares/uploadUserDocs.middleware.js';
 
 export default class UsersRouter extends express.Router {
-  constructor({ UserController }) {
+  constructor({ UserController, Authorizator }) {
     super();
     this.userController = UserController;
+    this.authorizator = Authorizator;
     this.setup();
   }
 
@@ -28,10 +29,16 @@ export default class UsersRouter extends express.Router {
       [isAuthenticated],
       this.userController.resetPassword
     );
+    // This is for role changing, new role is passed in as a query as well as the user id
     this.put(
       '/permission/change/',
-      [isAuthorized('changeRole')],
+      [this.authorizator.authorizatePremium('changeRole')],
       this.userController.changeRole
+    );
+    this.post(
+      '/:userID/documents/:type',
+      [upload],
+      this.userController.addDocument
     );
   };
 }

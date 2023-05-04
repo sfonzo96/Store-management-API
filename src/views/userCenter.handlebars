@@ -23,8 +23,45 @@
     <span>{{user.role}}</span>
   </div>
   <div>
+    {{#if (docsIncludes user.documents 'idDoc')}}
+    <p>ID verified</p>
+    {{/if}}
+    {{#unless (docsIncludes user.documents 'idDoc')}}
+    <h3>Upload your ID's photo</h3>
+    <form action="/api/users/{{user.id}}/documents/idDoc" method="post" enctype="multipart/form-data">
+      <label for="idDoc"></label>
+      <input type="file" name="idDoc" id="idDoc" />
+      <button type="submit">Upload file</button>
+    </form>
+    {{/unless}}
+
+    {{#if (docsIncludes user.documents 'idDoc')}}
+    <p>Adress verified</p>
+    {{/if}}
+    {{#unless (docsIncludes user.documents 'addressDoc')}}
+    <h3>Verify your home addess </h3>
+    <form action="/api/users/{{user.id}}/documents/addressDocs" method="post" enctype="multipart/form-data">
+      <label for="addressDoc"></label>
+      <input type="file" name="addressDoc" id="addressDoc" />
+      <button type="submit">Upload file</button>
+    </form>
+    {{/unless}}
+
+    {{#if (docsIncludes user.documents 'idDoc')}}
+    <p>Account status verified</p>
+    {{/if}}
+    {{#unless (docsIncludes user.documents 'statusDoc')}}
+    <h3>Verify your status account</h3>
+    <form action="/api/users/{{user.id}}/documents/statusDocs" method="post" enctype="multipart/form-data">
+      <label for="statusDoc"></label>
+      <input type="file" name="statusDoc" id="statusDoc" />
+      <button type="submit">Upload file</button>
+    </form>
+    {{/unless}}
+  </div>
+  <div>
     <button type='button' id='sendPasswordResetBtn'>Get reset password link</button>
   </div>
 </div>
 
-<script src='userCenter.js'></script>
+<script src='/js/userCenter.js'></script>

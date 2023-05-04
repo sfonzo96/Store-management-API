@@ -134,4 +134,20 @@ export default class UserController {
       next(error);
     }
   };
+
+  addDocument = async (req, res, next) => {
+    try {
+      const { userID } = req.params;
+      const { file } = req;
+      const success = await this.userService.addDocument(userID, file);
+
+      if (!success) {
+        throw new CustomError('SERVER_ERROR', 'Error adding document');
+      }
+
+      res.status(200).redirect('/usercenter');
+    } catch (error) {
+      next(error);
+    }
+  };
 }

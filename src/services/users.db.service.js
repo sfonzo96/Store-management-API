@@ -95,8 +95,47 @@ export default class UserService {
     }
   };
 
+  // make a generic update method
+
+  refreshLastConnection = async (id) => {
+    const user = await this.usersDao.update(
+      { _id: id },
+      { lastConnection: Date.now() }
+    );
+
+    if (!user) {
+      throw new CustomError('NOT_FOUND', 'User not found');
+    }
+
+    return new UserDTO(user);
+  };
+
   changeRole = async (id, toRole) => {
     const user = await this.usersDao.update({ _id: id }, { role: toRole });
+
+    if (!user) {
+      throw new CustomError('NOT_FOUND', 'User not found');
+    }
+
+    return new UserDTO(user);
+  };
+
+  addDocument = async (id, file) => {
+    const document = {
+      name: file.fieldname,
+      reference: file.path,
+    };
+
+    let user = await this.usersDao.getById(id);
+
+    if (user.documents.some((doc) => doc.name === document.name)) {
+      throw new CustomError('CONFLICT', 'Document already exists');
+    } else {
+      user = await this.usersDao.update(
+        { _id: id, 'documents.document.name': { $ne: document.name } },
+        { $addToSet: { documents: document } }
+      );
+    }
 
     if (!user) {
       throw new CustomError('NOT_FOUND', 'User not found');

@@ -41,6 +41,26 @@ const userSchema = new mongoose.Schema(
       enum: ['github', null],
       default: null,
     },
+    documents: [
+      {
+        name: {
+          type: String,
+          enum: ['idDoc', 'adressDoc', 'statusDoc'],
+          unique: true,
+          required: true,
+        },
+        reference: {
+          // This should store the url to the doc
+          type: String,
+          required: true,
+        },
+        _id: false,
+      },
+    ],
+    lastConnection: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,

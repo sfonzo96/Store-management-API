@@ -1,6 +1,9 @@
 // awilix utils
 import { createContainer, asClass, asValue, InjectionMode } from 'awilix';
 
+// utils
+import Authorizator from './middlewares/authorizator.middleware.js';
+
 //TODO: set auto-load (check https://github.com/jeffijoe/awilix#auto-loading-modules)
 // config
 import ServerConfig from './config/server.config.js';
@@ -12,7 +15,7 @@ import ProductsRouter from './routers/products.routes.js';
 import CartsRouter from './routers/carts.routes.js';
 import ViewsRouter from './routers/views.routes.js';
 import UsersRouter from './routers/users.routes.js';
-import PassportLocalRouter from './routers/passportLocal.routes.js';
+import PassportRouter from './routers/passport.routes.js';
 import GithubRouter from './routers/github.routes.js';
 import ChatRouter from './routers/chat.routes.js';
 import MockingRouter from './routers/mocking.routes.js';
@@ -80,12 +83,15 @@ container.register({
   ChatController: asClass(ChatController).singleton(),
   MockingController: asClass(MockingController).singleton(),
 
+  // Utility classes
+  Authorizator: asClass(Authorizator).singleton(),
+
   // Routers
   ProductsRouter: asClass(ProductsRouter).singleton(),
   CartsRouter: asClass(CartsRouter).singleton(),
   ViewsRouter: asClass(ViewsRouter).singleton(),
   UsersRouter: asClass(UsersRouter).singleton(),
-  PassportRouter: asClass(PassportLocalRouter).singleton(),
+  PassportRouter: asClass(PassportRouter).singleton(),
   GithubRouter: asClass(GithubRouter).singleton(),
   ChatRouter: asClass(ChatRouter).singleton(),
   MockingRouter: asClass(MockingRouter).singleton(),
