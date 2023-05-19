@@ -84,7 +84,6 @@ export default class CartsController {
         throw new CustomError('NOT_FOUND', 'Cart not found');
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };

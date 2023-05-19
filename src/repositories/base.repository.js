@@ -42,4 +42,8 @@ export default class BaseRepository {
   delete = async (id) => {
     return await this.model.deleteOne({ _id: id }).lean();
   };
+
+  deleteMany = async (criteria) => {
+    return await this.model.deleteMany(criteria).lean();
+  };
 }

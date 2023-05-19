@@ -46,7 +46,6 @@ const userSchema = new mongoose.Schema(
         name: {
           type: String,
           enum: ['idDoc', 'adressDoc', 'statusDoc'],
-          unique: true,
           required: true,
         },
         reference: {

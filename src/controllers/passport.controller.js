@@ -1,7 +1,6 @@
 import logger from '../logger/index.logger.js';
 
 export default class PassportController {
-  // TODO: implement a notification on authentication (frontend)
   constructor({ UserService }) {
     this.userService = UserService;
   }

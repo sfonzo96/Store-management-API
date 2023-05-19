@@ -45,7 +45,6 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',
       required: true,
-      default: null,
     },
     status: {
       type: Boolean,

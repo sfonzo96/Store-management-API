@@ -20,6 +20,23 @@ export default class UserController {
     }
   };
 
+  getUsers = async (req, res, next) => {
+    try {
+      const userList = await this.userService.getUsers();
+
+      if (userList.length < 1) {
+        throw new CustomError('NOT_FOUND', 'No users found');
+      }
+
+      res.status(200).json({
+        success: true,
+        userList,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   getUser = async (req, res, next) => {
     try {
       const { email } = req.params;
@@ -63,7 +80,6 @@ export default class UserController {
     }
   };
 
-  //TODO: verify token should be generic
   verifyPasswordResetToken = async (req, res, next) => {
     try {
       const { token } = req.params;
@@ -146,6 +162,21 @@ export default class UserController {
       }
 
       res.status(200).redirect('/usercenter');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  deleteInactiveUsers = async (req, res, next) => {
+    try {
+      const deleted = await this.userService.deleteInactiveUsers();
+
+      if (!deleted) {
+        throw new CustomError('SERVER_ERROR', 'Error deleting users');
+      }
+      return res.status(200).json({
+        success: true,
+      });
     } catch (error) {
       next(error);
     }

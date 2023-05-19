@@ -1,4 +1,4 @@
-import CartDTO from '../dto/cartDTO.js';
+import CartDTO from '../dto/cartDTO.res.js';
 import CustomError from '../utils/CustomError.js';
 import mongoose from 'mongoose';
 
@@ -63,7 +63,6 @@ export default class CartService {
       );
       return new CartDTO(updatedCart);
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };

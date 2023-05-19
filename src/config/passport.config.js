@@ -1,7 +1,7 @@
 import passportLocal from 'passport-local';
 import passportGithub from 'passport-github2';
 import container from '../container.js';
-import UserDTO from '../dto/userDTO.js';
+import fullUserDTO_res from '../dto/fullUserDTO.res.js';
 import logger from '../logger/index.logger.js';
 
 const passportConfig = async (passport) => {
@@ -81,11 +81,11 @@ const passportConfig = async (passport) => {
             };
 
             const newUser = await userService.createUser(userData);
-            new UserDTO(newUser);
+            new fullUserDTO_res(newUser);
             return done(null, newUser);
           }
 
-          done(null, new UserDTO(user));
+          done(null, new fullUserDTO_res(user));
         } catch (error) {
           done(error);
         }
@@ -96,7 +96,7 @@ const passportConfig = async (passport) => {
   passport.serializeUser((user, done) => {
     logger.info('Serializing');
     if (!user.id) {
-      user = new UserDTO(user);
+      user = new fullUserDTO_res(user);
     }
     done(null, user.id);
   });

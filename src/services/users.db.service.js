@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
-import UserDTO from '../dto/userDTO.js';
+import simpleUserDTO_res from '../dto/simpleUserDTO.res.js';
+import fullUserDTO_res from '../dto/fullUserDTO.res.js';
 import CustomError from '../utils/CustomError.js';
+import mailing from '../utils/mailing.js';
 
 export default class UserService {
   constructor({ UserRepository, CartRepository }) {
@@ -27,9 +29,26 @@ export default class UserService {
         cart: newCart.id,
       });
 
-      return new UserDTO(createdUser);
+      return new fullUserDTO_res(createdUser);
     } catch (error) {
-      console.log('error', error);
+      throw error;
+    }
+  };
+
+  getUsers = async () => {
+    try {
+      const userList = await this.usersDao.getMany();
+
+      if (userList.length < 1) {
+        return false;
+      }
+
+      const simpleUsersList = userList.map(
+        (user) => new simpleUserDTO_res(user)
+      );
+
+      return simpleUsersList;
+    } catch (error) {
       throw error;
     }
   };
@@ -57,7 +76,7 @@ export default class UserService {
         throw new CustomError('NOT_FOUND', 'User not found');
       }
 
-      return new UserDTO(user);
+      return new fullUserDTO_res(user);
     } catch (error) {
       throw error;
     }
@@ -89,7 +108,7 @@ export default class UserService {
         }
       );
 
-      return new UserDTO(updatedUser);
+      return new fullUserDTO_res(updatedUser);
     } catch (error) {
       throw error;
     }
@@ -98,49 +117,86 @@ export default class UserService {
   // make a generic update method
 
   refreshLastConnection = async (id) => {
-    const user = await this.usersDao.update(
-      { _id: id },
-      { lastConnection: Date.now() }
-    );
+    try {
+      const user = await this.usersDao.update(
+        { _id: id },
+        { lastConnection: Date.now() }
+      );
 
-    if (!user) {
-      throw new CustomError('NOT_FOUND', 'User not found');
+      if (!user) {
+        throw new CustomError('NOT_FOUND', 'User not found');
+      }
+
+      return new fullUserDTO_res(user);
+    } catch (error) {
+      throw error;
     }
-
-    return new UserDTO(user);
   };
 
   changeRole = async (id, toRole) => {
-    const user = await this.usersDao.update({ _id: id }, { role: toRole });
+    try {
+      const user = await this.usersDao.update({ _id: id }, { role: toRole });
 
-    if (!user) {
-      throw new CustomError('NOT_FOUND', 'User not found');
+      if (!user) {
+        throw new CustomError('NOT_FOUND', 'User not found');
+      }
+
+      return new fullUserDTO_res(user);
+    } catch (error) {
+      throw error;
     }
-
-    return new UserDTO(user);
   };
 
   addDocument = async (id, file) => {
-    const document = {
-      name: file.fieldname,
-      reference: file.path,
-    };
+    try {
+      const document = {
+        name: file.fieldname,
+        reference: file.path,
+      };
 
-    let user = await this.usersDao.getById(id);
+      let user = await this.usersDao.getById(id);
 
-    if (user.documents.some((doc) => doc.name === document.name)) {
-      throw new CustomError('CONFLICT', 'Document already exists');
-    } else {
-      user = await this.usersDao.update(
-        { _id: id, 'documents.document.name': { $ne: document.name } },
-        { $addToSet: { documents: document } }
-      );
+      if (user.documents.some((doc) => doc.name === document.name)) {
+        throw new CustomError('CONFLICT', 'Document already exists');
+      } else {
+        user = await this.usersDao.update(
+          { _id: id, 'documents.document.name': { $ne: document.name } },
+          { $addToSet: { documents: document } }
+        );
+      }
+
+      if (!user) {
+        throw new CustomError('NOT_FOUND', 'User not found');
+      }
+
+      return new fullUserDTO_res(user);
+    } catch (error) {
+      throw error;
     }
+  };
 
-    if (!user) {
-      throw new CustomError('NOT_FOUND', 'User not found');
+  deleteInactiveUsers = async () => {
+    try {
+      const currentDate = new Date(); // Gets current Date
+      const twoDaysAgo = new Date(
+        currentDate.getTime() - 2 * 24 * 60 * 60 * 1000
+      ); // Calculates the date 2 days ago in ms
+      const nonActiveCriteria = {
+        lastConnection: { $lt: twoDaysAgo }, // Sets the criteria to delete users that have not connected in the last 2 days, i.e users whose lastConnection date in ms is less than 2 days ago date
+      };
+
+      const inactiveUsers = await this.usersDao.getMany(nonActiveCriteria); // Gets the list of inactive users
+
+      // loops over the list and sends mails to  each user
+      await inactiveUsers.forEach(async (user) => {
+        await mailing.sendDeletionNotice(user);
+      });
+
+      this.usersDao.deleteMany(nonActiveCriteria); // Deletes users that have not connected in the last 2 days
+
+      return true;
+    } catch (error) {
+      throw error;
     }
-
-    return new UserDTO(user);
   };
 }

@@ -98,4 +98,46 @@ const sendPurchaseMail = async (user, purchase) => {
   }
 };
 
-export default { sendPwResetEmail, sendNotificateSell, sendPurchaseMail };
+const sendDeletionNotice = async (user) => {
+  try {
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: user.email,
+      subject: 'Account Deletion',
+      html: `
+                <h1>Hi ${user.firstName}!</h1>
+                <h2>Your account has been deleted due to inactivity in the last two days.</h2>
+                <p>We're sorry to see you go :(.</p>
+            `,
+    };
+    const response = await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logger.error('Error: ', error);
+  }
+};
+
+const sendProductDeletionNotice = async (product, ownerEmail) => {
+  try {
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: ownerEmail,
+      subject: 'Product Deletion',
+      html: `
+                <h1>Hi! Your product has been deleted.</h1>
+                <h2>Product ID: ${product._id}</h2>
+                <h2>Product Title: ${product.title}</h2>
+            `,
+    };
+    const response = await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logger.error('Error: ', error);
+  }
+};
+
+export default {
+  sendPwResetEmail,
+  sendNotificateSell,
+  sendPurchaseMail,
+  sendDeletionNotice,
+  sendProductDeletionNotice,
+};

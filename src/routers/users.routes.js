@@ -11,7 +11,9 @@ export default class UsersRouter extends express.Router {
   }
 
   setup = () => {
+    this.get('/', [], this.userController.getUsers);
     this.post('/', [], this.userController.createUser);
+    this.delete('/', [], this.userController.deleteInactiveUsers);
     this.get('/:email', [isAuthenticated], this.userController.getUser);
     this.get(
       '/getCurrentUser',

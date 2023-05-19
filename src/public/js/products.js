@@ -19,10 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
               quantity: 1,
             },
           }).then((res) => {
-            alert(
-              'Product added to cart'
-              // TODO Luego hago esto más decente, ya renegué demasiado para hacerlo funcionar ja'
-            );
+            alert('Product added to cart');
           });
         })
         .catch((err) => {

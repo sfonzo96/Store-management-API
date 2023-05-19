@@ -61,7 +61,10 @@ export default class ProductController {
 
       if (req.user.id) {
         // This wil validate that the req.user obj has an id (testing's user won't have it) and define an owner if it has (admin or premium user will have it)
-        const owner = req.user.id;
+        const owner = {
+          ownerId: req.user.id,
+          ownerEmail: req.user.email,
+        };
         Object.assign(product, { owner });
       }
 
@@ -76,7 +79,6 @@ export default class ProductController {
         data: newProduct,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };
@@ -106,7 +108,13 @@ export default class ProductController {
   deleteProduct = async (req, res, next) => {
     try {
       const { productID } = req.params;
-      await this.productService.deleteProduct(productID);
+
+      const success = await this.productService.deleteProduct(productID);
+
+      if (!success) {
+        throw new CustomError('BAD_REQUEST', "Product couldn't be deleted.");
+      }
+
       res.status(200).json({
         success: true,
       });

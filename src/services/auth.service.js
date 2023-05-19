@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import UserDTO from '../dto/userDTO.js';
+import fullUserDTO_res from '../dto/fullUserDTO.res.js';
 import CustomError from '../utils/CustomError.js';
 
 export default class AuthService {
@@ -21,7 +21,7 @@ export default class AuthService {
         throw new CustomError('INVALID_CREDENTIALS', 'Wrong password');
       }
 
-      return new UserDTO(user);
+      return new fullUserDTO_res(user);
     } catch (error) {
       next(error);
     }

@@ -1,4 +1,4 @@
-export default class UserDTO {
+export default class fullUserDTO {
   constructor(user) {
     this.firstName = user.firstName;
     this.lastName = user.lastName;

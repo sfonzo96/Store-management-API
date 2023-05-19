@@ -1,10 +1,9 @@
-import UserDTO from '../dto/userDTO.js';
+import fullUserDTO_res from '../dto/fullUserDTO.res.js';
 import CustomError from '../utils/CustomError.js';
 export default class ViewController {
   constructor({ ProductService, UserService }) {
     this.productService = ProductService;
     this.userService = UserService;
-    // TODO: integrate other controllers instead of services and avoid repeating the functions??
   }
 
   login = (req, res, next) => {
@@ -62,7 +61,7 @@ export default class ViewController {
     try {
       const userMail = req.user.email;
       const user = await this.userService.getUser(userMail);
-      const userDTO = new UserDTO(user);
+      const userDTO = new fullUserDTO_res(user);
 
       if (userDTO) {
         res.status(200).render('cart', { user: userDTO });
