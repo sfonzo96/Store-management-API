@@ -1,4 +1,5 @@
 //TODO: implementar repositorio para purchase
+import CustomError from '../utils/CustomError.js';
 import mailing from '../utils/mailing.js';
 
 export default class PurchaseService {
@@ -67,10 +68,19 @@ export default class PurchaseService {
         return null;
       }
 
+      console.log(availableProducts);
+
+      const subtotal = availableProducts.reduce((accumulator, current) => {
+        return accumulator + current.product.price * current.quantity;
+      }, 0);
+
       const purchase = await this.purchaseTicket.create({
         purchaser: user.email,
         products: availableProducts,
+        subtotal: subtotal,
       });
+
+      console.log(purchase);
 
       await this.cartsDao.update(
         { _id: cartID },
@@ -81,6 +91,36 @@ export default class PurchaseService {
       mailing.sendPurchaseMail(user, purchase);
       // TODO: check case parcial purchase (how to tell the user?)
       return purchase;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getPurchaseById = async (id) => {
+    try {
+      const purchase = await this.purchaseTicket.findOne({ _id: id }).lean();
+
+      if (!purchase) {
+        throw new CustomError('NOT_FOUND', 'Purchase not found');
+      }
+
+      return purchase;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  setPurchaseStatus = async (id, status) => {
+    try {
+      const purchase = await this.purchaseTicket.findOne({ _id: id }).lean();
+
+      if (!purchase) {
+        throw new CustomError('NOT_FOUND', 'Purchase not found');
+      }
+
+      await this.purchaseTicket
+        .updateOne({ _id: id }, { status: status })
+        .lean();
     } catch (error) {
       throw error;
     }

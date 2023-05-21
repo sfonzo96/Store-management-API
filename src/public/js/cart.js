@@ -1,6 +1,7 @@
 const emtpyCartBtn = document.getElementById('emtpyCartBtn');
 const removeProductBtns = document.querySelectorAll('.removeFromCartBtn');
-const purchaseBtn = document.getElementById('purchaseBtn');
+const purchaseBtnCash = document.getElementById('purchaseBtnCash');
+const purchaseBtnCard = document.getElementById('purchaseBtnCard');
 
 document.addEventListener('DOMContentLoaded', () => {
   if (emtpyCartBtn) {
@@ -13,10 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
         axios({
           method: 'delete',
           url: `/api/carts/${cartID}`,
-        }).then((res) => {
-          alert('Cart emptied!');
-          location.reload();
-        });
+        })
+          .then((res) => {
+            alert('Cart emptied!');
+            location.reload();
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
       });
     });
   }
@@ -33,20 +38,33 @@ document.addEventListener('DOMContentLoaded', () => {
           axios({
             method: 'DELETE',
             url: `/api/carts/${cartID}/product/${productID}`,
-          }).then((res) => {
-            alert(
-              'Product removed from cart.'
-              // TODO: botones + y - para modificar la cantidad.
-            );
-            location.reload();
-          });
+          })
+            .then((res) => {
+              if (res.data.success === true) {
+                Swal.fire({
+                  text: `Removed successfully.`,
+                  toast: true,
+                  position: 'top-right',
+                });
+                location.reload();
+              } else {
+                Swal.fire({
+                  text: `Failed to remove.`,
+                  toast: true,
+                  position: 'top-right',
+                });
+              }
+            })
+            .catch((err) => {
+              alert(err.message);
+            });
         });
       });
     });
   }
 
-  if (purchaseBtn) {
-    purchaseBtn.addEventListener('click', () => {
+  if (purchaseBtnCash) {
+    purchaseBtnCash.addEventListener('click', () => {
       axios({
         method: 'GET',
         url: '/api/carts/getCartID',
@@ -54,17 +72,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const cartID = res.data.cartID;
         axios({
           method: 'POST',
-          url: `/api/carts/${cartID}/purchase`,
+          url: `/api/payments/${cartID}/purchase?method=cash`,
         })
           .then((res) => {
-            if (res.success === true) {
-              alert('Purchase successful!');
+            if (res.data.success === true) {
+              Swal.fire({
+                text: `Purchase successful!`,
+                toast: true,
+                position: 'top-right',
+              });
               location.reload();
             } else {
-              alert('Purchase failed!');
+              Swal.fire({
+                text: `Purchase failed!`,
+                toast: true,
+                position: 'top-right',
+              });
             }
           })
-          .then((err) => {
+          .catch((err) => {
+            alert(err.message);
+          });
+      });
+    });
+  }
+
+  if (purchaseBtnCard) {
+    purchaseBtnCard.addEventListener('click', () => {
+      axios({
+        method: 'GET',
+        url: '/api/carts/getCartID',
+      }).then((res) => {
+        const cartID = res.data.cartID;
+        axios({
+          method: 'POST',
+          url: `/api/payments/${cartID}/purchase?method=card`,
+        })
+          .then((res) => {
+            if (res.data.success === true) {
+              Swal.fire({
+                text: `Purchase successful!`,
+                toast: true,
+                position: 'top-right',
+              });
+              location.reload();
+            } else {
+              Swal.fire({
+                text: `Purchase failed!`,
+                toast: true,
+                position: 'top-right',
+              });
+            }
+          })
+          .catch((err) => {
             alert(err.message);
           });
       });

@@ -12,6 +12,7 @@ const serverConfig = {
   CLIENT_SECRET: process.env.CLIENT_SECRET,
   APP_ID: process.env.APP_ID,
   NODE_ENV: process.env.NODE_ENV || 'development',
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };
 
 export default serverConfig;

@@ -51,8 +51,10 @@ const sendNotificateSell = async (purchaseID) => {
                 <p>Check recent sales in the site.</p>
             `,
     };
-    const response = await transporter.sendMail(mailOptions);
-  } catch (error) {}
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    logger.error('Error: ', error);
+  }
 };
 
 const sendPurchaseMail = async (user, purchase) => {
@@ -71,7 +73,7 @@ const sendPurchaseMail = async (user, purchase) => {
                     <li>Order Items: ${purchase.products.map((item) => {
                       return `
                             <ul style="{
-                                list-style-type: none;
+                                list-style: none;
                                 display: flex;
                                 justify-content: space-between;
                                 width: 100%;
@@ -84,15 +86,16 @@ const sendPurchaseMail = async (user, purchase) => {
                                   item.product.price * item.quantity
                                 }</li>
                             </ul>
+                            \n\n
                         `;
                     })}</li>
-                    <li>Order Date: ${purchase.createdAt}</li>
-                    <li>Order Total: ${purchase.subtotal}</li>
+                    <li>Order Date: ${purchase.purchase_datetime}</li>
+                    <li>Order Total: $${purchase.subtotal}</li>
                 </ul>
                 <p>Thank you for trusting us!</p>
             `,
     };
-    const response = await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);
   }

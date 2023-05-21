@@ -1,50 +1,37 @@
 import mongoose from 'mongoose';
 import { nanoid } from 'nanoid';
 
-const purchaseSchema = new mongoose.Schema(
-  {
-    code: {
-      type: String,
-      required: true,
-      unique: true,
-      default: nanoid(),
-    },
-    subtotal: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    purchase_datetime: {
-      type: Date,
-      requires: true,
-      default: Date.now,
-    },
-    purchaser: {
-      type: String,
-      required: true,
-    },
-    products: {
-      type: Array,
-      required: true,
-    },
+const purchaseSchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+    default: nanoid(),
   },
-  {
-    methods: {
-      setSubtotal() {
-        this.subtotal = this.products.reduce((accumulator, current) => {
-          return accumulator + current.price * current.quantity;
-        }, 0);
-      },
-    },
-  }
-);
-
-//TODO: setSubtotal not working, set products as a reference
-
-/* purchaseSchema.post('save', function (next) {
-    this.setSubtotal();
-    next();
-}); */
+  subtotal: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  purchase_datetime: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  purchaser: {
+    type: String,
+    required: true,
+  },
+  products: {
+    type: Array,
+    required: true,
+  },
+  status: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+});
 
 const TicketModel = mongoose.model('Ticket', purchaseSchema);
 

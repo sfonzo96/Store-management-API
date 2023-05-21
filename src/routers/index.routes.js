@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 
 export default class IndexRouter extends express.Router {
   constructor({
@@ -12,6 +11,7 @@ export default class IndexRouter extends express.Router {
     GithubRouter,
     ChatRouter,
     MockingRouter,
+    PaymentsRouter,
   }) {
     super();
     this.productsRouter = ProductsRouter;
@@ -22,6 +22,7 @@ export default class IndexRouter extends express.Router {
     this.githubRouter = GithubRouter;
     this.chatRouter = ChatRouter;
     this.mockingRouter = MockingRouter;
+    this.paymentsRouter = PaymentsRouter;
     this.setup();
   }
 
@@ -30,7 +31,6 @@ export default class IndexRouter extends express.Router {
     this.use(express.json());
     this.use(express.urlencoded({ extended: true }));
     this.use(cors());
-    // this.use(helmet()); needs to be configured to allow axios and other front end scripts
 
     // Set router for each path
     this.use('/api/products', this.productsRouter);
@@ -41,5 +41,6 @@ export default class IndexRouter extends express.Router {
     this.use('/api/github', this.githubRouter);
     this.use('/api/chat', this.chatRouter);
     this.use('/api/mocking', this.mockingRouter);
+    this.use('/api/payments', this.paymentsRouter);
   };
 }

@@ -161,29 +161,4 @@ export default class CartsController {
       next(error);
     }
   };
-
-  makePurchase = async (req, res, next) => {
-    try {
-      const { cartID } = req.params;
-      const userMail = req.user.email;
-
-      const purchase = await this.purchaseService.makePurchase(
-        cartID,
-        userMail
-      );
-      if (purchase) {
-        res.status(200).json({
-          success: true,
-          data: purchase,
-        });
-      } else {
-        throw new CustomError(
-          'CONFLICT',
-          'Out of stock. Try again later or contact us for updates.'
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  };
 }

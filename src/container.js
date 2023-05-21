@@ -1,8 +1,9 @@
 // awilix utils
 import { createContainer, asClass, asValue, InjectionMode } from 'awilix';
 
-// utils
+// utils and middlewares
 import Authorizator from './middlewares/authorizator.middleware.js';
+import StripePayment from './utils/stripePayment.js';
 
 //TODO: set auto-load (check https://github.com/jeffijoe/awilix#auto-loading-modules)
 // config
@@ -19,6 +20,7 @@ import PassportRouter from './routers/passport.routes.js';
 import GithubRouter from './routers/github.routes.js';
 import ChatRouter from './routers/chat.routes.js';
 import MockingRouter from './routers/mocking.routes.js';
+import PaymentsRouter from './routers/payments.routes.js';
 // models
 import User from './models/users.model.js';
 import Product from './models/products.model.js';
@@ -37,6 +39,7 @@ import AuthService from './services/auth.service.js';
 import WebsocketService from './services/websocket.service.js';
 import ChatService from './services/chat.db.service.js';
 import PurchaseService from './services/purchase.db.service.js';
+import PaymentService from './services/payments.service.js';
 // controllers
 import UserController from './controllers/users.controller.js';
 import ProductController from './controllers/products.controller.js';
@@ -45,6 +48,7 @@ import ViewController from './controllers/views.controller.js';
 import PassportController from './controllers/passport.controller.js';
 import ChatController from './controllers/chat.controller.js';
 import MockingController from './controllers/mocking.controller.js';
+import PaymentController from './controllers/payments.controller.js';
 
 // create container
 const container = createContainer({
@@ -73,6 +77,7 @@ container.register({
   CartService: asClass(CartService).singleton(),
   AuthService: asClass(AuthService).singleton(),
   PurchaseService: asClass(PurchaseService).singleton(),
+  PaymentService: asClass(PaymentService).singleton(),
 
   // Controllers
   UserController: asClass(UserController).singleton(),
@@ -82,9 +87,11 @@ container.register({
   PassportController: asClass(PassportController).singleton(),
   ChatController: asClass(ChatController).singleton(),
   MockingController: asClass(MockingController).singleton(),
+  PaymentController: asClass(PaymentController).singleton(),
 
-  // Utility classes
+  // Utility classes and middlewares
   Authorizator: asClass(Authorizator).singleton(),
+  StripePayment: asClass(StripePayment).singleton(),
 
   // Routers
   ProductsRouter: asClass(ProductsRouter).singleton(),
@@ -95,6 +102,7 @@ container.register({
   GithubRouter: asClass(GithubRouter).singleton(),
   ChatRouter: asClass(ChatRouter).singleton(),
   MockingRouter: asClass(MockingRouter).singleton(),
+  PaymentsRouter: asClass(PaymentsRouter).singleton(),
   Router: asClass(Router).singleton(),
 
   // Config

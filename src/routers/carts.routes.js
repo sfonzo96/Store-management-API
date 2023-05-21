@@ -21,7 +21,7 @@ export default class CartsRouter extends express.Router {
       '/:cartID/product/:productID',
       [
         (req, res, next) =>
-          this.authorizator.authorizateRegularUser()(req, res, next),
+          this.authorizator.authorizateRegularUser(req, res, next),
       ],
       this.cartController.addProductToCart
     );
@@ -29,18 +29,10 @@ export default class CartsRouter extends express.Router {
       '/:cartID/product/:productID',
       [
         (req, res, next) =>
-          this.authorizator.authorizateRegularUser()(req, res, next),
+          this.authorizator.authorizateRegularUser(req, res, next),
       ],
       this.cartController.deleteProductFromCart
     );
     this.get('/getCartID', [], this.cartController.getCartID);
-    this.post(
-      '/:cartID/purchase',
-      [
-        (req, res, next) =>
-          this.authorizator.authorizateRegularUser()(req, res, next),
-      ],
-      this.cartController.makePurchase
-    );
   };
 }

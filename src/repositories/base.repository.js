@@ -31,11 +31,6 @@ export default class BaseRepository {
     return await this.model
       .findOneAndUpdate(filter, update, arrayFilters)
       .lean();
-
-    // O conviene:
-    // const response = await this.getOne(id).lean();
-    // Object.assign(response, data);
-    // response.save();
   };
 
   // Hard delete
