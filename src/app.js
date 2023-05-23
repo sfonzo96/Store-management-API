@@ -12,6 +12,7 @@ import loggerMiddleware from './middlewares/logger.middleware.js';
 import logger from './logger/index.logger.js';
 import setSwaggerDocs from './utils/swagger.js';
 
+// App server class and server configuration
 export default class AppServer {
   constructor({ ServerConfig, Router, WebsocketService }) {
     this.app = express();
@@ -22,13 +23,13 @@ export default class AppServer {
   }
 
   async setup() {
-    // Set swagger
+    // Sets swagger
     setSwaggerDocs(this.app, this.config.PORT);
 
-    // Set static route
+    // Sets static route
     this.app.use(express.static('src/public'));
 
-    // Set cookie parser, session and passport
+    // Sets cookie parser, session and passport
     await passportConfig(passport);
     this.app.use(cookie());
     this.app.use(
@@ -47,21 +48,22 @@ export default class AppServer {
       })
     );
 
-    // set passport
+    // Sets passport
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
-    // Set main router
+    // Sets main router
     this.app.use(this.router);
 
-    // Set error handler
+    // Sets error handler
     this.app.use(errorHandler);
 
-    // Set logger middleware
+    // Sets logger middleware
     this.app.use(loggerMiddleware);
 
-    // Set template engine
+    // Sets template engine
     const hbs = handlebars.create({
+      // Defines handlebars helper
       helpers: {
         paginationUrl,
         compare,
@@ -73,6 +75,7 @@ export default class AppServer {
     this.app.set('views', 'src/views');
   }
 
+  // Starts the server
   start() {
     const server = this.app.listen(this.config.PORT, () => {
       logger.info(`🚀 Server started on port: ${this.config.PORT}`);
@@ -80,6 +83,7 @@ export default class AppServer {
 
     server.on('error', (err) => logger.error('Error:', err));
 
+    // Sets websocket
     const io = new Server(server);
     this.websocketService.websocketInit(io);
   }

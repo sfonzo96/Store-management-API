@@ -1,5 +1,4 @@
-// MEMO: se inyecta modelo en repository y luego repository en service
-
+// A generic repository for CRUD operations (DAO)
 export default class BaseRepository {
   constructor(model) {
     this.model = model;

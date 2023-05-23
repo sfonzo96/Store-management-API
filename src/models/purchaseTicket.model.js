@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { nanoid } from 'nanoid';
 
+// Defines the purchase ticket schema
 const purchaseSchema = new mongoose.Schema({
   code: {
     type: String,
@@ -13,6 +14,7 @@ const purchaseSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  // Stores purchase date time in a friendly format
   purchase_datetime: {
     type: Date,
     required: true,

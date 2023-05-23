@@ -10,6 +10,7 @@ export default class CartsController {
 
   createCart = async (req, res, next) => {
     try {
+      // Creates a new cart
       const newCart = await this.cartService.createCart();
       res.status(201).json({
         success: true,
@@ -22,6 +23,7 @@ export default class CartsController {
 
   getCart = async (req, res, next) => {
     try {
+      // Gets a cart by its ID
       const { cartID } = req.params;
       const cart = await this.cartService.getCart(cartID);
       res.status(200).json({
@@ -35,6 +37,7 @@ export default class CartsController {
 
   deleteCart = async (req, res, next) => {
     try {
+      // Soft deletes a cart by its ID (service function updates to empty cart)
       const { cartID } = req.params;
 
       const cart = await this.cartService.deleteCart(cartID); // Returns an empty cart
@@ -59,9 +62,13 @@ export default class CartsController {
           'Invalid quantity. Must be a positive integer.'
         );
       }
+
+      // Gets the user by the id stored in session
       const user = await this.userService.getUser(req.user.id);
+      // Gets the product by its ID
       const product = await this.productService.getProduct(productID);
 
+      // If the user is premium and the product is owned by the user, throw an error to forbid the auto-buy
       if (user.role === 'premium' && user._id === product.owner) {
         throw new CustomError(
           'FORBIDDEN',
@@ -69,6 +76,7 @@ export default class CartsController {
         );
       }
 
+      // Adds the product to the cart in the desired amount
       const cart = await this.cartService.addProductToCart(
         cartID,
         productID,
@@ -92,6 +100,8 @@ export default class CartsController {
     try {
       const { cartID, productID } = req.params;
 
+      // Deletes the product from the cart
+
       const cart = await this.cartService.deleteProductFromCart(
         cartID,
         productID
@@ -113,6 +123,8 @@ export default class CartsController {
     try {
       const { products } = req.body;
       const { cartID } = req.params;
+
+      // Updates the cart with the new set of products
       const updatedCart = await this.cartService.updateCart(cartID, products);
       if (updatedCart) {
         res.status(200).json({
@@ -131,6 +143,8 @@ export default class CartsController {
     try {
       const { cartID, productID } = req.params;
       const { quantity } = req.body;
+
+      // Updates the quantity of a product in the cart by adding the desired amount to the current
       const updatedCart = await this.cartService.updateQuantity(
         cartID,
         productID,
@@ -151,6 +165,7 @@ export default class CartsController {
 
   getCartID = async (req, res, next) => {
     try {
+      // Gets the cart from the session and returns its ID to the client side prior to another related request
       const cartID = req.user.cart._id.toString();
 
       res.status(200).json({

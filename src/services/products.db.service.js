@@ -84,12 +84,11 @@ export default class ProductsService {
       const productOwner = await this.usersDao.getById(product.owner.ownerId);
 
       if (productOwner.role === 'premium') {
-        console.log('premium');
         // Checks if the owner is premium, if so, notifies product deletion
         await mailing.sendProductDeletionNotice(product, productOwner.email);
       }
 
-      //await this.productsDao.delete(productID);
+      await this.productsDao.delete(productID);
 
       // ws emit to all clients to update real time view
       const productsList = await this.getProducts();

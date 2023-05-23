@@ -4,8 +4,9 @@ import logger from '../logger/index.logger.js';
 import jwt from 'jsonwebtoken';
 dotenv.config();
 
-//TODO: maybe turn into a class/service
+// Maybe can be turned into a class/service
 
+// Creates the nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   port: 587,
@@ -15,13 +16,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Sends a password reset email with the jwt token that will expire in 1h
 const sendPwResetEmail = async (user) => {
   try {
     const expiresIn = '1h';
+
+    // Creates the token
     const token = jwt.sign({ status: true }, process.env.JWT_SECRET, {
       expiresIn,
     });
 
+    // Creates the email's options object
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: user.email,
@@ -29,18 +34,22 @@ const sendPwResetEmail = async (user) => {
       html: `
                 <h2>Hi ${user.firstName}! You requested a password reset.</h2>
                 <h3>Click the link to reset your password.</h3>
-                <a href="https://entregas-backend-coder.glitch.me//api/users/password/reset/${token}">Reset Password</a> 
+                <a href="https://entregas-backend-coder.glitch.me/api/users/password/reset/${token}">Reset Password</a> 
                 <p>If you did not request a password reset, please ignore this email.</p>
-            `, // MEMO: href value should change according to the current domain
+            `,
     };
+
+    // Sends the email
     const response = await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);
   }
 };
 
+// Sends a new purchase notification to the admin / store owner
 const sendNotificateSell = async (purchaseID) => {
   try {
+    // Creates the email's options object with the purchase ID
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
@@ -51,12 +60,15 @@ const sendNotificateSell = async (purchaseID) => {
                 <p>Check recent sales in the site.</p>
             `,
     };
+
+    // Sends the email
     await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);
   }
 };
 
+// Sends a purchase confirmation email to the user
 const sendPurchaseMail = async (user, purchase) => {
   try {
     const mailOptions = {
@@ -95,14 +107,18 @@ const sendPurchaseMail = async (user, purchase) => {
                 <p>Thank you for trusting us!</p>
             `,
     };
+
+    // Sends the email
     await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);
   }
 };
 
+// Sends a deletion notice to the inactive users that have been deleted
 const sendDeletionNotice = async (user) => {
   try {
+    // Creates the email's options object
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: user.email,
@@ -113,14 +129,18 @@ const sendDeletionNotice = async (user) => {
                 <p>We're sorry to see you go :(.</p>
             `,
     };
+
+    // Sends the email
     const response = await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);
   }
 };
 
+// Sends a product deletion notice to the deleted product's owner
 const sendProductDeletionNotice = async (product, ownerEmail) => {
   try {
+    // Creates the email's options object
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: ownerEmail,
@@ -131,6 +151,7 @@ const sendProductDeletionNotice = async (product, ownerEmail) => {
                 <h2>Product Title: ${product.title}</h2>
             `,
     };
+    // Sends the email
     const response = await transporter.sendMail(mailOptions);
   } catch (error) {
     logger.error('Error: ', error);

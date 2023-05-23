@@ -6,6 +6,7 @@ export default class CartDTO {
     this.setSubtotal();
   }
 
+  // Sets the subtotal of the cart to be sent to the client side
   setSubtotal = () => {
     let subtotal = 0;
     this.products.forEach((product) => {

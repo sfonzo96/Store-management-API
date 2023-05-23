@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Creates and exports an object with all the server configuration
 const serverConfig = {
   PORT: process.env.PORT || 3000,
   MONGO_URI:
     process.env.NODE_ENV === 'production'
       ? process.env.MONGO_URI_PROD
-      : process.env.MONGO_URI_DEV,
+      : process.env.MONGO_URI_DEV, // IMPORTANT to check ENV variables to avoid production DB overwrite or data loss
   SESSION_SECRET: process.env.SESSION_SECRET,
   CLIENT_ID: process.env.CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET,

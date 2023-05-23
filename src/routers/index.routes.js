@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 
+// Main router, extends from express.Router and sets up all the other routers on instantiation
+// Also sets some configurations and mids for the server
 export default class IndexRouter extends express.Router {
   constructor({
     ProductsRouter,

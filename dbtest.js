@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import serverConfig from './src/config/server.config.js';
 
+// This is a localdatabase connection initiator for testing purposes
 export default async function dbtest() {
   try {
     mongoose.set('strictQuery', false);

@@ -4,16 +4,6 @@ export default class PaymentsController {
     this.purchaseService = PurchaseService;
   }
 
-  /* createPaymentIntent = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const paymentIntent = await this.paymentsService.createPaymentIntent(id);
-      res.status(200).send(paymentIntent);
-    } catch (error) {
-      next(error);
-    }
-  }; */
-
   makePurchase = async (req, res, next) => {
     try {
       const { cartID } = req.params;

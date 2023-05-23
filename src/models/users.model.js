@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// Defines the user item schema
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -66,6 +67,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Populates the cart with the products data when a get operation is performed
 userSchema.pre('findOne', function (next) {
   this.populate({
     path: 'cart',

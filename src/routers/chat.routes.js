@@ -1,18 +1,14 @@
 import express from 'express';
+// Extends the express.Router class to define chat router
 export default class ChatRouter extends express.Router {
-  constructor({ ChatController /* Authorizator */ }) {
+  constructor({ ChatController }) {
     super();
     this.chatController = ChatController;
-    // this.authorizator = Authorizator;
     this.setup();
   }
 
+  // Method sets up the routes when instantiated
   setup = () => {
-    /*     this.post(
-      '/new',
-      [this.authorizator.authorizateRegularUser()],
-      this.chatController.createMessage
-    ); */
     this.get('/load', [], this.chatController.getMessages);
   };
 }

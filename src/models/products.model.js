@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import mongooseDelete from 'mongoose-delete';
 import paginate from 'mongoose-paginate-v2';
 
+// Defines the product schema
 const productSchema = new mongoose.Schema(
   {
     title: {
@@ -23,7 +24,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       default:
-        'https://shoptheoldemercantile.com/image/cache/catalog/placeholderproduct-500x500.png',
+        'https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png',
     },
     stock: {
       type: Number,
@@ -57,7 +58,9 @@ const productSchema = new mongoose.Schema(
   }
 );
 
+// Add paginate plugin to schema
 productSchema.plugin(paginate);
+//  Add soft delete plugin to schema
 productSchema.plugin(mongooseDelete, { deletedAt: true });
 
 const ProductModel = mongoose.model('Products', productSchema);

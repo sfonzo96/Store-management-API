@@ -5,15 +5,18 @@ export default class PassportController {
     this.userService = UserService;
   }
 
+  // Not in use, but can be used to redirect to a custom error page
   fail = async (req, res) => {
     logger.warn('Failed login');
     res.redirect('error', { error: 'Failed login' });
   };
 
+  // Redirects to products page after a successful signup
   signUp = async (req, res) => {
     res.status(201).redirect('/products');
   };
 
+  // Refreshes user last connection and redirects to products page after a successful login
   login = async (req, res) => {
     const { id } = req.user;
     await this.userService.refreshLastConnection(id);
@@ -22,6 +25,7 @@ export default class PassportController {
   };
 
   logout = async (req, res, next) => {
+    // Refreshes user last connection and redirects to home page (login) after a successful logout
     try {
       const { id } = req.user;
       await this.userService.refreshLastConnection(id);

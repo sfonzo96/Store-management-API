@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// Defines the cart item schema
 const cartItemSchema = new mongoose.Schema(
   {
     product: {
@@ -19,6 +20,7 @@ const cartItemSchema = new mongoose.Schema(
   }
 );
 
+// Defines the cart schema
 const cartSchema = new mongoose.Schema(
   {
     products: [
@@ -33,8 +35,7 @@ const cartSchema = new mongoose.Schema(
   }
 );
 
-// get cart from db POPULATED WITH MIDDLEWARE (SO INFO IS AVAILABLE!!)
-
+// Populates cart items when a read operation is performed
 cartSchema.pre('findOne', function (next) {
   this.populate('products.product');
   next();

@@ -1,4 +1,5 @@
 import express from 'express';
+// Extends the express.Router class to define products router as a subclass
 export default class ProductsRouter extends express.Router {
   constructor({ ProductController, Authorizator }) {
     super();
@@ -11,6 +12,7 @@ export default class ProductsRouter extends express.Router {
     this.get('/', [], this.productController.getProducts);
     this.post(
       '/',
+      // Verifies user is logged in and has premium role
       [
         (req, res, next) =>
           this.authorizator.authorizatePremium('createProduct')(req, res, next),
@@ -20,6 +22,7 @@ export default class ProductsRouter extends express.Router {
     this.get('/:productID', [], this.productController.getProduct);
     this.put(
       '/:productID',
+      // Verifies user is logged in and has premium role
       [
         (req, res, next) =>
           this.authorizator.authorizatePremium('updateProduct')(req, res, next),
@@ -28,6 +31,7 @@ export default class ProductsRouter extends express.Router {
     );
     this.delete(
       '/:productID',
+      // Verifies user is logged in and has premium role
       [
         (req, res, next) =>
           this.authorizator.authorizatePremium('deleteProduct')(req, res, next),

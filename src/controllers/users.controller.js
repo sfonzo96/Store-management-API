@@ -7,19 +7,23 @@ export default class UserController {
     this.userService = UserService;
   }
 
+  // Creastes a new user
   createUser = async (req, res, next) => {
     try {
+      // Creates a new user with the request's body's data
       const user = await this.userService.createUser(req.body);
+
       if (!user) {
         throw new CustomError('SERVER_ERROR', 'Error creating user');
       }
-      delete user.password;
+
       res.status(201).redirect('/');
     } catch (error) {
       next(error);
     }
   };
 
+  // Gets all users
   getUsers = async (req, res, next) => {
     try {
       const userList = await this.userService.getUsers();
@@ -37,6 +41,7 @@ export default class UserController {
     }
   };
 
+  // Gets a single user by its email
   getUser = async (req, res, next) => {
     try {
       const { email } = req.params;
@@ -56,16 +61,19 @@ export default class UserController {
     }
   };
 
+  // Sends a password reset email to the user
   sendPwResetEmail = async (req, res, next) => {
     try {
       const { email } = req.body;
 
+      // gets the user by its email
       const user = await this.userService.getUser(email);
 
       if (!user) {
         throw new CustomError('NOT_FOUND', 'User not found');
       }
 
+      // Sends the email to the user
       const res = await mailing.sendPwResetEmail(user);
 
       if (!res) {
@@ -80,10 +88,12 @@ export default class UserController {
     }
   };
 
+  // Verifies the password reset token
   verifyPasswordResetToken = async (req, res, next) => {
     try {
       const { token } = req.params;
 
+      // Verification
       const isValid = await verifyJwt(token);
 
       if (!isValid) {
@@ -96,10 +106,13 @@ export default class UserController {
     }
   };
 
+  // Resets the user's password
   resetPassword = async (req, res, next) => {
     try {
+      // When token is valid the email and new password comes in the request's body
       const { email, newPassword } = req.body;
 
+      // Updates the password to the user related to that email
       const res = await this.userService.resetPassword(email, newPassword);
 
       if (!res) {
@@ -112,10 +125,12 @@ export default class UserController {
     }
   };
 
+  // Gets the current user from session
   getCurrentUser = async (req, res, next) => {
     try {
       const { email } = req.user;
 
+      // Gets the user by its email
       const user = await this.userService.getUser(email);
 
       if (!user) {
@@ -133,9 +148,12 @@ export default class UserController {
     }
   };
 
+  // Changes a user's role
   changeRole = async (req, res, next) => {
     try {
       const { userID, toRole } = req.query;
+
+      // Changes the role to a new one
       const user = await this.userService.changeRole(userID, toRole);
 
       if (!user) {
@@ -151,10 +169,13 @@ export default class UserController {
     }
   };
 
+  // Handles uploaded file (to "uploads" folder)
   addDocument = async (req, res, next) => {
     try {
       const { userID } = req.params;
       const { file } = req;
+
+      // Adds the document to the user register and stores it in folder
       const success = await this.userService.addDocument(userID, file);
 
       if (!success) {
@@ -167,8 +188,10 @@ export default class UserController {
     }
   };
 
+  // Deletes a user
   deleteInactiveUsers = async (req, res, next) => {
     try {
+      // Deletes inactive users (more than 2 days off)
       const deleted = await this.userService.deleteInactiveUsers();
 
       if (!deleted) {

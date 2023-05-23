@@ -2,6 +2,7 @@ import express from 'express';
 import isAuthenticated from '../middlewares/isAuthenticated.middleware.js';
 import upload from '../middlewares/uploadUserDocs.middleware.js';
 
+// Extends the express.Router class to define users router as a subclass
 export default class UsersRouter extends express.Router {
   constructor({ UserController, Authorizator }) {
     super();
@@ -17,6 +18,7 @@ export default class UsersRouter extends express.Router {
     this.get('/:email', [isAuthenticated], this.userController.getUser);
     this.get(
       '/getCurrentUser',
+      // Verifies user is logged in
       [isAuthenticated],
       this.userController.getCurrentUser
     );
@@ -28,12 +30,14 @@ export default class UsersRouter extends express.Router {
     );
     this.post(
       '/password/reset',
+      // Verifies user is logged in
       [isAuthenticated],
       this.userController.resetPassword
     );
     // This is for role changing, new role is passed in as a query as well as the user id
     this.put(
       '/permission/change/',
+      // Verifies user is logged in and has premium role
       [this.authorizator.authorizatePremium('changeRole')],
       this.userController.changeRole
     );

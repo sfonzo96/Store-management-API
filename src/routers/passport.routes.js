@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
+// Extends the express.Router class to define passport router as a subclass
 export default class PassportRouter extends express.Router {
   constructor({ PassportController }) {
     super();
@@ -12,6 +13,7 @@ export default class PassportRouter extends express.Router {
     this.get('/failed', this.passportController.fail);
     this.post(
       '/signup',
+      // Validates user request to sign up
       [
         passport.authenticate('signup', {
           failureRedirect: '/failed',
@@ -21,6 +23,7 @@ export default class PassportRouter extends express.Router {
     );
     this.post(
       '/login',
+      // Validates user request to log in
       [
         passport.authenticate('login', {
           failureRedirect: '/failed',

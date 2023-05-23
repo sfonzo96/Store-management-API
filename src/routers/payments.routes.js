@@ -1,4 +1,6 @@
 import express from 'express';
+import isAuthenticated from '../middlewares/isAuthenticated.middleware';
+// Extends the express.Router class to define payments router as a subclass
 export default class PaymentsRouter extends express.Router {
   constructor({ PaymentController, Authorizator }) {
     super();
@@ -10,9 +12,11 @@ export default class PaymentsRouter extends express.Router {
   setup = () => {
     this.post(
       '/:cartID/purchase/',
+      // Verifies user is logged in
       [
-        (req, res, next) =>
-          this.authorizator.authorizateRegularUser(req, res, next),
+        isAuthenticated,
+        /* (req, res, next) =>
+          this.authorizator.authorizateRegularUser(req, res, next), */
       ],
       this.paymentController.makePurchase
     );

@@ -2,6 +2,7 @@ import multer from 'multer';
 import CustomError from '../utils/CustomError.js';
 import path from 'path';
 
+// Saves the ID Doc in uploads/idDocs
 const idStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/idDocs');
@@ -14,6 +15,7 @@ const idStorage = multer.diskStorage({
   },
 });
 
+// Saves the Address Doc in uploads/addressesDoc
 const addressStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/addressesDoc');
@@ -26,6 +28,7 @@ const addressStorage = multer.diskStorage({
   },
 });
 
+// Saves the Status Doc in uploads/statusDoc
 const statusStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/statusDoc');
@@ -38,12 +41,12 @@ const statusStorage = multer.diskStorage({
   },
 });
 
+// Defines the upload multer middleware
 const uploadID = multer({ storage: idStorage }).single('idDoc');
-
 const uploadAdress = multer({ storage: addressStorage }).single('addressDoc');
-
 const uploadStatus = multer({ storage: statusStorage }).single('statusDoc');
 
+// Checks the type of file to upload
 const upload = (req, res, next) => {
   const { type } = req.params;
 

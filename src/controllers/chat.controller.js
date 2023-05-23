@@ -7,6 +7,7 @@ export default class ViewController {
 
   getMessages = async (req, res, next) => {
     try {
+      // Gets the messages stored in the db
       const messages = await this.chatService.getMessages();
       if (messages.length > 0) {
         res.status(200).json({
@@ -23,22 +24,4 @@ export default class ViewController {
       next(error);
     }
   };
-
-  /*   createMessage = async (req, res, next) => {
-    try {
-      const messageData = req.body;
-      const newMessage = await this.chatService.createMessage(messageData);
-
-      if (newMessage) {
-        res.status(200).json({
-          success: true,
-          message: newMessage,
-        });
-      } else {
-        throw new CustomError('SERVER_ERROR', 'Error creating message');
-      }
-    } catch (error) {
-      next(error);
-    }
-  }; */
 }

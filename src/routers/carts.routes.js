@@ -1,5 +1,7 @@
 import express from 'express';
+import isAuthenticated from '../middlewares/isAuthenticated.middleware';
 
+// Extends the express.Router class to define carts router as a subclass
 export default class CartsRouter extends express.Router {
   constructor({ CartController, Authorizator }) {
     super();
@@ -8,6 +10,7 @@ export default class CartsRouter extends express.Router {
     this.setup();
   }
 
+  // Method sets up the routes when instantiated
   setup = () => {
     this.post('/', [], this.cartController.createCart);
     this.put('/:cartID/', [], this.cartController.updateCart);
@@ -19,17 +22,21 @@ export default class CartsRouter extends express.Router {
     );
     this.post(
       '/:cartID/product/:productID',
+      // Verifies user is logged in, other alternative is left commented
       [
-        (req, res, next) =>
-          this.authorizator.authorizateRegularUser(req, res, next),
+        isAuthenticated,
+        /* (req, res, next) =>
+          this.authorizator.authorizateRegularUser(req, res, next), */
       ],
       this.cartController.addProductToCart
     );
     this.delete(
       '/:cartID/product/:productID',
+      // Verifies user is logged in, other alternative is left commented
       [
-        (req, res, next) =>
-          this.authorizator.authorizateRegularUser(req, res, next),
+        isAuthenticated,
+        /* (req, res, next) =>
+          this.authorizator.authorizateRegularUser(req, res, next), */
       ],
       this.cartController.deleteProductFromCart
     );

@@ -9,6 +9,7 @@ const passportConfig = async (passport) => {
   const authService = container.resolve('AuthService');
   const config = container.resolve('ServerConfig');
 
+  // Define passport signup strategy
   passport.use(
     'signup',
     new passportLocal.Strategy(
@@ -33,6 +34,7 @@ const passportConfig = async (passport) => {
     )
   );
 
+  // Define passport login strategy
   passport.use(
     'login',
     new passportLocal.Strategy(
@@ -53,6 +55,7 @@ const passportConfig = async (passport) => {
     )
   );
 
+  // Define passport github login strategy
   passport.use(
     'github',
     new passportGithub.Strategy(
@@ -68,6 +71,7 @@ const passportConfig = async (passport) => {
 
           if (!user) {
             const names = [
+              // Full name comes in only one field, so we split it
               profile.displayName.split(' ')[0],
               profile.displayName.split(' ')[1],
             ];
@@ -93,6 +97,7 @@ const passportConfig = async (passport) => {
     )
   );
 
+  // Define passport serialize
   passport.serializeUser((user, done) => {
     logger.info('Serializing');
     if (!user.id) {
@@ -101,6 +106,7 @@ const passportConfig = async (passport) => {
     done(null, user.id);
   });
 
+  // Define passport deserialize
   passport.deserializeUser(async (id, done) => {
     logger.info('Deserializing');
     const user = await userService.getUserById(id);

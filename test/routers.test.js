@@ -7,6 +7,7 @@ const expect = chai.expect;
 
 const requester = supertest('http://localhost:8080');
 
+// Mocks
 const productMock = {
   title: 'Producto 3',
   description: 'Este es el producto 3',

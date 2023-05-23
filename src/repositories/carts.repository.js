@@ -1,5 +1,6 @@
 import BaseRepository from './base.repository.js';
 
+// Extends BaseRepository class for cart's operations
 export default class CartsRepository extends BaseRepository {
   constructor({ Cart }) {
     super(Cart);
@@ -11,13 +12,8 @@ export default class CartsRepository extends BaseRepository {
     const emptyCart = await this.model.findByIdAndUpdate(cartID, {
       $set: { products: [] },
     });
-    // Hard delete: await CartModel.findByIdAndDelete(cartID).lean();
+    // If hard delete is desired: await this.model.findByIdAndDelete(cartID).lean();
 
     return emptyCart;
   };
-
-  // MEMO: maybe not necessary since it's possible with update method
-  // addProductToCart(cartID, productID, quantity) {}
-
-  // deleteProductFromCart(cartID, productID) {}
 }

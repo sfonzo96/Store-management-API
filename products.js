@@ -1,3 +1,4 @@
+// To be used if you want to populate the database with products
 const products = [
   {
     title: 'Producto 1',

@@ -5,6 +5,7 @@ export default class ProductController {
     this.productService = ProductService;
   }
 
+  // Gets all products with pagination, admits a limit per page, a sort and a category filter
   getProducts = async (req, res, next) => {
     try {
       const { limit, sort, page, category } = req.query;
@@ -19,6 +20,7 @@ export default class ProductController {
       let query = {};
       if (category) query = { category: category };
 
+      // Gets paginated data from db
       const paginatedData = await this.productService.getProducts(
         query,
         options
@@ -37,9 +39,12 @@ export default class ProductController {
     }
   };
 
+  // Gets a single product by its ID
   getProduct = async (req, res, next) => {
     try {
       const { productID } = req.params;
+
+      // Gets the product from db
       const product = await this.productService.getProduct(productID);
 
       if (product) {
@@ -55,6 +60,7 @@ export default class ProductController {
     }
   };
 
+  // Creates a new product
   createProduct = async (req, res, next) => {
     try {
       const product = req.body;
@@ -68,6 +74,7 @@ export default class ProductController {
         Object.assign(product, { owner });
       }
 
+      // Creates the product
       const newProduct = await this.productService.createProduct(product);
 
       if (!newProduct) {
@@ -87,6 +94,8 @@ export default class ProductController {
     try {
       const { productID } = req.params;
       const product = req.body;
+
+      // Updates the product with the new data from the request's body
       const updatedProduct = await this.productService.updateProduct(
         productID,
         product
@@ -105,10 +114,12 @@ export default class ProductController {
     }
   };
 
+  // Deletes a product by its ID
   deleteProduct = async (req, res, next) => {
     try {
       const { productID } = req.params;
 
+      // Deletes a product from db
       const success = await this.productService.deleteProduct(productID);
 
       if (!success) {

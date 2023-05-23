@@ -6,18 +6,23 @@ export default class ViewController {
     this.userService = UserService;
   }
 
+  // Redirects after successful login
   login = (req, res, next) => {
     try {
+      // Checks if the user is authenticated before redirecting
+      // If it's not, will return to login page
       if (!req.isAuthenticated()) {
         return res.status(200).render('login');
       }
 
+      // If it is, then will be redirected to products page
       return res.status(200).redirect('/products');
     } catch (error) {
       next(error);
     }
   };
 
+  // Redirects after successful signup
   registerUser = async (req, res, next) => {
     try {
       res.status(200).render('signUp');
@@ -26,6 +31,7 @@ export default class ViewController {
     }
   };
 
+  // Gets products from the database and renders their page with their data
   getProducts = async (req, res, next) => {
     try {
       const { limit, sort, page, category } = req.query;
@@ -57,6 +63,7 @@ export default class ViewController {
     }
   };
 
+  // Gets the cart and renders it's page with the data
   getCart = async (req, res, next) => {
     try {
       const userMail = req.user.email;
@@ -73,6 +80,7 @@ export default class ViewController {
     }
   };
 
+  // Gets the current user and renders the chat page with the data
   getChat = async (req, res, next) => {
     try {
       const user = req.user;
@@ -83,6 +91,7 @@ export default class ViewController {
     }
   };
 
+  // Gets the current user and renders the user center page with the data
   getUserCenter = async (req, res, next) => {
     try {
       const user = req.user;
@@ -93,10 +102,12 @@ export default class ViewController {
     }
   };
 
+  // Gets the current user and renders the admin center page with the data
   getAdminCenter = async (req, res, next) => {
     try {
       const user = req.user;
 
+      // Checks for admin role
       if (user.role !== 'admin') {
         throw new CustomError('FORBIDDEN', 'Access denied.');
       }
@@ -107,18 +118,24 @@ export default class ViewController {
     }
   };
 
+  // Gets the productID from the query and renders the update product page with the data
   getUpdateProduct = async (req, res, next) => {
     try {
+      // Gets the productID of the product to be updated
       const productID = req.query.productIDPut;
 
+      // Gets the product from the database
       const product = await this.productService.getProduct(productID);
 
+      // Gets the current user
       const user = req.user;
 
+      // checks for admin role
       if (user.role !== 'admin') {
         throw new CustomError('FORBIDDEN', 'Access denied.');
       }
 
+      // If the product exists, renders the update product page with the data
       if (product) {
         return res
           .status(200)
@@ -131,6 +148,7 @@ export default class ViewController {
     }
   };
 
+  // Not used but can be used to render the error page
   getError = async (req, res, next) => {
     try {
       res.status(200).render('error', { error: 'Error' });
@@ -139,6 +157,7 @@ export default class ViewController {
     }
   };
 
+  // Renders the forgot password page
   getResetPassword = async (req, res, next) => {
     try {
       res.status(200).render('resetPassword');
@@ -147,6 +166,7 @@ export default class ViewController {
     }
   };
 
+  // Renders the reset password success page
   getResetPasswordSuccess = async (req, res, next) => {
     try {
       res.status(200).render('resetPasswordSuccess');
@@ -155,6 +175,7 @@ export default class ViewController {
     }
   };
 
+  // Renders the reset password failed page
   getResetPasswordFailed = async (req, res, next) => {
     try {
       res.status(200).render('resetPasswordFailed');

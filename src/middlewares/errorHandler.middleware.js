@@ -2,6 +2,7 @@ import errorMap from '../utils/errorMap.js';
 import CustomError from '../utils/CustomError.js';
 import logger from '../logger/index.logger.js';
 
+// Handles errors thrown by the application
 export default function errorHandler(err, req, res, next) {
   // Check if the error is thrown as an operational error
   if (err instanceof CustomError) {

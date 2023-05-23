@@ -1,5 +1,6 @@
 import express from 'express';
 
+// Extends the express.Router class to define views router as a subclass
 export default class ViewsRouter extends express.Router {
   constructor({ ViewController }) {
     super();

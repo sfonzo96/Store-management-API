@@ -1,3 +1,4 @@
+// Error map used in error handler middleware
 const errorMap = {
   BAD_REQUEST: { message: 'Bad request', statusCode: 400 },
   INVALID_CREDENTIALS: { message: 'Invalid credentials', statusCode: 401 },

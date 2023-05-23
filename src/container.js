@@ -31,6 +31,7 @@ import PurchaseTicket from './models/purchaseTicket.model.js';
 import UserRepository from './repositories/users.repository.js';
 import ProductRepository from './repositories/products.repository.js';
 import CartRepository from './repositories/carts.repository.js';
+import PurchaseRepository from './repositories/purchases.repository.js';
 // services
 import UserService from './services/users.db.service.js';
 import ProductService from './services/products.db.service.js';
@@ -55,7 +56,7 @@ const container = createContainer({
   injectionMode: InjectionMode.PROXY,
 });
 
-// register all dependencies
+// register all dependencies (.singleton is used to create a single instance of classes that will be required more than once across the app)
 container.register({
   // Models
   User: asValue(User),
@@ -68,6 +69,7 @@ container.register({
   UserRepository: asClass(UserRepository).singleton(),
   ProductRepository: asClass(ProductRepository).singleton(),
   CartRepository: asClass(CartRepository).singleton(),
+  PurchaseRepository: asClass(PurchaseRepository).singleton(),
 
   // Services
   ChatService: asClass(ChatService).singleton(),

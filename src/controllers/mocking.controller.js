@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 export default class MockingController {
+  // Creates a fake product list with 100 items
   getFakeProducts = async (req, res, next) => {
     try {
       const products = [];
@@ -13,6 +14,7 @@ export default class MockingController {
     }
   };
 
+  // Creates a fake product
   createFakeProduct = async () => {
     return {
       id: faker.database.mongodbObjectId(),
@@ -23,6 +25,7 @@ export default class MockingController {
       stock: faker.datatype.number(),
       code: faker.datatype.uuid(),
       category: faker.commerce.department(),
+      owner: faker.database.mongodbObjectId(),
       status: faker.datatype.boolean(),
     };
   };
