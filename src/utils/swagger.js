@@ -21,8 +21,9 @@ const setSwaggerDocs = (app) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });
-  const host = windows.location.host;
-  logger.info(`v1 API docs available at http://${host}/api/v1/docs`);
+  logger.info(
+    `v1 API docs available at http://proyectofinalbackend-coder.up.railway.app/api/v1/docs`
+  );
 };
 
 export default setSwaggerDocs;
