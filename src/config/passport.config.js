@@ -60,8 +60,8 @@ const passportConfig = async (passport) => {
     'github',
     new passportGithub.Strategy(
       {
-        clientID: config.CLIENT_ID,
-        clientSecret: config.CLIENT_SECRET,
+        clientID: config.GH_CLIENT_ID,
+        clientSecret: config.GH_CLIENT_SECRET,
         callbackURL:
           'https://entregas-backend-coder.glitch.me/api/github/callback',
       },

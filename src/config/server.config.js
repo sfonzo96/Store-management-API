@@ -9,8 +9,8 @@ const serverConfig = {
       ? process.env.MONGO_URI_PROD
       : process.env.MONGO_URI_DEV, // IMPORTANT to check ENV variables to avoid production DB overwrite or data loss
   SESSION_SECRET: process.env.SESSION_SECRET,
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  GH_CLIENT_ID: process.env.GH_CLIENT_ID,
+  GH_CLIENT_SECRET: process.env.GH_CLIENT_SECRET,
   APP_ID: process.env.APP_ID,
   NODE_ENV: process.env.NODE_ENV || 'development',
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
