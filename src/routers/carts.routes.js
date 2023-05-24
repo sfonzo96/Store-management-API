@@ -1,5 +1,5 @@
 import express from 'express';
-import isAuthenticated from '../middlewares/isAuthenticated.middleware';
+import isAuthenticated from '../middlewares/isAuthenticated.middleware.js';
 
 // Extends the express.Router class to define carts router as a subclass
 export default class CartsRouter extends express.Router {

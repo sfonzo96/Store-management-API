@@ -1,5 +1,5 @@
 import express from 'express';
-import isAuthenticated from '../middlewares/isAuthenticated.middleware';
+import isAuthenticated from '../middlewares/isAuthenticated.middleware.js';
 // Extends the express.Router class to define payments router as a subclass
 export default class PaymentsRouter extends express.Router {
   constructor({ PaymentController, Authorizator }) {
