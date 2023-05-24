@@ -24,7 +24,11 @@ La idea fue crear una aplicación tipo e-commerce que incluya:
 
 ## Enlace al sitio activo
 
-- https://entregas-backend-coder.glitch.me/ (Funcionalidad de Front-end limitada!)
+- [Deploy en Railway](https://proyectofinalbackend-coder.up.railway.app/) (Funcionalidad de Front-end limitada!)
+
+## Documentación extra
+
+- [Swagger](https://proyectofinalbackend-coder.up.railway.app/api/v1/docs) (En desarrollo.)
 
 ## Librerías utilizadas (npm)
 

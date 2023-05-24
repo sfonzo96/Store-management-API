@@ -63,7 +63,7 @@ const passportConfig = async (passport) => {
         clientID: config.GH_CLIENT_ID,
         clientSecret: config.GH_CLIENT_SECRET,
         callbackURL:
-          'https://entregas-backend-coder.glitch.me/api/github/callback',
+          'https://proyectofinalbackend-coder.up.railway.app/api/github/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

@@ -24,7 +24,7 @@ export default class AppServer {
 
   async setup() {
     // Sets swagger
-    setSwaggerDocs(this.app, this.config.PORT);
+    setSwaggerDocs(this.app);
 
     // Sets static route
     this.app.use(express.static('src/public'));

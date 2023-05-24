@@ -34,7 +34,7 @@ const sendPwResetEmail = async (user) => {
       html: `
                 <h2>Hi ${user.firstName}! You requested a password reset.</h2>
                 <h3>Click the link to reset your password.</h3>
-                <a href="https://entregas-backend-coder.glitch.me/api/users/password/reset/${token}">Reset Password</a> 
+                <a href="https://proyectofinalbackend-coder.up.railway.app/api/users/password/reset/${token}">Reset Password</a> 
                 <p>If you did not request a password reset, please ignore this email.</p>
             `,
     };
