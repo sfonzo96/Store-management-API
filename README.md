@@ -6,8 +6,8 @@ El objetivo de este proyecto fue poner en práctica los conocimientos que fueron
 
 ## Equipo docente
 
-- Profesor: Diego Fernando Alzate Cardona
-- Tutor: Gabriel Navarro
+- Profesor: [Diego Fernando Alzate Cardona](https://www.linkedin.com/in/dfalzate/)
+- Tutor: [Gabriel Navarro](https://www.linkedin.com/in/gabriel-dario-navarro/)
 
 ## Requisitos de la aplicación
 
@@ -128,7 +128,7 @@ Detener servidor
 
 ## Autor del proyecto
 
-- [@sfonzo96](https://www.linkedin.com/in/santiagofonzo/)
+- [Santiago Fonzo](https://www.linkedin.com/in/santiagofonzo/)
 
 ## Licencia
 
