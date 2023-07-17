@@ -19,7 +19,7 @@ import UsersRouter from './routers/users.routes.js';
 import PassportRouter from './routers/passport.routes.js';
 import GithubRouter from './routers/github.routes.js';
 import ChatRouter from './routers/chat.routes.js';
-import MockingRouter from './routers/mocking.routes.js';
+// import MockingRouter from './routers/mocking.routes.js';
 import PaymentsRouter from './routers/payments.routes.js';
 // models
 import User from './models/users.model.js';
@@ -48,7 +48,7 @@ import CartController from './controllers/carts.controller.js';
 import ViewController from './controllers/views.controller.js';
 import PassportController from './controllers/passport.controller.js';
 import ChatController from './controllers/chat.controller.js';
-import MockingController from './controllers/mocking.controller.js';
+// import MockingController from './controllers/mocking.controller.js';
 import PaymentController from './controllers/payments.controller.js';
 
 // create container
@@ -88,7 +88,7 @@ container.register({
   ViewController: asClass(ViewController).singleton(),
   PassportController: asClass(PassportController).singleton(),
   ChatController: asClass(ChatController).singleton(),
-  MockingController: asClass(MockingController).singleton(),
+  // MockingController: asClass(MockingController).singleton(),
   PaymentController: asClass(PaymentController).singleton(),
 
   // Utility classes and middlewares
@@ -103,7 +103,7 @@ container.register({
   PassportRouter: asClass(PassportRouter).singleton(),
   GithubRouter: asClass(GithubRouter).singleton(),
   ChatRouter: asClass(ChatRouter).singleton(),
-  MockingRouter: asClass(MockingRouter).singleton(),
+  // MockingRouter: asClass(MockingRouter).singleton(),
   PaymentsRouter: asClass(PaymentsRouter).singleton(),
   Router: asClass(Router).singleton(),
 

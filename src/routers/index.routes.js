@@ -12,7 +12,7 @@ export default class IndexRouter extends express.Router {
     PassportRouter,
     GithubRouter,
     ChatRouter,
-    MockingRouter,
+    // MockingRouter,
     PaymentsRouter,
   }) {
     super();
@@ -23,7 +23,7 @@ export default class IndexRouter extends express.Router {
     this.passportRouter = PassportRouter;
     this.githubRouter = GithubRouter;
     this.chatRouter = ChatRouter;
-    this.mockingRouter = MockingRouter;
+    // this.mockingRouter = MockingRouter;
     this.paymentsRouter = PaymentsRouter;
     this.setup();
   }
@@ -42,7 +42,7 @@ export default class IndexRouter extends express.Router {
     this.use('/api/passport', this.passportRouter);
     this.use('/api/github', this.githubRouter);
     this.use('/api/chat', this.chatRouter);
-    this.use('/api/mocking', this.mockingRouter);
+    // this.use('/api/mocking', this.mockingRouter);
     this.use('/api/payments', this.paymentsRouter);
   };
 }

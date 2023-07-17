@@ -1,4 +1,4 @@
-import express from 'express';
+/* import express from 'express';
 
 // Extends the express.Router class to define mocking router as a subclass
 export default class MockingRouter extends express.Router {
@@ -12,3 +12,4 @@ export default class MockingRouter extends express.Router {
     this.get('/', this.mockingController.getFakeProducts);
   };
 }
+ */
