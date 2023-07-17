@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+/* import { faker } from '@faker-js/faker';
 
 export default class MockingController {
   // Creates a fake product list with 100 items
@@ -30,3 +30,4 @@ export default class MockingController {
     };
   };
 }
+ */

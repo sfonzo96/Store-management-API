@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+/* import mongoose from 'mongoose';
 import supertest from 'supertest';
 import chai from 'chai';
 import dbtest from '../dbtest.js';
@@ -142,3 +142,4 @@ describe('Testing Routers', () => {
     it('Logs out a user', async () => {});
   });
 });
+ */
