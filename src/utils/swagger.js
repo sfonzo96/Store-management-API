@@ -22,7 +22,7 @@ const setSwaggerDocs = (app) => {
     res.send(swaggerSpec);
   });
   logger.info(
-    `v1 API docs available at http://proyectofinalbackend-coder.up.railway.app/api/v1/docs`
+    `v1 API docs available at https://coderhouse-backend-final.onrender.com/api/v1/docs`
   );
 };
 
