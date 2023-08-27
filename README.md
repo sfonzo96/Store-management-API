@@ -24,11 +24,11 @@ La idea fue crear una aplicación tipo e-commerce que incluya:
 
 ## Enlace al sitio activo
 
-- [Deploy en Render](https://coderhouse-backend-final.onrender.com) (Funcionalidad de Front-end limitada!)
+- [Deploy en Render](https://store-management-api-kfl7.onrender.com/) (Funcionalidad de Front-end limitada!)
 
 ## Documentación extra
 
-- [Swagger](https://coderhouse-backend-final.onrender.com/api/v1/docs) (En desarrollo.)
+- [Swagger](https://store-management-api-kfl7.onrender.com/api/v1/docs) (En desarrollo.)
 
 ## Librerías utilizadas (npm)
 
@@ -78,7 +78,7 @@ Finalizado. A decidir si se recrea el Front-end utilizando ReactJS.
 Clonado del repositorio a directorio local
 
 ```bash
-  git clone https://github.com/sfonzo96/ProyectoFInalBackend-Coderhouse.git
+  git clone https://github.com/sfonzo96/Store-management-API.git
 ```
 
 Moverse a directorio repositorio local
